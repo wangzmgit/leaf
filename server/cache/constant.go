@@ -1,0 +1,51 @@
+package cache
+
+/**
+ * 缓存常量
+ * author: hsx
+ * date: 2022.11.10
+ */
+
+// 邮箱验证码缓存标识符
+const EMAIL_CODE_KEY = "email_code_key:"
+
+// 邮箱验证码过期时间 n 分钟
+const EMIAL_CODE_EXPIRATION_TIME int = 5
+
+// 图片验证码缓存标识符
+const IMG_CODE_KEY = "img_code_key:"
+
+// 图片验证码过期时间 n 分钟
+const IMG_CODE_EXPIRATION_TIME = 3
+
+// 用户验证码缓存标识符
+const USER_KEY = "user_key:"
+
+// 用户信息过期时间 n 小时
+const USER_EXPIRATION_TIME = 24
+
+// 验证token缓存标识符
+const ACCESS_TOKEN_KEY = "access_token_key:"
+
+// 验证token过期时间 n 分钟
+const ACCESS_TOKEN_EXPRIRATION_TIME = 5
+
+// 刷新token缓存标识符
+const REFRESH_TOKEN_KEY = "refresh_token_key:"
+
+// 刷新token过期时间 n 小时
+const REFRESH_TOKEN_EXPRIRATION_TIME = 336 // 14 * 24
+
+// 登录尝试次数缓存标识符
+const LOGIN_TRY_COUNT_KEY = "login_try_count_key:"
+
+// 登录尝试次数过期时间 n 分钟
+const LOGIN_TRY_COUNT_EXPRIRATION_TIME = 30
+
+
+
+// 滑块x坐标缓存标识符
+const SLIDER_X_KEY = "slider_x_key:"
+
+// 滑块x坐标过期时间 n 分钟
+const SLIDER_X_EXPRIRATION_TIME = 5
