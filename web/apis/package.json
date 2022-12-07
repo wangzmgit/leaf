@@ -1,0 +1,15 @@
+{
+  "name": "@leaf/apis",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.ts",
+  "devDependencies": {
+    "typescript": "^4.6.4",
+    "vite": "^3.2.0"
+  },
+  "dependencies": {
+    "@leaf/utils": "workspace:^1.0.0",
+    "axios": "^1.1.3"
+  }
+}
