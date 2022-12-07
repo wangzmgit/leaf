@@ -1,8 +1,11 @@
 package routes
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"kuukaa.fun/leaf/logger"
+	"kuukaa.fun/leaf/middleware"
 )
 
 func InitRouter() {
@@ -10,15 +13,18 @@ func InitRouter() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 	r.Use(logger.GinLogger, logger.GinRecovery(true))
-	
+
 	// 设置信任网络 []string nil 为不计算，避免性能消耗，上线应当设置
 	_ = r.SetTrustedProxies(nil)
+
+	//跨域中间件
+	r.Use(middleware.CORS())
 
 	// 收集添加路由
 	CollectRoutes(r)
 
 	// 运行
-	r.Run(":8081")
+	r.Run(":9000")
 }
 
 func CollectRoutes(r *gin.Engine) *gin.Engine {
@@ -27,7 +33,12 @@ func CollectRoutes(r *gin.Engine) *gin.Engine {
 	{
 		// 用户相关路由
 		CollectUserRoutes(v1)
+		CollectCaptchaRoutes(v1)
+		CollectUploadRoutes(v1)
 	}
+
+	//获取静态文件
+	r.StaticFS("/api/img", http.Dir("./upload/image"))
 
 	return r
 }

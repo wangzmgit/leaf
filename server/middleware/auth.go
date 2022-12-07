@@ -15,13 +15,13 @@ func Auth() gin.HandlerFunc {
 		// 验证并解析token
 		_, claims, err := jwt.ParseToken(tokenString)
 		if err != nil {
-			zap.L().Info("token验证失败")
+			zap.L().Info("token验证失败: " + err.Error())
 			resp.Response(ctx, resp.UnauthorizedError, "", nil)
 			ctx.Abort()
 			return
 		}
 		// 验证token存在 -> 判断token类型
-		if claims.TokenType == 1 { // accessToken
+		if claims.TokenType == 0 { // accessToken
 			// 读取缓存
 			accessToken := cache.GetAccessToken(claims.UserId)
 			if accessToken != "" { // accessToken 未过期
@@ -29,15 +29,17 @@ func Auth() gin.HandlerFunc {
 				ctx.Next()
 			} else {
 				// 刷新accessToken 和 refreshToken
-				refreshDoubleToken(ctx, claims.UserId)
+				// refreshDoubleToken(ctx, claims.UserId)
+				zap.L().Info("token过期")
+				resp.Response(ctx, resp.TokenExpriedError, "", nil)
 				return
 			}
-		} else if claims.TokenType == 2 { // refreshToken
+		} else if claims.TokenType == 1 { // refreshToken
 			// 读取缓存
 			refreshToken := cache.GetRefreshToken(claims.UserId)
 			if refreshToken != "" { // refreshToken 未过期
 				// 刷新accessToken 和 refreshToken
-				refreshDoubleToken(ctx, claims.UserId)
+				refreshAccessToken(ctx, claims.UserId)
 				return
 			} else {
 				zap.L().Info("token验证失败")
@@ -54,28 +56,21 @@ func Auth() gin.HandlerFunc {
 	}
 }
 
-func refreshDoubleToken(ctx *gin.Context, id uint) {
+func refreshAccessToken(ctx *gin.Context, id uint) {
 	// 生成验证token
 	var err error
 	var accessToken string
-	var refreshToken string
 	if accessToken, err = jwt.GenerateAccessToken(id); err != nil {
 		resp.Response(ctx, resp.Error, "验证token生成失败", nil)
 		zap.L().Error("验证token生成失败")
 		return
 	}
-	// 生成刷新token
-	if refreshToken, err = jwt.GenerateRefreshToken(id); err != nil {
-		resp.Response(ctx, resp.Error, "刷新token生成失败", nil)
-		zap.L().Error("刷新token生成失败")
-		return
-	}
 
 	// 存入缓存
 	cache.SetAccessToken(id, accessToken)
-	cache.SetRefreshToken(id, refreshToken)
 
 	// 返回给前端
-	resp.OK(ctx, "", gin.H{"accessToken": accessToken, "refreshToken": refreshToken})
+	resp.OK(ctx, "", gin.H{"token": accessToken})
+
 	ctx.Abort()
 }

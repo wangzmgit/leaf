@@ -1,47 +1,16 @@
 package api
 
 import (
-	"reflect"
-
 	"github.com/gin-gonic/gin"
-	"github.com/wangzmgit/jigsaw"
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 	"kuukaa.fun/leaf/cache"
 	"kuukaa.fun/leaf/domain/dto"
-	"kuukaa.fun/leaf/domain/model"
 	"kuukaa.fun/leaf/domain/resp"
 	"kuukaa.fun/leaf/domain/valid"
 	"kuukaa.fun/leaf/service"
 	"kuukaa.fun/leaf/util/jwt"
-	"kuukaa.fun/leaf/util/mail"
-	"kuukaa.fun/leaf/util/random"
 )
-
-func SendEmailCode(ctx *gin.Context) {
-	// 获取邮箱
-	email := ctx.PostForm("email")
-
-	zap.L().Debug(email)
-
-	// 生成code
-	code := random.GenerateNumberCode(4)
-
-	zap.L().Debug(code)
-
-	// 发送code
-	if err := mail.SendCaptcha(email, code); err != nil {
-		resp.Response(ctx, resp.SendMailError, "邮箱验证码发送失败", nil)
-		zap.L().Error("邮箱验证码发送失败")
-		return
-	}
-
-	// code放入缓存
-	cache.SetEmailCode(email, code)
-
-	resp.OK(ctx, "验证码已发送到您的邮箱", nil)
-
-}
 
 func Register(ctx *gin.Context) {
 	// 获取参数
@@ -113,25 +82,16 @@ func Login(ctx *gin.Context) {
 	// 读取登录尝试次数，超过3次进行滑块验证
 	loginTryCount := cache.GetLoginTryCount(loginDTO.Email)
 	if loginTryCount >= 3 {
-		// 进行滑块验证
-		slider, bg, x, y, err := jigsaw.Create()
-		if err != nil {
-			zap.L().Error("滑块验证资源生成失败")
-		}
-		// 保存x坐标到缓存
-		cache.SetSliderX(loginDTO.Email,x)
-
-		resp.
-
-		return 
-
+		resp.Response(ctx, resp.Captcha, "", nil)
+		zap.L().Info("需要人机验证")
+		return
 	}
 
 	// 读取数据库
 	user := service.SelectUserByEmail(loginDTO.Email)
 	// 验证账号密码
 	passwordError := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginDTO.Password))
-	if reflect.DeepEqual(user, model.User{}) == false || passwordError != nil {
+	if passwordError != nil {
 		resp.Response(ctx, resp.UsernamePasswordNotMatchError, "", nil)
 		zap.L().Info("用户名密码不匹配")
 		// 记录登录尝试次数
@@ -161,5 +121,11 @@ func Login(ctx *gin.Context) {
 	cache.SetRefreshToken(user.ID, refreshToken)
 
 	// 返回给前端
-	resp.OK(ctx, "", gin.H{"accessToken": accessToken, "refreshToken": refreshToken})
+	resp.OK(ctx, "", gin.H{"access_token": accessToken, "refresh_token": refreshToken})
+}
+
+// 检查 accessToken
+func RefreshAccessToken(ctx *gin.Context) {
+	//如果refreshToken不过期会在中间件阶段返回accessToken
+	resp.OK(ctx, "", nil)
 }

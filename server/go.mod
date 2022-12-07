@@ -8,11 +8,25 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.4.2
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/spf13/viper v1.13.0
+	github.com/wangzmgit/jigsaw v0.1.0
 	go.uber.org/zap v1.23.0
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gorm.io/driver/mysql v1.4.3
 	gorm.io/gorm v1.24.0
+)
+
+require (
+	github.com/aliyun/aliyun-oss-go-sdk v2.2.6+incompatible // indirect
+	github.com/clbanning/mxj v1.8.4 // indirect
+	github.com/google/go-querystring v1.0.0 // indirect
+	github.com/gookit/color v1.3.6 // indirect
+	github.com/mozillazg/go-httpheader v0.2.1 // indirect
+	github.com/qiniu/api.v7/v7 v7.8.2 // indirect
+	github.com/qiniu/go-sdk/v7 v7.13.0 // indirect
+	github.com/tencentyun/cos-go-sdk-v5 v0.7.40 // indirect
+	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
+	golang.org/x/time v0.2.0 // indirect
 )
 
 require (
@@ -44,7 +58,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
-	github.com/wangzmgit/jigsaw v0.1.0 // indirect
+	github.com/wangzmgit/unioss v0.2.0
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	golang.org/x/image v0.1.0 // indirect

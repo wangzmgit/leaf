@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"kuukaa.fun/leaf/cache"
 	"kuukaa.fun/leaf/db/mysql"
 	"kuukaa.fun/leaf/initialize"
@@ -14,6 +12,10 @@ import (
 func main() {
 	// 初始化配置文件
 	initialize.ConfigFiles()
+	// 初始化滑块验证码生成
+	initialize.Jigsaw()
+	// 初始化OSS
+	initialize.Oss()
 	// 初始化日志
 	logger.InitLogger()
 	// 初始化mysql
@@ -26,9 +28,6 @@ func main() {
 	service.InitMysqlClient()
 
 	// fmt.Println(jwt.GenerateAccessToken(1))
-
-	count := cache.GetLoginTryCount("2")
-	fmt.Printf("count: %v\n", count)
 
 	// 初始化路由
 	routes.InitRouter()
