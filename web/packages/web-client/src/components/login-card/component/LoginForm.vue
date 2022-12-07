@@ -1,0 +1,180 @@
+<template>
+    <div class="login-form">
+        <!-- 账号登录 -->
+        <n-tabs default-value="account" size="large" justify-content="space-evenly" @update:value="loginTypeChange">
+            <n-tab-pane class="form-container" name="account" tab="账号登录">
+                <n-form ref="accountFormRef" :rules="rules" :model="loginForm" label-placement="left" label-width="70">
+                    <n-form-item label="账号" path="account">
+                        <n-input placeholder="请输入邮箱" v-model:value="loginForm.email" />
+                    </n-form-item>
+                    <n-form-item label="密码" path="password">
+                        <n-input placeholder="请输入密码" v-model:value="loginForm.password" type="password">
+                            <template #suffix>
+                                <n-button type="primary" text>找回密码</n-button>
+                            </template>
+                        </n-input>
+                    </n-form-item>
+                </n-form>
+            </n-tab-pane>
+            <!-- 邮箱登录 -->
+            <n-tab-pane class="form-container" name="email" tab="邮箱验证">
+                <n-form ref="emailFormRef" :rules="rules" :model="loginForm" label-placement="left" label-width="70">
+                    <n-form-item label="邮箱" path="email">
+                        <n-input placeholder="请输入邮箱" v-model:value="loginForm.email" />
+                    </n-form-item>
+                    <n-form-item label="验证码" path="code">
+                        <n-input placeholder="请输入验证码" v-model:value="loginForm.code" />
+                        <n-button :disabled="disabledSend" @click="beforeSendCode">{{ sendBtnText }}</n-button>
+                    </n-form-item>
+                </n-form>
+            </n-tab-pane>
+        </n-tabs>
+        <div class="login-btn">
+            <n-button @click="emits('changeForm')">立即注册</n-button>
+            <n-button type="primary" @click="sendLoginRequest">登录</n-button>
+        </div>
+    </div>
+    <slider-captcha v-model:show="captcha.show" :email="loginForm.email"></slider-captcha>
+</template>
+
+<script setup lang="ts">
+import { reactive, ref } from 'vue';
+import useSendCode from '@/hooks/send-code-hooks';
+
+import type { UserLoginType } from "@leaf/apis";
+import { loginAPI, getUserInfoAPI } from "@leaf/apis";
+import { isEmail, storageData, statusCode } from '@leaf/utils';
+
+import type { FormRules, FormInst } from 'naive-ui';
+import { NTabs, NTabPane, NForm, NFormItem, NInput, NButton, useNotification } from 'naive-ui';
+
+import { SliderCaptcha } from "@leaf/components"
+
+const emits = defineEmits(["changeForm"]);
+
+//通知组件
+const notification = useNotification();
+
+const captcha = reactive<{
+    marking: string,
+    show: boolean,
+    bg: string,
+    slider: string,
+    y: number
+    key: number
+}>({
+    key: Date.now(),
+    marking: "",
+    show: false,
+    bg: "",
+    slider: "",
+    y: 0
+})
+
+//登录表单
+const loginForm = reactive<UserLoginType>({
+    email: "",
+    code: "",
+    password: "",
+});
+
+
+//校验规则
+const rules: FormRules = {
+    email: [
+        { required: true, message: "请输入邮箱", trigger: ['blur', 'input'] },
+        { type: "email", message: "请输入正确的邮箱地址", trigger: ['blur', 'input'] },
+    ],
+    password: { required: true, message: '请输入密码', trigger: ['blur', 'input'] },
+    code: { required: true, message: '请输入验证码', trigger: ['blur', 'input'] },
+}
+
+//发送验证码相关
+const { disabledSend, sendBtnText, sendEmailCode } = useSendCode();
+const beforeSendCode = () => {
+    if (!loginForm.email) {
+        return;
+    }
+    sendEmailCode(loginForm.email);
+}
+
+// 登录方式切换
+const currentTabName = ref("account");
+const loginTypeChange = (tabName: any) => {
+    // loginForm.loginType = tabName === "account" ? 1 : 2;
+    currentTabName.value = tabName;
+}
+
+//登录相关
+const emailFormRef = ref<FormInst | null>(null);
+const accountFormRef = ref<FormInst | null>(null);
+//登录
+const sendLoginRequest = () => {
+    let currentRef: FormInst | null = null;
+    switch (currentTabName.value) {
+        case "account":
+            currentRef = accountFormRef.value;
+            break;
+        case "email":
+            currentRef = emailFormRef.value;
+            break;
+    }
+
+    currentRef?.validate((err) => {
+        if (!err) {
+            loginAPI(loginForm).then((res) => {
+                switch (res.data.code) {
+                    case statusCode.CAPTCHA_REQUIRED:
+                        captcha.show = true;
+                        break;
+                    case statusCode.OK:
+                        storageData.set("access_token", res.data.data.access_token, 5);
+                        storageData.set("refresh_token", res.data.data.refresh_token, 14 * 24 * 60);
+                        getUserInfoAPI().then((infoRes) => {
+                            if (infoRes.data.code === statusCode.OK) {
+                                storageData.set("user_info", infoRes.data.data.userInfo, 14 * 24 * 60);
+                            }
+                        })
+                        break;
+                    default:
+                        notification.error({
+                            title: res.data.msg,
+                            duration: 3000,
+                        });
+                }
+            });
+        } else {
+            notification.error({
+                title: '请检查输入的数据',
+                duration: 3000,
+            })
+        }
+    });
+}
+</script>
+
+<style lang="less" scoped>
+.login-form {
+    .form-container {
+        box-sizing: border-box;
+        padding: 40px 30px 0 30px;
+
+        .login-type-text {
+            display: block;
+            text-align: center;
+            font-size: 22px;
+            margin: 16px 0;
+        }
+    }
+
+    .login-btn {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 30px 0;
+
+        button {
+            width: 160px;
+        }
+    }
+}
+</style>

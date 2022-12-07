@@ -1,0 +1,11 @@
+packages:
+  # 项目
+  - "packages/*"
+  # 接口相关
+  - "apis/**"
+  # 一些工具
+  - "utils/**"
+  # 公共组件
+  - "components/**"
+  # 图标
+  - "icons/**"
