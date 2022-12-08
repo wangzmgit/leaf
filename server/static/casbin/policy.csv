@@ -1,0 +1,9 @@
+p, user, /api/v1/user/info/get, GET
+p, user, /api/v1/user/info/modify, POST
+p, user, /api/v1/user/cover/modify, POST
+
+p, user, /api/v1/upload/image, POST
+
+g, auditor, user
+g, admin, auditor
+g, root, admin

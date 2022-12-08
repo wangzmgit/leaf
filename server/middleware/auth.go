@@ -4,7 +4,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"kuukaa.fun/leaf/cache"
+	"kuukaa.fun/leaf/domain/dto"
 	"kuukaa.fun/leaf/domain/resp"
+	"kuukaa.fun/leaf/service"
+	"kuukaa.fun/leaf/util/authentication"
 	"kuukaa.fun/leaf/util/jwt"
 )
 
@@ -24,12 +27,20 @@ func Auth() gin.HandlerFunc {
 		if claims.TokenType == 0 { // accessToken
 			// 读取缓存
 			accessToken := cache.GetAccessToken(claims.UserId)
-			if accessToken != "" { // accessToken 未过期
+			if accessToken == tokenString { // accessToken 未过期
+				// 验证权限
+				user := service.SelectUserByID(claims.UserId)
+				role := dto.GetRoleString(user.Role)
+				if !authentication.Check(role, ctx.Request.URL.RequestURI(), ctx.Request.Method) {
+					zap.L().Info("权限不足")
+					resp.Response(ctx, resp.UnauthorizedError, "", nil)
+					ctx.Abort()
+					return
+				}
 				ctx.Set("userId", claims.UserId)
 				ctx.Next()
 			} else {
 				// 刷新accessToken 和 refreshToken
-				// refreshDoubleToken(ctx, claims.UserId)
 				zap.L().Info("token过期")
 				resp.Response(ctx, resp.TokenExpriedError, "", nil)
 				return
@@ -37,8 +48,8 @@ func Auth() gin.HandlerFunc {
 		} else if claims.TokenType == 1 { // refreshToken
 			// 读取缓存
 			refreshToken := cache.GetRefreshToken(claims.UserId)
-			if refreshToken != "" { // refreshToken 未过期
-				// 刷新accessToken 和 refreshToken
+			if refreshToken == tokenString { // refreshToken 未过期
+				// 刷新accessToken
 				refreshAccessToken(ctx, claims.UserId)
 				return
 			} else {
@@ -53,6 +64,7 @@ func Auth() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
+
 	}
 }
 

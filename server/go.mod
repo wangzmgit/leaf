@@ -17,7 +17,9 @@ require (
 )
 
 require (
+	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible // indirect
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.6+incompatible // indirect
+	github.com/casbin/casbin/v2 v2.59.0 // indirect
 	github.com/clbanning/mxj v1.8.4 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/gookit/color v1.3.6 // indirect

@@ -7,6 +7,7 @@ import (
 	"kuukaa.fun/leaf/logger"
 	"kuukaa.fun/leaf/routes"
 	"kuukaa.fun/leaf/service"
+	"kuukaa.fun/leaf/util/authentication"
 )
 
 func main() {
@@ -16,6 +17,8 @@ func main() {
 	initialize.Jigsaw()
 	// 初始化OSS
 	initialize.Oss()
+	// 初始化casbin
+	authentication.InitCasbin()
 	// 初始化日志
 	logger.InitLogger()
 	// 初始化mysql
