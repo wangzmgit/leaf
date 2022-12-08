@@ -4,6 +4,6 @@ import "github.com/wangzmgit/jigsaw"
 
 func Jigsaw() {
 	j := jigsaw.New()
-	j.SetBgDir("./static/images/bg/")
-	j.SetMaskPath("./static/images/mask.png")
+	j.SetBgDir("./static/jigsaw/bg/")
+	j.SetMaskPath("./static/jigsaw/mask.png")
 }
