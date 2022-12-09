@@ -154,7 +154,7 @@ const changeUpload = (status: string, data: any) => {
 const getUserInfo = () => {
     getUserInfoAPI().then((res) => {
         if (res.data.code === statusCode.OK) {
-            const tmpInfo = res.data.data.userInfo as UserInfoType;
+            const tmpInfo = res.data.data.user_info as UserInfoType;
             userInfo.value = tmpInfo;
             storageData.update("user_info", tmpInfo);
         }

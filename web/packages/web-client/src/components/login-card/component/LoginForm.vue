@@ -43,7 +43,7 @@ import useSendCode from '@/hooks/send-code-hooks';
 
 import type { UserLoginType } from "@leaf/apis";
 import { loginAPI, getUserInfoAPI } from "@leaf/apis";
-import { isEmail, storageData, statusCode } from '@leaf/utils';
+import { storageData, statusCode } from '@leaf/utils';
 
 import type { FormRules, FormInst } from 'naive-ui';
 import { NTabs, NTabPane, NForm, NFormItem, NInput, NButton, useNotification } from 'naive-ui';
@@ -132,7 +132,7 @@ const sendLoginRequest = () => {
                         storageData.set("refresh_token", res.data.data.refresh_token, 14 * 24 * 60);
                         getUserInfoAPI().then((infoRes) => {
                             if (infoRes.data.code === statusCode.OK) {
-                                storageData.set("user_info", infoRes.data.data.userInfo, 14 * 24 * 60);
+                                storageData.set("user_info", infoRes.data.data.user_info, 14 * 24 * 60);
                             }
                         })
                         break;

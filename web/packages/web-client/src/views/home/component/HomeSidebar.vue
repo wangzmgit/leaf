@@ -37,20 +37,7 @@
                     </span>
                 </div>
                 <div class="menu-group">
-                    <span class="menu-item menu-item-only-text">动画</span>
-                    <span class="menu-item menu-item-only-text">生活</span>
-                    <span class="menu-item menu-item-only-text">游戏</span>
-
-                    <span class="menu-item menu-item-only-text">动画</span>
-                    <span class="menu-item menu-item-only-text">生活</span>
-                    <span class="menu-item menu-item-only-text">游戏</span>
-
-                    <span class="menu-item menu-item-only-text">动画</span>
-                    <span class="menu-item menu-item-only-text">生活</span>
-                    <span class="menu-item menu-item-only-text">游戏</span>
-                    <span class="menu-item menu-item-only-text">动画</span>
-                    <span class="menu-item menu-item-only-text">生活</span>
-                    <span class="menu-item menu-item-only-text">游戏</span>
+                    <span class="menu-item menu-item-only-text" v-for="item in partitionList">{{ item.content }}</span>
                 </div>
                 <div class="menu-footer">
                     <div class="links">
@@ -98,10 +85,12 @@
 </template>
 
 <script setup lang="ts">
-import { globalConfig } from "@leaf/utils";
+import { globalConfig, statusCode } from "@leaf/utils";
 import { History, Collection, Me, Message, Setting } from "@leaf/icons";
 import { NIcon, NScrollbar } from "naive-ui";
-import { ref, watch } from "vue";
+import { onBeforeMount, ref, watch } from "vue";
+import type { PartitionType } from "@leaf/apis";
+import { getPartitionAPI } from "@leaf/apis";
 
 const props = withDefaults(defineProps<{
     fold: boolean
@@ -110,11 +99,26 @@ const props = withDefaults(defineProps<{
 })
 
 const menuFold = ref(props.fold);
-
 watch(() => props.fold, (newValue) => {
     menuFold.value = newValue;
 });
 
+// 获取分区
+const partitionList = ref<Array<PartitionType>>([])
+const getPartition = () => {
+    getPartitionAPI().then((res) => {
+        if (res.data.code === statusCode.OK) {
+            const partitions = res.data.data.partitions as PartitionType[];
+            partitionList.value = partitions.filter((item) => {
+                return item.parent_id === 0;
+            })
+        }
+    })
+}
+
+onBeforeMount(() => {
+    getPartition();
+})
 </script>
 
 <style lang="less" scoped>
