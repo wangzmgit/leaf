@@ -4,6 +4,9 @@ p, user, /api/v1/user/cover/modify, POST
 
 p, user, /api/v1/upload/image, POST
 
+p, root, /api/v1/partition/add, POST
+p, root, /api/v1/partition/delete, POST
+
 g, auditor, user
 g, admin, auditor
 g, root, admin

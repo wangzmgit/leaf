@@ -38,6 +38,8 @@ var (
 	NameExistError   = R{httpStatus: http.StatusOK, code: 6000, msg: "用户名已存在"}
 	InvalidLinkError = R{httpStatus: http.StatusOK, code: 6010, msg: "用户名已存在"}
 
+	ParentPartitionError = R{httpStatus: http.StatusOK, code: 6020, msg: "所属分区不存在"}
+
 	// 90** 第三方服务错误
 	SendMailError = R{httpStatus: http.StatusOK, code: 9010, msg: "邮件发送失败"}
 	OssError      = R{httpStatus: http.StatusOK, code: 9020, msg: "文件存储错误"}

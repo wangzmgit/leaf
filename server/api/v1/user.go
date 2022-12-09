@@ -18,7 +18,7 @@ func GetUserInfo(ctx *gin.Context) {
 		userInfo = service.SelectUserByID(userId)
 	}
 
-	resp.OK(ctx, "", gin.H{"userInfo": vo.ToUserVo(userInfo)})
+	resp.OK(ctx, "", gin.H{"user_info": vo.ToUserVo(userInfo)})
 }
 
 func ModifyUserInfo(ctx *gin.Context) {

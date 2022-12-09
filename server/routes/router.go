@@ -33,8 +33,12 @@ func CollectRoutes(r *gin.Engine) *gin.Engine {
 	{
 		// 用户相关路由
 		CollectUserRoutes(v1)
+		// 人机验证相关路由
 		CollectCaptchaRoutes(v1)
+		// 文件上传相关路由
 		CollectUploadRoutes(v1)
+		// 分区相关路由
+		CollectPartitionRoutes(v1)
 	}
 
 	//获取静态文件

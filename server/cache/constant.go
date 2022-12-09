@@ -53,3 +53,9 @@ const UPLOAD_IMAGE_KEY = "upload_image_key"
 
 // 上传文件过期时间 n 分钟
 const UPLOAD_IMAGE_EXPRIRATION_TIME = 20
+
+// 分区缓存标识符
+const PARTITION_KEY = "partition_key"
+
+// 分区过期时间 不过期
+const PARTITION_EXPRIRATION_TIME = 0

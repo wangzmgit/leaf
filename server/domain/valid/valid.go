@@ -13,6 +13,15 @@ func Email(email string) bool {
 	return reg.MatchString(email)
 }
 
+// 从query中获取的id，可能为负数
+func ID(id int) bool {
+	return id > 0
+}
+
+func Content(content string) bool {
+	return len(content) > 0
+}
+
 func Name(name string) bool {
 	return len(name) > 0
 }

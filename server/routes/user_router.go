@@ -17,17 +17,17 @@ func CollectUserRoutes(r *gin.RouterGroup) {
 		user.POST("emailcode", api.SendEmailCode)
 
 		//需要用户登录
-		userAuth := user.Group("")
-		userAuth.Use(middleware.Auth())
+		auth := user.Group("")
+		auth.Use(middleware.Auth())
 		{
 			//刷新token
-			userAuth.GET("token/refresh", api.RefreshAccessToken)
+			auth.GET("token/refresh", api.RefreshAccessToken)
 			//用户获取个人信息
-			userAuth.GET("/info/get", api.GetUserInfo)
+			auth.GET("/info/get", api.GetUserInfo)
 			//用户修改个人信息
-			userAuth.POST("/info/modify", api.ModifyUserInfo)
+			auth.POST("/info/modify", api.ModifyUserInfo)
 			//用户修改空间封面图
-			userAuth.POST("/cover/modify", api.ModifySpaceCover)
+			auth.POST("/cover/modify", api.ModifySpaceCover)
 		}
 
 	}
