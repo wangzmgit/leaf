@@ -31,7 +31,7 @@ func Auth() gin.HandlerFunc {
 				// 验证权限
 				user := service.SelectUserByID(claims.UserId)
 				role := dto.GetRoleString(user.Role)
-				if !authentication.Check(role, ctx.Request.URL.RequestURI(), ctx.Request.Method) {
+				if !authentication.Check(role, ctx.Request.URL.Path, ctx.Request.Method) {
 					zap.L().Info("权限不足")
 					resp.Response(ctx, resp.UnauthorizedError, "", nil)
 					ctx.Abort()

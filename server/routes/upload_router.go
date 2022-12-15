@@ -9,11 +9,11 @@ import (
 func CollectUploadRoutes(r *gin.RouterGroup) {
 	upload := r.Group("upload")
 	{
-		// 用户注册
-		uploadAuth := upload.Group("")
-		uploadAuth.Use(middleware.Auth())
+		auth := upload.Group("")
+		auth.Use(middleware.Auth())
 		{
-			uploadAuth.POST("image", api.UploadImg)
+			auth.POST("image", api.UploadImg)
+			auth.POST("video", api.UploadVideo)
 		}
 	}
 }

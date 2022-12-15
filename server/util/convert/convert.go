@@ -13,3 +13,7 @@ func StringToInt(v string) int {
 	}
 	return res
 }
+
+func StringToUint(v string) uint {
+	return uint(StringToInt(v))
+}

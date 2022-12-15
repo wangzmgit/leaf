@@ -25,3 +25,13 @@ func IsParentPartitionExist(id uint) bool {
 	}
 	return false
 }
+
+// 是否为子分区
+func IsSubpartition(id uint) bool {
+	var partition model.Partition
+	mysqlClient.First(&partition, id)
+	if partition.ID != 0 && partition.ParentId != 0 {
+		return true
+	}
+	return false
+}

@@ -18,6 +18,10 @@ func ID(id int) bool {
 	return id > 0
 }
 
+func Title(title string) bool {
+	return len(title) > 0
+}
+
 func Content(content string) bool {
 	return len(content) > 0
 }
@@ -49,7 +53,6 @@ func FileType(suffix string, isImg bool) bool {
 
 func FileSize(contentLength string, targetSize int64) bool {
 	contentSize, err := strconv.ParseInt(contentLength, 10, 64)
-	println(contentLength)
 	if err != nil {
 		zap.L().Error("请求大小转换失败: " + err.Error())
 		return false

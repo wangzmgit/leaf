@@ -13,6 +13,7 @@ func InsertUser(user model.User) {
 	mysqlClient.Create(&user)
 }
 
+// 获取用户信息 (通过邮箱，只查数据库)
 func SelectUserByEmail(email string) (user model.User) {
 	mysqlClient.Where(model.User{Email: email}).First(&user)
 	// 存入缓存
@@ -20,10 +21,21 @@ func SelectUserByEmail(email string) (user model.User) {
 	return
 }
 
+// 获取用户信息 (通过ID，只查数据库)
 func SelectUserByID(userId uint) (user model.User) {
 	mysqlClient.First(&user, userId)
 	// 存入缓存
 	cache.SetUser(user)
+	return
+}
+
+// 获取用户信息 (通过ID，先查缓存)
+func GetUserInfo(userId uint) (user model.User) {
+	user = cache.GetUser(userId)
+	if user.ID == 0 {
+		user = SelectUserByID(userId)
+	}
+
 	return
 }
 

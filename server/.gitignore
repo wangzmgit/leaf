@@ -1,2 +1,3 @@
 /config/*.yml
+/upload/video/v_test
 *.log

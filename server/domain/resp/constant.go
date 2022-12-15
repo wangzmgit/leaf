@@ -15,6 +15,7 @@ var (
 
 	// 10** 通用错误
 	SliderVerificationError = R{httpStatus: http.StatusOK, code: 1010, msg: "滑块验证失败"}
+	InvalidLinkError        = R{httpStatus: http.StatusOK, code: 1020, msg: "链接已经失效"}
 
 	// 30** 认证授权相关错误
 	TokenExpriedError = R{httpStatus: http.StatusOK, code: 3000, msg: "token已过期"}
@@ -35,10 +36,13 @@ var (
 	// 50** 服务器相关错误
 
 	// 60** 用户相关错误
-	NameExistError   = R{httpStatus: http.StatusOK, code: 6000, msg: "用户名已存在"}
-	InvalidLinkError = R{httpStatus: http.StatusOK, code: 6010, msg: "用户名已存在"}
+	NameExistError = R{httpStatus: http.StatusOK, code: 6000, msg: "用户名已存在"}
 
-	ParentPartitionError = R{httpStatus: http.StatusOK, code: 6020, msg: "所属分区不存在"}
+	// 70** 视频相关错误
+	PartitionError       = R{httpStatus: http.StatusOK, code: 7010, msg: "分区不存在"}
+	ParentPartitionError = R{httpStatus: http.StatusOK, code: 7020, msg: "所属分区不存在"}
+
+	VideoNotExistError = R{httpStatus: http.StatusOK, code: 7110, msg: "视频不存在"}
 
 	// 90** 第三方服务错误
 	SendMailError = R{httpStatus: http.StatusOK, code: 9010, msg: "邮件发送失败"}

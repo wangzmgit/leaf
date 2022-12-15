@@ -13,10 +13,7 @@ import (
 
 func GetUserInfo(ctx *gin.Context) {
 	userId := ctx.GetUint("userId")
-	userInfo := cache.GetUser(userId)
-	if userInfo.ID == 0 {
-		userInfo = service.SelectUserByID(userId)
-	}
+	userInfo := service.GetUserInfo(userId)
 
 	resp.OK(ctx, "", gin.H{"user_info": vo.ToUserVo(userInfo)})
 }

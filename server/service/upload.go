@@ -1,6 +1,7 @@
 package service
 
 import (
+	"io/ioutil"
 	"strconv"
 	"time"
 
@@ -9,42 +10,76 @@ import (
 	"kuukaa.fun/leaf/util/random"
 )
 
-func UploadImgService(dir, fileName string) (string, error) {
-	objectKey := dir + "/" + fileName
+// 上传图片到OSS
+func UploadImgToOss(fileName string) error {
+	objectKey := "img/" + fileName
 	filePath := "./upload/" + objectKey
+	oss, err := unioss.GetStorage()
+	if err != nil {
+		return err
+	}
+	return oss.PutObjectFromFile(objectKey, filePath)
+}
+
+// 上传视频到OSS
+func UploadVideoToOss(dirName string) error {
+	oss, err := unioss.GetStorage()
+	if err != nil {
+		return err
+	}
+
+	files, err := ioutil.ReadDir("./upload/video/" + dirName)
+	if err != nil {
+		return err
+	}
+
+	for _, f := range files {
+		if f.Name() != "upload.mp4" {
+			objectKey := "video/" + dirName + "/" + f.Name()
+			filePath := "./upload/" + objectKey
+			oss.PutObjectFromFile(objectKey, filePath)
+		}
+	}
+
+	return nil
+}
+
+/**
+ * 随机生成图片文件名
+ * return: 文件名字符串
+ */
+func GenerateImgFilename(suffix string) string {
+	// 前缀 + 时间戳(36进制) + 3位随机数 + 后缀
+	return "img_" + strconv.FormatInt(time.Now().UnixNano(), 36) + random.GenerateNumberCode(3) + suffix
+}
+
+/**
+ * 随机生成一个视频文件名
+ * return: 文件名字符串
+ */
+func GenerateVideoFilename() string {
+	// 前缀 + 时间戳(36进制) + 3位随机数
+	return "v_" + strconv.FormatInt(time.Now().UnixNano(), 36) + random.GenerateNumberCode(3)
+}
+
+//生成文件url
+func GenerateFileUrl(objectKey string) (string, error) {
 	if viper.GetString("oss.type") != "local" {
-		// 调用OSS上传
 		oss, err := unioss.GetStorage()
 		if err != nil {
 			return "", err
 		}
-		oss.PutObjectFromFile(objectKey, filePath)
-		//获取文件url
+
 		return oss.GetObjectUrl(objectKey), nil
 	}
 
-	// 返回文件URL
-	return GenerateUrl(objectKey), nil
-}
-
-/**
- * 随机生成一个不重复的文件名
- * return: 文件名字符串
- */
-func GenerateUniqueFilename(prefix, suffix string) string {
-	// 前缀 + 时间戳(36进制) + 3位随机数 + 后缀
-	return prefix + strconv.FormatInt(time.Now().UnixNano(), 36) + random.GenerateNumberCode(3) + suffix
-}
-
-//生成文件url
-func GenerateUrl(objectKey string) string {
 	protocol := "http://"
 	if viper.GetBool("file.https") {
 		protocol = "https://"
 	}
 	if len(viper.GetString("file.domain")) == 0 {
-		return "/api/" + objectKey
+		return "/api/" + objectKey, nil
 	} else {
-		return protocol + viper.GetString("file.domain") + "/api/" + objectKey
+		return protocol + viper.GetString("file.domain") + "/api/" + objectKey, nil
 	}
 }

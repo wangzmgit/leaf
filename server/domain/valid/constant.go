@@ -8,6 +8,7 @@ const (
 
 	ID_ERROR = "ID错误"
 
+	TITLE_ERROR   = "标题不能为空"
 	CONTENT_ERROR = "内容不能为空"
 
 	FILE_TYPE_ERROR = "文件类型不符合要求"

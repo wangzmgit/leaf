@@ -39,10 +39,13 @@ func CollectRoutes(r *gin.Engine) *gin.Engine {
 		CollectUploadRoutes(v1)
 		// 分区相关路由
 		CollectPartitionRoutes(v1)
+		// 视频相关路由
+		CollectVideoRoutes(v1)
 	}
 
 	//获取静态文件
 	r.StaticFS("/api/img", http.Dir("./upload/image"))
+	r.StaticFS("/api/video", http.Dir("./upload/video"))
 
 	return r
 }

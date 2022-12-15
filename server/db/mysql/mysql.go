@@ -37,4 +37,6 @@ func GetMysqlClient() *gorm.DB {
 func InitTables() {
 	mysqlClient.AutoMigrate(&model.User{})
 	mysqlClient.AutoMigrate(&model.Partition{})
+	mysqlClient.AutoMigrate(&model.Video{})
+	mysqlClient.AutoMigrate(&model.Resource{})
 }

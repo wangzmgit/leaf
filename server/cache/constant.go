@@ -59,3 +59,9 @@ const PARTITION_KEY = "partition_key"
 
 // 分区过期时间 不过期
 const PARTITION_EXPRIRATION_TIME = 0
+
+// 视频点击量标识符
+const VIDEO_CLICKS_KEY = "video_clicks_key"
+
+// 分区过期时间  n 分钟
+const VIDEO_CLICKS_EXPRIRATION_TIME = 30
