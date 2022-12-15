@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<{
     minWidth: number
     minHeight: number
     aspectRatio?: number
-    fillColor?:string
+    fillColor?: string
 }>(), {
     minWidth: 0,
     minHeight: 0,
@@ -56,13 +56,13 @@ const getDataURL = () => {
     return cropper.getDataURL();
 }
 
-const getFile =  async () => {
+const getFile = async () => {
     const original = props.file?.name || "";
     const fileName = original.substring(0, original.lastIndexOf("."));
     const blob = await cropper.getBlob({
         fillColor: props.fillColor
     });
-    return new File([blob], `${fileName}.png`, {type: "image/png", lastModified: Date.now()});                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+    return new File([blob], `${fileName}.png`, { type: "image/png", lastModified: Date.now() });
 }
 
 onBeforeMount(() => {

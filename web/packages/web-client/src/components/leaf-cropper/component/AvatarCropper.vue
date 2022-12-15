@@ -33,7 +33,6 @@ const emits = defineEmits(["stateChange"])
 const uploadAvatar = async () => {
     if (cropperRef.value) {
         const file = await cropperRef.value.getFile();
-        console.log('file', file)
         await uploadImgAPI({
             name: "image",
             action: "v1/upload/image",

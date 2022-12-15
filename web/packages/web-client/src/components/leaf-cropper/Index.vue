@@ -30,7 +30,11 @@ const imageChange = (e: Event) => {
 }
 
 const open = () => {
-    inputRef.value?.click();
+    if (!imgFile) {
+        inputRef.value?.click();
+    } else {
+        showCropper.value = true;
+    }
 }
 
 const closeCropper = () => {
@@ -40,8 +44,15 @@ const closeCropper = () => {
     showCropper.value = false;
 }
 
+const setImgFile = (file: File | null) => {
+    if (file) {
+        imgFile.value = file;
+    }
+}
+
 defineExpose({
     open,
+    setImgFile,
     closeCropper
 })
 

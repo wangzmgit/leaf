@@ -1,8 +1,8 @@
 <template>
     <div class="space-cover-cropper">
         <div class="cropper-container">
-            <pic-cropper ref="cropperRef" :aspectRatio="(5 / 1)" :key="props.file?.name" :file="props.file"
-                :minHeight="55" :minWidth="275" fillColor="#e6e6e6" @change="imgChange"></pic-cropper>
+            <pic-cropper ref="cropperRef" :aspectRatio="(16 / 9)" :key="props.file?.name" :file="props.file"
+                :minHeight="360" :minWidth="640" fillColor="#e6e6e6" @change="imgChange"></pic-cropper>
         </div>
         <div class="btn-container">
             <n-button type="primary" @click="uploadCover">裁剪并上传</n-button>
