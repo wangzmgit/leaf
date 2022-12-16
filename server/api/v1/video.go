@@ -94,8 +94,10 @@ func GetVideoStatus(ctx *gin.Context) {
 	videoId := convert.StringToUint(ctx.DefaultQuery("vid", "0"))
 	video := service.SelectVideoByID(videoId)
 
+	resources := service.SelectResourceByVideo(videoId, false)
+
 	// 返回给前端
-	resp.OK(ctx, "ok", gin.H{"video": vo.ToVideoStatusVO(video)})
+	resp.OK(ctx, "ok", gin.H{"video": vo.ToVideoStatusVO(video, resources)})
 }
 
 // 获取视频信息
@@ -113,7 +115,7 @@ func GetVideoByID(ctx *gin.Context) {
 	author := service.GetUserInfo(video.Uid)
 
 	//获取视频资源
-	resources := service.SelectResourceByVideo(video.ID)
+	resources := service.SelectResourceByVideo(video.ID, true)
 
 	//获取视频统计数据
 	// TODO: 获取点赞和收藏数据
@@ -126,4 +128,27 @@ func GetVideoByID(ctx *gin.Context) {
 
 	// 返回给前端
 	resp.OK(ctx, "ok", gin.H{"video": vo.ToVideoVO(video, author, resources)})
+}
+
+// 提交审核
+func SubmitReview(ctx *gin.Context) {
+	//获取参数
+	var idDTO dto.IdDTO
+	if err := ctx.Bind(&idDTO); err != nil {
+		resp.Response(ctx, resp.RequestParamError, "", nil)
+		zap.L().Error("请求参数有误")
+		return
+	}
+
+	if service.SelectResourceCountByVid(idDTO.ID) == 0 {
+		resp.Response(ctx, resp.ResourceNotExistError, "", nil)
+		zap.L().Error("资源不存在")
+		return
+	}
+
+	// 更新视频状态
+	service.UpadteVideoStatus(idDTO.ID, common.WAITING_REVIEW)
+
+	// 返回给前端
+	resp.OK(ctx, "ok", nil)
 }

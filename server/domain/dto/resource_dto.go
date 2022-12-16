@@ -5,6 +5,12 @@ import (
 	"kuukaa.fun/leaf/domain/model"
 )
 
+// 修改资源标题
+type ModifyResourceTitleDTO struct {
+	ID    uint
+	Title string
+}
+
 /**
  * resDTO结构体转化为Resource结构体
  * param: vid 视频id
@@ -13,9 +19,10 @@ import (
  * param: resDTO 不同分辨率DTO结构体
  * return: Resource结构体
  */
-func ResourceDtoToResource(vid uint, quality int, duration float64, url string) model.Resource {
+func ResourceDtoToResource(vid, uid uint, quality int, duration float64, url string) model.Resource {
 	return model.Resource{
 		Vid:      vid,
+		Uid:      uid,
 		Url:      url,
 		Duration: duration,
 		Status:   common.VIDEO_PROCESSING,

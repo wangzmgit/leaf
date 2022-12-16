@@ -20,16 +20,19 @@ type VideoVo struct {
 
 // 视频状态VO
 type VideoStatusVO struct {
-	ID        uint   `json:"vid"`
-	Title     string `json:"title"`
-	Cover     string `json:"cover"`
-	Desc      string `json:"desc"`
-	Status    int    `json:"status"`
-	Partition uint   `json:"partition"`
-	Copyright bool   `json:"copyright"`
+	ID        uint         `json:"vid"`
+	Title     string       `json:"title"`
+	Cover     string       `json:"cover"`
+	Desc      string       `json:"desc"`
+	Status    int          `json:"status"`
+	Partition uint         `json:"partition"`
+	Copyright bool         `json:"copyright"`
+	Resources []ResourceVo `json:"resources"`
 }
 
-func ToVideoStatusVO(video model.Video) VideoStatusVO {
+func ToVideoStatusVO(video model.Video, resources []model.Resource) VideoStatusVO {
+	resourcesVO := ResourceListToVoList(resources)
+
 	return VideoStatusVO{
 		ID:        video.ID,
 		Title:     video.Title,
@@ -38,6 +41,7 @@ func ToVideoStatusVO(video model.Video) VideoStatusVO {
 		Status:    video.Status,
 		Partition: video.PartitionID,
 		Copyright: video.Copyright,
+		Resources: resourcesVO,
 	}
 }
 

@@ -113,12 +113,13 @@ func getHeigthRes(height int) int {
 func completeTransCoding(resourceId uint, status int) {
 	// 更新资源状态
 	UpadteResourceStatus(resourceId, status)
+	// 获取资源信息
+	resource := SelectResourceByID(resourceId)
 	// 获取转码中资源的数量
-	count := SelectResourceCount(resourceId, common.VIDEO_PROCESSING)
+	count := SelectResourceCountByStatus(resource.Vid, common.VIDEO_PROCESSING)
 	// 如果没有转码中的视频，则更新视频为待审核
 	if count == 0 {
 		// 获取视频审核状态
-		resource := SelectResourceByID(resourceId)
 		video := SelectVideoByID(resource.Vid)
 		if video.Status == common.SUBMIT_REVIEW {
 			UpadteVideoStatus(video.ID, common.WAITING_REVIEW)

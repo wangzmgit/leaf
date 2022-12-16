@@ -42,7 +42,8 @@ var (
 	PartitionError       = R{httpStatus: http.StatusOK, code: 7010, msg: "分区不存在"}
 	ParentPartitionError = R{httpStatus: http.StatusOK, code: 7020, msg: "所属分区不存在"}
 
-	VideoNotExistError = R{httpStatus: http.StatusOK, code: 7110, msg: "视频不存在"}
+	VideoNotExistError    = R{httpStatus: http.StatusOK, code: 7110, msg: "视频不存在"}
+	ResourceNotExistError = R{httpStatus: http.StatusOK, code: 7120, msg: "资源不存在"}
 
 	// 90** 第三方服务错误
 	SendMailError = R{httpStatus: http.StatusOK, code: 9010, msg: "邮件发送失败"}

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"io/ioutil"
+	"os"
 	"strconv"
 	"time"
 
@@ -28,7 +28,7 @@ func UploadVideoToOss(dirName string) error {
 		return err
 	}
 
-	files, err := ioutil.ReadDir("./upload/video/" + dirName)
+	files, err := os.ReadDir("./upload/video/" + dirName)
 	if err != nil {
 		return err
 	}
@@ -62,7 +62,7 @@ func GenerateVideoFilename() string {
 	return "v_" + strconv.FormatInt(time.Now().UnixNano(), 36) + random.GenerateNumberCode(3)
 }
 
-//生成文件url
+// 生成文件url
 func GenerateFileUrl(objectKey string) (string, error) {
 	if viper.GetString("oss.type") != "local" {
 		oss, err := unioss.GetStorage()

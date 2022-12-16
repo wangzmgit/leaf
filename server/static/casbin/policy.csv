@@ -3,11 +3,15 @@ p, user, /api/v1/user/info/modify, POST
 p, user, /api/v1/user/cover/modify, POST
 
 p, user, /api/v1/upload/image, POST
-p, user, /api/v1/upload/video, POST
+p, user, /api/v1/upload/video/:vid, POST
+
+p, user, /api/v1/resource/title/modify, POST
+p, user, /api/v1/resource/delete, POST
 
 p, user, /api/v1/video/status, GET
 p, user, /api/v1/video/info/upload, POST
 p, user, /api/v1/video/info/modify, POST
+p, user, /api/v1/video/review/submit, POST
 
 p, root, /api/v1/partition/add, POST
 p, root, /api/v1/partition/delete, POST

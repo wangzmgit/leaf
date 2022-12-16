@@ -74,8 +74,8 @@ func UploadImg(ctx *gin.Context) {
 
 func UploadVideo(ctx *gin.Context) {
 	// 获取视频ID
-	var idDTO dto.IdDTO
-	if err := ctx.Bind(&idDTO); err != nil {
+	vid := convert.StringToUint(ctx.Param("vid"))
+	if vid == 0 {
 		resp.Response(ctx, resp.RequestParamError, "", nil)
 		zap.L().Error("请求参数有误")
 		return
@@ -92,7 +92,7 @@ func UploadVideo(ctx *gin.Context) {
 	filenameOnly := service.GenerateVideoFilename()
 	// 参数校验
 	userId := ctx.GetUint("userId")
-	videoInfo := service.SelectVideoByID(idDTO.ID)
+	videoInfo := service.SelectVideoByID(vid)
 	if videoInfo.ID == 0 || videoInfo.Uid != userId {
 		resp.Response(ctx, resp.VideoNotExistError, "", nil)
 		zap.L().Error("视频不存在")
@@ -142,7 +142,7 @@ func UploadVideo(ctx *gin.Context) {
 	}
 
 	// 存入数据库
-	resource := dto.ResourceDtoToResource(idDTO.ID, quality, duration, url)
+	resource := dto.ResourceDtoToResource(vid, userId, quality, duration, url)
 	rid := service.InsertResource(resource)
 
 	// 启动转码服务
