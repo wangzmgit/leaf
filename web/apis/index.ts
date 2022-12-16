@@ -13,3 +13,6 @@ export * from "./src/types/partition-type";
 
 export * from "./src/api/video";
 export * from "./src/types/video-type";
+
+export * from "./src/api/resource";
+export * from "./src/types/resource-type";

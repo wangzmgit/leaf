@@ -19,12 +19,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { NScrollbar, NEllipsis } from "naive-ui";
-import type { PartListType } from "@leaf/apis";
+import type { ResourceType } from "@leaf/apis";
 
 const emits = defineEmits(['change']);
 const props = withDefaults(defineProps<{
     active?: number
-    resources: Array<PartListType>
+    resources: Array<ResourceType>
 }>(), {
     active: 1
 })

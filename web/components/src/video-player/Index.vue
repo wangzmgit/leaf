@@ -9,13 +9,13 @@ import { onBeforeMount, onMounted, ref, watch } from 'vue';
 import dashjs from "dashjs";
 import { WPlayer } from 'vue-wplayer';
 import 'vue-wplayer/dist/style.css';
-import { PartListType } from '@leaf/apis';
+import { ResourceType } from '@leaf/apis';
 import { OptionsType, QualityType } from '../types/player';
 
 const props = withDefaults(defineProps<{
     vid: number,
     theme: string,
-    resources: Array<PartListType>,
+    resources: Array<ResourceType>,
     part: number
 }>(), {
     part: 1

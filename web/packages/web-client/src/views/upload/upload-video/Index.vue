@@ -8,9 +8,8 @@
         </n-steps>
         <div class="upload-center">
             <upload-video-info v-if="current === 1" :info="videoInfo" @finish="infoFinish"></upload-video-info>
-            <!--<upload-video :vid="videoInfo.vid" v-else-if="current === 2"></upload-video> -->
+            <upload-video :vid="videoInfo.vid" :resources="videoInfo.resources" v-else-if="current === 2"></upload-video>
         </div>
-
     </div>
 </template>
 
@@ -23,7 +22,7 @@ import UploadVideoInfo from './component/UploadVideoInfo.vue';
 import { statusCode, reviewCode } from '@leaf/utils';
 import { getVideoStatusAPI } from '@leaf/apis';
 import type { VideoStatusType } from '@leaf/apis';
-// import UploadVideo from './components/UploadVideo.vue';
+import UploadVideo from './component/UploadVideo.vue';
 
 const route = useRoute();
 const notification = useNotification();//通知
@@ -39,7 +38,8 @@ const videoInfo = ref<VideoStatusType>({
     cover: "",
     desc: "",
     copyright: false,
-    partition: 0
+    partition: 0,
+    resources: []
 });
 
 

@@ -71,7 +71,7 @@ import { VideoPlayer } from "@leaf/components";
 import ArchiveInfo from './component/ArchiveInfo.vue';
 
 import { Forbid } from "@leaf/icons";
-import type { PartListType, VideoType } from '@leaf/apis';
+import type { ResourceType, VideoType } from '@leaf/apis';
 import { getVideoInfoAPI } from '@leaf/apis';
 import { statusCode } from '@leaf/utils';
 
@@ -87,7 +87,7 @@ const stat = ref({
     collect: 0
 });//点赞收藏数据
 const loading = ref(true);
-const resources = ref<Array<PartListType>>([]);
+const resources = ref<Array<ResourceType>>([]);
 const videoInfo = ref<VideoType>();
 
 //获取视频信息

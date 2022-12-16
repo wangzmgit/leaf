@@ -1,4 +1,12 @@
+import { ResourceType } from "./resource-type"
 import { UserInfoType } from "./user-type"
+
+export interface BaseVideoType {
+    vid: number,
+    title: string,
+    cover: string,
+    created_at: string
+}
 
 // 上传视频
 export interface UploadVideoType {
@@ -26,17 +34,11 @@ export interface VideoStatusType {
     cover: string,
     desc: string,
     copyright: boolean,
-    partition: number
+    partition: number,
+    resources: ResourceType[]
 }
 
-
-export interface BaseVideoType {
-    vid: number,
-    title: string,
-    cover: string,
-    created_at: string
-}
-
+// 视频
 export interface VideoType extends BaseVideoType {
     desc: string,
     copyright: boolean,
@@ -44,12 +46,3 @@ export interface VideoType extends BaseVideoType {
     author: UserInfoType
 }
 
-// 分P
-export interface PartListType {
-    id: number
-    title: string,
-    url: string,
-    duration: number,
-    status: number,
-    quality: number,
-}

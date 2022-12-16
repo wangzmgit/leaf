@@ -1,7 +1,7 @@
 <template>
-    <div class="upload-video">
-        <n-upload multiple directory-dnd :show-file-list="false" @before-upload="beforeUploadVideo"
-            @change="handleChange">
+    <div class="video-uploader">
+        <n-upload multiple directory-dnd :show-file-list="false" accept="video/mp4" @before-upload="beforeUploadVideo"
+            :custom-request="handleChange">
             <n-upload-dragger>
                 <div v-if="!uploading">
                     <div style="margin-bottom: 12px">
@@ -26,7 +26,9 @@
 import { ref } from "vue";
 import { Upload } from "@leaf/icons";
 import { globalConfig } from "@leaf/utils";
+import type { UploadCustomRequestOptions } from "naive-ui";
 import { NIcon, NUpload, NUploadDragger, NText, NP, NProgress, useNotification } from 'naive-ui';
+import { uploadFileAPI } from "@leaf/apis";
 
 const emits = defineEmits(["finish"]);
 const props = defineProps<{
@@ -61,34 +63,52 @@ const beforeUploadVideo = async (options: any) => {
 }
 
 //上传变化的回调
-const handleChange = (options: any) => {
+const handleChange = ({ file }: UploadCustomRequestOptions) => {
+    if (!file.file) return;
     uploading.value = true;
-    const status = options.file.status;
-    if (status === "finished") {
-        emits("finish");
-        notification.success({
-            title: '上传完成',
-            duration: 3000,
-        });
-        uploading.value = false;
-    } else if (status === "error") {
-        notification.error({
-            title: '文件上传失败',
-            duration: 5000,
-        });
-        uploading.value = false;
-    }
+    uploadFileAPI({
+        name: "video",
+        action: `v1/upload/video/${props.vid}`,
+        file: file.file,
+        onProgress: (val: any) => {
+            changeUpload("uploading", val)
+        },
+        onError: () => {
+            changeUpload("error")
+            uploading.value = false;
+        },
+        onFinish: (data?: any) => {
+            changeUpload("success", data)
+            uploading.value = false;
+        },
+    })
+}
 
-    //上传进度
-    const event = options.event;
-    if (event) {
-        percent.value = Math.floor((event.loaded / event.total) * 100);
+//上传变化的回调
+const changeUpload = (status: string, data?: any) => {
+    switch (status) {
+        case "success":
+            emits("finish");
+            notification.success({
+                title: '上传完成',
+                duration: 3000,
+            });
+            break;
+        case "uploading":
+            percent.value = data;
+            break;
+        case "error":
+            notification.error({
+                title: '文件上传失败',
+                duration: 5000,
+            });
+            break;
     }
 }
 </script>
 
 <style lang="less" scoped>
-.upload-video {
+.video-uploader {
     width: 350px;
     margin: 50px auto;
 }

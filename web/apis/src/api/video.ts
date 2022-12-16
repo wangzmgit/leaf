@@ -19,5 +19,10 @@ export const modifyVideoInfoAPI = (modifyVideo: ModifyVideoType) => {
 //获取视频信息
 export const getVideoInfoAPI = (vid: number) => {
     return request.get(`v1/video/get?vid=${vid}`);
-  }
-  
+}
+
+
+//提交审核
+export const submitReviewAPI = (id: number) => {
+    return request.post('v1/video/review/submit', { id });
+}

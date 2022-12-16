@@ -16,7 +16,7 @@
 import { ref } from 'vue';
 import PicCropper from './PicCropper.vue';
 import { NButton } from 'naive-ui';
-import { uploadImgAPI } from "@leaf/apis";
+import { uploadFileAPI } from "@leaf/apis";
 
 const props = defineProps<{
     file?: File
@@ -33,7 +33,7 @@ const emits = defineEmits(["stateChange"])
 const uploadAvatar = async () => {
     if (cropperRef.value) {
         const file = await cropperRef.value.getFile();
-        await uploadImgAPI({
+        await uploadFileAPI({
             name: "image",
             action: "v1/upload/image",
             file: file,
