@@ -43,7 +43,20 @@ func UploadVideoInfo(ctx *gin.Context) {
 	}
 
 	video := dto.UploadVideoDtoToVideo(userId, uploadVideoDTO)
-	vid := service.InsertVideo(video)
+	vid, err := service.InsertVideo(video)
+	if err != nil {
+		resp.Response(ctx, resp.Error, "创建视频失败", nil)
+		zap.L().Error("创建视频失败 " + err.Error())
+		return
+	}
+
+	// 创建点赞
+	if err := service.InsertLike(vid); err != nil {
+		service.DeleteVideo(vid)
+		resp.Response(ctx, resp.Error, "创建视频失败", nil)
+		zap.L().Error("创建点赞失败 " + err.Error())
+		return
+	}
 
 	// 返回给前端
 	resp.OK(ctx, "ok", gin.H{"vid": vid})
@@ -121,13 +134,11 @@ func GetVideoByID(ctx *gin.Context) {
 	// TODO: 获取点赞和收藏数据
 
 	//增加播放量(一个ip在同一个视频下，每30分钟可重新增加1播放量)
-	if cache.GetClicks(video.ID, ctx.ClientIP()) == "" {
-		service.AddClicks(video.ID)
-		cache.SetClicks(video.ID, ctx.ClientIP())
-	}
+	service.AddVideoClicks(video.ID, ctx.ClientIP())
+	clicks := service.GetVideoClicks(video.ID)
 
 	// 返回给前端
-	resp.OK(ctx, "ok", gin.H{"video": vo.ToVideoVO(video, author, resources)})
+	resp.OK(ctx, "ok", gin.H{"video": vo.ToVideoVO(video, author, clicks, resources)})
 }
 
 // 提交审核

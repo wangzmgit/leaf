@@ -9,9 +9,9 @@ type Video struct {
 	Desc        string `gorm:"type:varchar(200);comment:'视频简介';default:'什么都没有'"`
 	Uid         uint   `gorm:"comment:'用户ID';not null;index"`
 	Copyright   bool   `gorm:"comment:'是否为原创';not null"`
-	Clicks      int    `gorm:"comment:'点击量';default:0"`
+	Clicks      int64  `gorm:"comment:'点击量';default:0"`
 	Status      int    `gorm:"comment:'审核状态';not null"`
-	PartitionID uint   `gorm:"comment:'分区ID';deult:0"`
+	PartitionId uint   `gorm:"comment:'分区ID';deult:0"`
 }
 
 func (table *Video) TableName() string {

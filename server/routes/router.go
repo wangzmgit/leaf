@@ -41,8 +41,10 @@ func CollectRoutes(r *gin.Engine) *gin.Engine {
 		CollectPartitionRoutes(v1)
 		// 视频相关路由
 		CollectVideoRoutes(v1)
-		// 视频资源相关录音
+		// 视频资源相关路由
 		CollectResourceRoutes(v1)
+		// 点赞收藏相关路由
+		CollectArchiveRoutes(v1)
 	}
 
 	//获取静态文件

@@ -35,3 +35,15 @@ func Get(key string) string {
 func Del(key string) {
 	redisClient.Del(ctx, key)
 }
+
+func Incr(key string) {
+	redisClient.Incr(ctx, key)
+}
+
+func Keys(key string) []string {
+	return redisClient.Keys(ctx, key).Val()
+}
+
+func TTL(key string) time.Duration {
+	return redisClient.TTL(ctx, key).Val()
+}

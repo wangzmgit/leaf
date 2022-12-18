@@ -10,7 +10,7 @@ require (
 	github.com/spf13/viper v1.13.0
 	github.com/wangzmgit/jigsaw v0.1.0
 	go.uber.org/zap v1.23.0
-	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
+	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gorm.io/driver/mysql v1.4.3
 	gorm.io/gorm v1.24.0
@@ -21,12 +21,22 @@ require (
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.6+incompatible // indirect
 	github.com/casbin/casbin/v2 v2.59.0 // indirect
 	github.com/clbanning/mxj v1.8.4 // indirect
+	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/gookit/color v1.3.6 // indirect
+	github.com/jasonlvhit/gocron v0.0.1 // indirect
+	github.com/klauspost/compress v1.13.6 // indirect
+	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect
 	github.com/mozillazg/go-httpheader v0.2.1 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/qiniu/api.v7/v7 v7.8.2 // indirect
 	github.com/qiniu/go-sdk/v7 v7.13.0 // indirect
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.40 // indirect
+	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
+	github.com/xdg-go/scram v1.1.1 // indirect
+	github.com/xdg-go/stringprep v1.0.3 // indirect
+	github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d // indirect
+	go.mongodb.org/mongo-driver v1.11.1 // indirect
 	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
 	golang.org/x/time v0.2.0 // indirect
 )

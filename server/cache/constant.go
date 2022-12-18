@@ -49,7 +49,7 @@ const SLIDER_X_KEY = "slider_x_key:"
 const SLIDER_X_EXPRIRATION_TIME = 5
 
 // 上传文件缓存标识符
-const UPLOAD_IMAGE_KEY = "upload_image_key"
+const UPLOAD_IMAGE_KEY = "upload_image_key:"
 
 // 上传文件过期时间 n 分钟
 const UPLOAD_IMAGE_EXPRIRATION_TIME = 20
@@ -60,8 +60,14 @@ const PARTITION_KEY = "partition_key"
 // 分区过期时间 不过期
 const PARTITION_EXPRIRATION_TIME = 0
 
-// 视频点击量标识符
-const VIDEO_CLICKS_KEY = "video_clicks_key"
+// 视频点击量限制标识符
+const VIDEO_CLICKS_KEY = "video_clicks_key:"
 
-// 分区过期时间  n 分钟
+// 视频点击量限制过期时间  n 分钟
 const VIDEO_CLICKS_EXPRIRATION_TIME = 30
+
+// 视频点击量标识符
+const VIDEO_CLICKS_LIMIT_KEY = "video_clicks_limit_key:"
+
+// 点击量过期时间  n 小时
+const VIDEO_CLICKS_LIMIT_EXPRIRATION_TIME = 72

@@ -1,19 +1,23 @@
 package service
 
 import (
-	"gorm.io/gorm"
 	"kuukaa.fun/leaf/common"
 	"kuukaa.fun/leaf/domain/dto"
 	"kuukaa.fun/leaf/domain/model"
 )
 
-func InsertVideo(video model.Video) uint {
-	mysqlClient.Create(&video)
-	return video.ID
+func InsertVideo(video model.Video) (uint, error) {
+	err := mysqlClient.Create(&video).Error
+	return video.ID, err
 }
 
 func SelectVideoByID(videoId uint) (video model.Video) {
 	mysqlClient.First(&video, videoId)
+	return
+}
+
+func SelectVideoClicks(videoId uint) (clicks int64) {
+	mysqlClient.Model(model.Video{}).Where("id = ?", videoId).Pluck("clicks", &clicks)
 	return
 }
 
@@ -32,6 +36,14 @@ func UpdateVideoInfo(modifyDTO dto.ModifyVideoDTO) error {
 	return nil
 }
 
+func UpdateClicks(videoId uint, clicks int64) error {
+	err := mysqlClient.Model(&model.Video{}).Where("id = ?", videoId).Update("clicks", clicks).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func UpadteVideoStatus(videoId uint, status int) error {
 	err := mysqlClient.Model(&model.Video{}).Where("id = ?", videoId).Update("status", status).Error
 	if err != nil {
@@ -40,6 +52,7 @@ func UpadteVideoStatus(videoId uint, status int) error {
 	return nil
 }
 
-func AddClicks(videoId uint) {
-	mysqlClient.Model(&model.Video{}).Where("id = ?", videoId).UpdateColumn("clicks", gorm.Expr("clicks + 1"))
+// 删除视频
+func DeleteVideo(id uint) {
+	mysqlClient.Where("id = ?", id).Delete(&model.Video{})
 }

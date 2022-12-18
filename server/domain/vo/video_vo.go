@@ -15,7 +15,7 @@ type VideoVo struct {
 	Copyright bool         `json:"copyright"`
 	Author    UserVo       `json:"author"`
 	Resource  []ResourceVo `json:"resources"`
-	Clicks    int          `json:"clicks"`
+	Clicks    int64        `json:"clicks"`
 }
 
 // 视频状态VO
@@ -39,13 +39,13 @@ func ToVideoStatusVO(video model.Video, resources []model.Resource) VideoStatusV
 		Cover:     video.Cover,
 		Desc:      video.Desc,
 		Status:    video.Status,
-		Partition: video.PartitionID,
+		Partition: video.PartitionId,
 		Copyright: video.Copyright,
 		Resources: resourcesVO,
 	}
 }
 
-func ToVideoVO(video model.Video, author model.User, resource []model.Resource) VideoVo {
+func ToVideoVO(video model.Video, author model.User, clicks int64, resource []model.Resource) VideoVo {
 
 	return VideoVo{
 		ID:        video.ID,
@@ -61,6 +61,6 @@ func ToVideoVO(video model.Video, author model.User, resource []model.Resource) 
 			Avatar: author.Avatar,
 		},
 		Resource: ResourceListToVoList(resource),
-		Clicks:   video.Clicks,
+		Clicks:   clicks,
 	}
 }

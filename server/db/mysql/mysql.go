@@ -17,7 +17,7 @@ func Init() {
 	dns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?%s",
 		viper.GetString("mysql.username"),
 		viper.GetString("mysql.password"),
-		viper.GetString("mysql.hostname"),
+		viper.GetString("mysql.host"),
 		viper.GetString("mysql.port"),
 		viper.GetString("mysql.datasource"),
 		viper.GetString("mysql.param"))

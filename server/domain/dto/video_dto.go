@@ -35,7 +35,7 @@ func UploadVideoDtoToVideo(userId uint, uploadVideoDTO UploadVideoDTO) model.Vid
 		Cover:       uploadVideoDTO.Cover,
 		Desc:        uploadVideoDTO.Desc,
 		Copyright:   uploadVideoDTO.Copyright,
-		PartitionID: uploadVideoDTO.Partition,
+		PartitionId: uploadVideoDTO.Partition,
 		Status:      common.CREATED_VIDEO,
 	}
 }
