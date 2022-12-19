@@ -9,6 +9,9 @@ import (
 func CollectArchiveRoutes(r *gin.RouterGroup) {
 	archive := r.Group("archive")
 	{
+		// 获取点赞收藏数据
+		archive.GET("stat", api.GetArchiveStat)
+
 		auth := archive.Group("")
 		auth.Use(middleware.Auth())
 		{
@@ -18,6 +21,13 @@ func CollectArchiveRoutes(r *gin.RouterGroup) {
 			auth.POST("cancel/like", api.CancelLike)
 			// 是否点赞
 			auth.GET("has/like", api.HasLike)
+
+			// 收藏
+			auth.POST("collect", api.Collect)
+			// 已收藏的文件夹
+			auth.GET("collect/collected", api.GetCollectedInfo)
+			// 是否收藏
+			auth.GET("has/collect", api.HasCollect)
 		}
 	}
 }

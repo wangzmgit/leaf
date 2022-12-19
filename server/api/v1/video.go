@@ -50,14 +50,6 @@ func UploadVideoInfo(ctx *gin.Context) {
 		return
 	}
 
-	// 创建点赞
-	if err := service.InsertLike(vid); err != nil {
-		service.DeleteVideo(vid)
-		resp.Response(ctx, resp.Error, "创建视频失败", nil)
-		zap.L().Error("创建点赞失败 " + err.Error())
-		return
-	}
-
 	// 返回给前端
 	resp.OK(ctx, "ok", gin.H{"vid": vid})
 }
@@ -135,10 +127,12 @@ func GetVideoByID(ctx *gin.Context) {
 
 	//增加播放量(一个ip在同一个视频下，每30分钟可重新增加1播放量)
 	service.AddVideoClicks(video.ID, ctx.ClientIP())
-	clicks := service.GetVideoClicks(video.ID)
+
+	// 获取播放量
+	video.Clicks = service.GetVideoClicks(video.ID)
 
 	// 返回给前端
-	resp.OK(ctx, "ok", gin.H{"video": vo.ToVideoVO(video, author, clicks, resources)})
+	resp.OK(ctx, "ok", gin.H{"video": vo.ToVideoVO(video, author, resources)})
 }
 
 // 提交审核
@@ -162,4 +156,36 @@ func SubmitReview(ctx *gin.Context) {
 
 	// 返回给前端
 	resp.OK(ctx, "ok", nil)
+}
+
+// 获取收藏视频列表
+func GetCollectVideo(ctx *gin.Context) {
+	id := convert.StringToUint(ctx.DefaultQuery("id", "0"))
+
+	userId := ctx.GetUint("userId")
+	page := convert.StringToInt(ctx.DefaultQuery("page", "1"))
+	pageSize := convert.StringToInt(ctx.DefaultQuery("page_size", "10"))
+
+	if pageSize > 30 {
+		resp.Response(ctx, resp.TooManyRequestsError, "", nil)
+		zap.L().Error("请求数量过多 ")
+		return
+	}
+
+	collection := service.SelectCollectionByID(id)
+	if !collection.Open && collection.Uid != userId {
+		resp.Response(ctx, resp.CollectionNotExistError, "", nil)
+		zap.L().Error("收藏夹不存在")
+		return
+	}
+
+	videos, total, err := service.SelectCollectVideo(id, page, pageSize)
+	if err != nil {
+		resp.Response(ctx, resp.Error, "", nil)
+		zap.L().Error("获取收藏视频失败")
+		return
+	}
+
+	// 返回给前端
+	resp.OK(ctx, "ok", gin.H{"total": total, "videos": vo.ToCollectListVO(videos)})
 }

@@ -6,6 +6,7 @@ import (
 	"kuukaa.fun/leaf/domain/dto"
 	"kuukaa.fun/leaf/domain/resp"
 	"kuukaa.fun/leaf/service"
+	"kuukaa.fun/leaf/util/convert"
 )
 
 func Like(ctx *gin.Context) {
@@ -65,15 +66,10 @@ func CancelLike(ctx *gin.Context) {
 }
 
 func HasLike(ctx *gin.Context) {
-	var idDTO dto.IdDTO
-	if err := ctx.Bind(&idDTO); err != nil {
-		resp.Response(ctx, resp.RequestParamError, "", nil)
-		zap.L().Error("请求参数有误")
-		return
-	}
+	videoId := convert.StringToUint(ctx.DefaultQuery("vid", "0"))
 
 	userId := ctx.GetUint("userId")
-	isLike, err := service.IsLike(idDTO.ID, userId)
+	isLike, err := service.IsLike(videoId, userId)
 	if err != nil {
 		resp.Response(ctx, resp.Error, "", nil)
 		zap.L().Error("获取点赞状态失败 " + err.Error())

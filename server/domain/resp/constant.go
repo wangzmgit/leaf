@@ -33,17 +33,18 @@ var (
 
 	FileUploadError = R{httpStatus: http.StatusOK, code: 4030, msg: "文件上传失败"}
 
+	PartitionError          = R{httpStatus: http.StatusOK, code: 4040, msg: "分区不存在"}
+	ParentPartitionError    = R{httpStatus: http.StatusOK, code: 4040, msg: "所属分区不存在"}
+	VideoNotExistError      = R{httpStatus: http.StatusOK, code: 4040, msg: "视频不存在"}
+	ResourceNotExistError   = R{httpStatus: http.StatusOK, code: 4040, msg: "资源不存在"}
+	CollectionNotExistError = R{httpStatus: http.StatusOK, code: 4040, msg: "收藏夹不存在"}
+
+	TooManyRequestsError = R{httpStatus: http.StatusOK, code: 4050, msg: "请求数量过多"}
+
 	// 50** 服务器相关错误
 
 	// 60** 用户相关错误
 	NameExistError = R{httpStatus: http.StatusOK, code: 6000, msg: "用户名已存在"}
-
-	// 70** 视频相关错误
-	PartitionError       = R{httpStatus: http.StatusOK, code: 7010, msg: "分区不存在"}
-	ParentPartitionError = R{httpStatus: http.StatusOK, code: 7020, msg: "所属分区不存在"}
-
-	VideoNotExistError    = R{httpStatus: http.StatusOK, code: 7110, msg: "视频不存在"}
-	ResourceNotExistError = R{httpStatus: http.StatusOK, code: 7120, msg: "资源不存在"}
 
 	// 90** 第三方服务错误
 	SendMailError = R{httpStatus: http.StatusOK, code: 9010, msg: "邮件发送失败"}

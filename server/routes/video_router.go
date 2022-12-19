@@ -24,6 +24,8 @@ func CollectVideoRoutes(r *gin.RouterGroup) {
 			auth.GET("/status", api.GetVideoStatus)
 			// 提交审核
 			auth.POST("/review/submit", api.SubmitReview)
+			// 获取收藏视频
+			auth.GET("/collect", api.GetCollectVideo)
 		}
 	}
 }

@@ -39,4 +39,5 @@ func InitTables() {
 	mysqlClient.AutoMigrate(&model.Partition{})
 	mysqlClient.AutoMigrate(&model.Video{})
 	mysqlClient.AutoMigrate(&model.Resource{})
+	mysqlClient.AutoMigrate(&model.Collection{})
 }

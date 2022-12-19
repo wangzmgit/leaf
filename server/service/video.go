@@ -7,8 +7,19 @@ import (
 )
 
 func InsertVideo(video model.Video) (uint, error) {
-	err := mysqlClient.Create(&video).Error
-	return video.ID, err
+
+	if err := mysqlClient.Create(&video).Error; err != nil {
+		return 0, err
+	}
+
+	// 创建点赞数据
+	if err := InsertLike(video.ID); err != nil {
+		// 删除MySQL中的收藏夹
+		DeleteVideo(video.ID)
+		return 0, err
+	}
+
+	return video.ID, nil
 }
 
 func SelectVideoByID(videoId uint) (video model.Video) {
@@ -55,4 +66,12 @@ func UpadteVideoStatus(videoId uint, status int) error {
 // 删除视频
 func DeleteVideo(id uint) {
 	mysqlClient.Where("id = ?", id).Delete(&model.Video{})
+}
+
+// 收藏夹是否属于用户
+func IsCollectionBelongUser(id, userId uint) bool {
+	var collection model.Collection
+	mysqlClient.Where("id = ? and uid = ?", id, userId).First(&collection)
+
+	return collection.ID != 0
 }

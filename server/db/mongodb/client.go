@@ -9,3 +9,7 @@ type MongoClient struct {
 func (m *MongoClient) Like() *mongo.Collection {
 	return m.db.Collection("like")
 }
+
+func (m *MongoClient) Collect() *mongo.Collection {
+	return m.db.Collection("collect")
+}

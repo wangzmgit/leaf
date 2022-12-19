@@ -30,8 +30,17 @@ type VideoStatusVO struct {
 	Resources []ResourceVo `json:"resources"`
 }
 
+// 收藏的视频
+type CollectVideoVO struct {
+	ID     uint   `json:"vid"`
+	Title  string `json:"title"`
+	Cover  string `json:"cover"`
+	Desc   string `json:"desc"`
+	Clicks int64  `json:"clicks"`
+}
+
 func ToVideoStatusVO(video model.Video, resources []model.Resource) VideoStatusVO {
-	resourcesVO := ResourceListToVoList(resources)
+	resourcesVO := ToResourceListVO(resources)
 
 	return VideoStatusVO{
 		ID:        video.ID,
@@ -45,7 +54,7 @@ func ToVideoStatusVO(video model.Video, resources []model.Resource) VideoStatusV
 	}
 }
 
-func ToVideoVO(video model.Video, author model.User, clicks int64, resource []model.Resource) VideoVo {
+func ToVideoVO(video model.Video, author model.User, resource []model.Resource) VideoVo {
 
 	return VideoVo{
 		ID:        video.ID,
@@ -60,7 +69,21 @@ func ToVideoVO(video model.Video, author model.User, clicks int64, resource []mo
 			Sign:   author.Sign,
 			Avatar: author.Avatar,
 		},
-		Resource: ResourceListToVoList(resource),
-		Clicks:   clicks,
+		Resource: ToResourceListVO(resource),
+		Clicks:   video.Clicks,
 	}
+}
+
+func ToCollectListVO(videos []model.Video) []CollectVideoVO {
+	length := len(videos)
+	newVideos := make([]CollectVideoVO, length)
+	for i := 0; i < length; i++ {
+		newVideos[i].ID = videos[i].ID
+		newVideos[i].Title = videos[i].Title
+		newVideos[i].Cover = videos[i].Cover
+		newVideos[i].Desc = videos[i].Desc
+		newVideos[i].Clicks = videos[i].Clicks
+	}
+
+	return newVideos
 }

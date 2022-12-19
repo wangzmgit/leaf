@@ -45,6 +45,8 @@ func CollectRoutes(r *gin.Engine) *gin.Engine {
 		CollectResourceRoutes(v1)
 		// 点赞收藏相关路由
 		CollectArchiveRoutes(v1)
+		// 收藏夹相关路由
+		CollectCollectionRoutes(v1)
 	}
 
 	//获取静态文件

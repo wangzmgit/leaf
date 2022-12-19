@@ -11,6 +11,8 @@ const (
 	TITLE_ERROR   = "标题不能为空"
 	CONTENT_ERROR = "内容不能为空"
 
+	COLLECTION_NAME_ERROR = "收藏夹名不能为空"
+
 	FILE_TYPE_ERROR = "文件类型不符合要求"
 	FILE_SIZE_ERROR = "文件大小不符合要求"
 )

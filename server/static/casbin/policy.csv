@@ -12,10 +12,20 @@ p, user, /api/v1/video/status, GET
 p, user, /api/v1/video/info/upload, POST
 p, user, /api/v1/video/info/modify, POST
 p, user, /api/v1/video/review/submit, POST
+p, user, /api/v1/video/collect, GET
 
 p, user, /api/v1/archive/has/like, GET
 p, user, /api/v1/archive/like, POST
 p, user, /api/v1/archive/cancel/like, POST
+p, user, /api/v1/archive/has/collect, GET
+p, user, /api/v1/archive/collect/collected, GET
+p, user, /api/v1/archive/collect, POST
+
+p, user, /api/v1/collection/list, GET
+p, user, /api/v1/collection/info, GET
+p, user, /api/v1/collection/add, POST
+p, user, /api/v1/collection/modify, POST
+p, user, /api/v1/collection/delete, POST
 
 p, root, /api/v1/partition/add, POST
 p, root, /api/v1/partition/delete, POST
