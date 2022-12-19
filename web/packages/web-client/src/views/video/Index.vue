@@ -17,7 +17,7 @@
                     <!-- 点赞收藏等数据 -->
                     <div class="video-toolbar">
                         <div class="toolbar-left">
-                            <archive-info :stat="stat" :vid="videoInfo!.vid"></archive-info>
+                            <archive-info :vid="videoInfo!.vid"></archive-info>
                         </div>
                         <!-- 日期播放和在线人数 -->
                         <div class="toolbar-right">
@@ -57,7 +57,6 @@
 <script setup lang="ts">
 import { getTheme } from "@/theme"
 // import config from '@/config';
-// import { statType } from '@/types/archive';
 import { useRoute, useRouter } from 'vue-router';
 import { NIcon, NTime, NButton, NSkeleton } from 'naive-ui';
 import { onBeforeMount, onBeforeUnmount, reactive, ref } from 'vue';
@@ -82,10 +81,6 @@ const vid = parseInt(route.params.vid.toString());
 // const title = config.title;
 const part = ref(1);//当前分集
 const more = ref(false);//是否展开简介
-const stat = ref({
-    like: 0,
-    collect: 0
-});//点赞收藏数据
 const loading = ref(true);
 const resources = ref<Array<ResourceType>>([]);
 const videoInfo = ref<VideoType>();
@@ -101,7 +96,6 @@ const getVideoInfo = (vid: number) => {
                 part.value = 1;
             }
 
-            stat.value = res.data.data.stat;
             //修改网站标题
             // document.title = `${res.data.data.video.title}-${title}`
             loading.value = false;

@@ -5,16 +5,16 @@
             <n-icon :class="[likeAnimation, archive.is_like ? 'active' : 'icon']" @click="likeClick">
                 <like></like>
             </n-icon>
-            <p>0</p>
+            <p>{{ stat.like }}</p>
         </div>
         <div class="archive-item">
             <n-icon :class="archive.is_collect ? 'active' : 'icon'" @click="showCollect = true">
                 <collect></collect>
             </n-icon>
-            <p>0</p>
+            <p>{{ stat.collect }}</p>
         </div>
     </div>
-    <!-- <collection-list v-if="showCollect" :vid="vid" @close="closeCollection"></collection-list> -->
+    <collection-list v-if="showCollect" :vid="vid" @close="closeCollection"></collection-list>
 </template>
 
 <script setup lang="ts">
@@ -22,9 +22,15 @@ import { NIcon } from 'naive-ui';
 import { getTheme } from "@/theme"
 import { Like, Collect } from "@leaf/icons";
 import { reactive, ref, onBeforeMount } from 'vue';
+import { statusCode } from '@leaf/utils';
+import {
+    getArchiveStatAPI, getLikeStatusAPI, getCollectStatusAPI,
+    likeAPI, cancelLikeAPI
+} from "@leaf/apis";
+import CollectionList from './CollectionList.vue';
 
 const props = defineProps<{
-    vid: Number
+    vid: number
 }>()
 
 const initTheme = () => {
@@ -34,54 +40,72 @@ const initTheme = () => {
         "--primary-color": theme.primaryColor
     }
 }
-// const stat = ref(props.stat);//点赞收藏数据
-//点赞收藏数据
+
+// 是否点赞收藏
 const archive = reactive({
     is_collect: false,
     is_like: false
 })
+
+// 点赞收藏数据
+const stat = ref<{
+    like: number
+    collect: number
+}>({
+    like: 0,
+    collect: 0
+});
+
 const showCollect = ref(false);
 const likeAnimation = ref('');
 
-//获取点赞收藏关注信息
-const getArchiveInfo = () => {
-    // getArchiveAPI(props.vid).then((res) => {
-    //     if (res.data.code === 2000) {
-    //         const resArchive = res.data.data.archive;
-    //         archive.is_like = resArchive.is_like;
-    //         archive.is_collect = resArchive.is_collect;
-    //     }
-    // })
-}
-
 //点赞点赞按钮
 const likeClick = () => {
-    // if (!archive.is_like) {
-    //     //调用点赞接口
-    //     likeAPI(props.vid);
-    //     likeAnimation.value = 'like-active';
-    //     stat.value.like++;
-    // } else {
-    //     dislikeAPI(props.vid);
-    //     stat.value.like--;
-    // }
-    // archive.is_like = !archive.is_like;
+    if (!archive.is_like) {
+        //调用点赞接口
+        likeAPI(props.vid);
+        likeAnimation.value = 'like-active';
+        stat.value.like++;
+    } else {
+        cancelLikeAPI(props.vid);
+        stat.value.like--;
+    }
+    archive.is_like = !archive.is_like;
 }
 
 //关闭收藏夹回调
 const closeCollection = (val: number) => {
-    // if (val === 1) {
-    //     stat.value.collect++;
-    //     archive.is_collect = true;
-    // } else if (val === -1) {
-    //     stat.value.collect--;
-    //     archive.is_collect = false;
-    // }
-    // showCollect.value = false;
+    if (val === 1) {
+        stat.value.collect++;
+        archive.is_collect = true;
+    } else if (val === -1) {
+        stat.value.collect--;
+        archive.is_collect = false;
+    }
+    showCollect.value = false;
 }
 
 onBeforeMount(() => {
-    getArchiveInfo();
+    //获取点赞收藏关注信息
+    getArchiveStatAPI(props.vid).then((res) => {
+        if (res.data.code === statusCode.OK) {
+            stat.value = res.data.data.stat;
+        }
+    })
+
+    // 获取是否点赞
+    getLikeStatusAPI(props.vid).then((res) => {
+        if (res.data.code === statusCode.OK) {
+            archive.is_like = res.data.data.like;
+        }
+    })
+
+    // 获取是否收藏
+    getCollectStatusAPI(props.vid).then((res) => {
+        if (res.data.code === statusCode.OK) {
+            archive.is_collect = res.data.data.collect;
+        }
+    })
 })
 
 </script>

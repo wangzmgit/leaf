@@ -16,3 +16,11 @@ export * from "./src/types/video-type";
 
 export * from "./src/api/resource";
 export * from "./src/types/resource-type";
+
+export * from "./src/api/archive";
+
+export * from "./src/api/collection";
+export * from "./src/types/collection-type";
+
+export * from "./src/api/collect";
+export * from "./src/types/collect-type";
