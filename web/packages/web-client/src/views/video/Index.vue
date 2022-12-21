@@ -32,7 +32,7 @@
                         <n-button text @click="more = !more">{{ more ? '收起' : '展开更多' }}</n-button>
                     </div>
                     <!--发表评论-->
-                    <!-- <comment :vid="videoInfo!.vid"></comment> -->
+                    <comment-list :vid="videoInfo!.vid"></comment-list>
                 </div>
                 <div v-else class="player-skeleton">
                     <n-skeleton height="500px" />
@@ -61,7 +61,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { NIcon, NTime, NButton, NSkeleton } from 'naive-ui';
 import { onBeforeMount, onBeforeUnmount, reactive, ref } from 'vue';
 // import { OnlineSocketURL } from '@/utils/request';
-// import Comment from './components/Comment.vue';
+import CommentList from './component/CommentList.vue';
 import PartList from './component/PartList.vue';
 import HeaderBar from '@/components/header-bar/Index.vue';
 import AuthorCard from './component/AuthorCard.vue';

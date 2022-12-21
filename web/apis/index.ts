@@ -24,3 +24,6 @@ export * from "./src/types/collection-type";
 
 export * from "./src/api/collect";
 export * from "./src/types/collect-type";
+
+export * from "./src/api/comment";
+export * from "./src/types/comment-type";
