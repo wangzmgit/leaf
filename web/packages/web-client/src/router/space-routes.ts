@@ -20,5 +20,17 @@ export const spaceRoutes: RouteRecordRaw = {
                 },
             ]
         },
+        {
+            path: '/space/following',
+            name: 'Following',
+            meta: { auth: true },
+            component: () => import("../views/space/follow/Index.vue"),
+        },
+        {
+            path: '/space/follower',
+            name: 'Follower',
+            meta: { auth: true },
+            component: () => import("../views/space/follow/Index.vue"),
+        },
     ]
 }

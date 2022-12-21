@@ -24,11 +24,11 @@
                         </div>
                         <div>
                             <p class="data-title">关注</p>
-                            <p class="data-content">{{ userData.followingCount }}</p>
+                            <p class="data-content" @click="goPage('Following')">{{ userData.followingCount }}</p>
                         </div>
                         <div>
                             <p class="data-title">粉丝</p>
-                            <p class="data-content">{{ userData.followersCount }}</p>
+                            <p class="data-content" @click="goPage('Follower')">{{ userData.followerCount }}</p>
                         </div>
                     </div>
                 </div>
@@ -51,9 +51,9 @@
 
 <script setup lang="ts">
 import { h, ref, onBeforeMount, reactive } from "vue";
-import { RouterLink, useRoute } from 'vue-router';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { Video, Collection, Upload, Message, Setting, Male, Female } from "@leaf/icons";
-import type { UserInfoType } from "@leaf/apis";
+import { getFollowDataAPI, type UserInfoType } from "@leaf/apis";
 import { statusCode, storageData } from "@leaf/utils";
 import { modifySpaceCoverAPI, getUserInfoAPI } from "@leaf/apis";
 import useRenderIcon from "@/hooks/render-icon-hooks";
@@ -64,6 +64,7 @@ import LeafCropper from "@/components/leaf-cropper/Index.vue";
 import SpaceCoverCropper from "@/components/leaf-cropper/component/SpaceCoverCropper.vue";
 
 const route = useRoute();
+const router = useRouter();
 const { renderIcon } = useRenderIcon();
 const notification = useNotification();
 
@@ -80,7 +81,16 @@ const menuOptions = [
         icon: renderIcon(Collection, '#e3c0aa'),
     },
     {
-        label: '投稿',
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "Upload",
+                    }
+                },
+                { default: () => '投稿' }
+            ),
         key: "upload",
         icon: renderIcon(Upload, '#7daebd'),
     },
@@ -116,8 +126,13 @@ const userInfo = ref<UserInfoType>({
 const userData = reactive({
     videoCount: 0,
     followingCount: 0,
-    followersCount: 0
+    followerCount: 0
 })
+
+//前往关注和粉丝页面
+const goPage = (name: string) => {
+    router.push({ name: name });
+}
 
 const cropperRef = ref<InstanceType<typeof LeafCropper> | null>(null)
 const uploadClick = () => {
@@ -161,6 +176,16 @@ const getUserInfo = () => {
     })
 }
 
+//获取关注数和粉丝数
+const getFollowData = (id: number) => {
+    getFollowDataAPI(id).then((res) => {
+        if (res.data.code === statusCode.OK) {
+            userData.followerCount = res.data.data.follower;
+            userData.followingCount = res.data.data.following;
+        } 
+    })
+}
+
 onBeforeMount(() => {
     userInfo.value = storageData.get("user_info");
     switch (route.name) {
@@ -183,6 +208,7 @@ onBeforeMount(() => {
             defaultOption.value = 'home';
             break;
     }
+    getFollowData(userInfo.value.uid);
 })
 
 </script>

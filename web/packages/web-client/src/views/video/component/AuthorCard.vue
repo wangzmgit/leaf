@@ -23,8 +23,9 @@
                 <p>{{ authorInfo.sign }}</p>
             </div>
             <div class="follow-btn">
-                <!-- <n-button size="small" v-if="isFollow" type="primary" @click="unfollow(author.uid)">已关注</n-button> -->
-                <n-button size="small" :disabled="true" type="error">关注</n-button>
+                <n-button size="small" v-if="isFollow" type="primary" @click="unfollow(author!.uid)">已关注</n-button>
+                <n-button size="small" v-else :disabled="!isLogin" type="error"
+                    @click="follow(author!.uid)">关注</n-button>
             </div>
         </div>
     </div>
@@ -32,11 +33,12 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-// import useUserFollow from '@/hooks/user-follow';
+import useUserFollow from '@/hooks/user-follow-hooks';
 import { NButton, NSkeleton } from 'naive-ui';
 import type { UserInfoType } from '@leaf/apis';
 import { CommonAvatar } from '@leaf/components';
-import { ref, watch } from 'vue';
+import { onBeforeMount, ref, watch } from 'vue';
+import { storageData } from '@leaf/utils';
 
 const router = useRouter();
 
@@ -45,16 +47,25 @@ const props = defineProps<{
     loading: Boolean
 }>()
 
-const authorInfo = ref(Object.assign({},props.author));
+const isLogin = ref(false);
+const authorInfo = ref(Object.assign({}, props.author));
+const { isFollow, getFollowStatus, follow, unfollow } = useUserFollow();
 
 const goUserSpace = (uid: number) => {
     let userUrl = router.resolve({ name: "User", params: { uid: uid } });
     window.open(userUrl.href, '_blank');
 }
 
-watch(()=>props.loading,(val) =>{
+watch(() => props.loading, (val) => {
     if (!val && props.author) {
         authorInfo.value = props.author;
+        getFollowStatus(authorInfo.value.uid);
+    }
+})
+
+onBeforeMount(() => {
+    if (storageData.get("user_info").uid) {
+        isLogin.value = true;
     }
 })
 

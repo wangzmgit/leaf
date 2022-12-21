@@ -27,3 +27,5 @@ export * from "./src/types/collect-type";
 
 export * from "./src/api/comment";
 export * from "./src/types/comment-type";
+
+export * from "./src/api/follow";
