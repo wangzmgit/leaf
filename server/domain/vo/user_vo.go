@@ -29,3 +29,19 @@ func ToUserVO(user model.User) UserVO {
 		Birthday:   user.Birthday,
 	}
 }
+
+func ToUserVoList(users []model.User) []UserVO {
+	length := len(users)
+	newUsers := make([]UserVO, length)
+	for i := 0; i < length; i++ {
+		newUsers[i].ID = users[i].ID
+		newUsers[i].Name = users[i].Username
+		newUsers[i].Sign = users[i].Sign
+		newUsers[i].Avatar = users[i].Avatar
+		newUsers[i].SpaceCover = users[i].SpaceCover
+		newUsers[i].Gender = users[i].Gender
+		newUsers[i].Birthday = users[i].Birthday
+	}
+
+	return newUsers
+}

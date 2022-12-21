@@ -31,6 +31,10 @@ p, user, /api/v1/comment/add, POST
 p, user, /api/v1/comment/delete, POST
 p, user, /api/v1/comment/reply/delete, POST
 
+p, user, /api/v1/follow/status, GET
+p, user, /api/v1/follow/add, POST
+p, user, /api/v1/follow/cancel, POST
+
 p, root, /api/v1/partition/add, POST
 p, root, /api/v1/partition/delete, POST
 

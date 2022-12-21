@@ -42,6 +42,8 @@ var (
 
 	TooManyRequestsError = R{httpStatus: http.StatusOK, code: 4050, msg: "请求数量过多"}
 
+	FollowYourselfError = R{httpStatus: http.StatusOK, code: 4060, msg: "不能关注自己"}
+
 	// 50** 服务器相关错误
 
 	// 60** 用户相关错误
