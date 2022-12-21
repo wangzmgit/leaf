@@ -19,6 +19,17 @@ const baseRoutes: Array<RouteRecordRaw> = [
         name: 'Video',
         component: () => import("../views/video/Index.vue")
     },
+    {
+        path: '/404',
+        name: '404',
+        component: () => import("../views/result/page-not-found/Index.vue")
+    },
+    {
+        path: '/:catchAll(.*)',
+        redirect: {
+            name: "404"
+        }
+    }
 ]
 
 const routes = baseRoutes.concat(spaceRoutes, uploadRoutes);
