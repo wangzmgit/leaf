@@ -122,9 +122,6 @@ func GetVideoByID(ctx *gin.Context) {
 	//获取视频资源
 	resources := service.SelectResourceByVideo(video.ID, true)
 
-	//获取视频统计数据
-	// TODO: 获取点赞和收藏数据
-
 	//增加播放量(一个ip在同一个视频下，每30分钟可重新增加1播放量)
 	service.AddVideoClicks(video.ID, ctx.ClientIP())
 

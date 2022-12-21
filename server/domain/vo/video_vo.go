@@ -6,14 +6,14 @@ import (
 	"kuukaa.fun/leaf/domain/model"
 )
 
-type VideoVo struct {
+type VideoVO struct {
 	ID        uint         `json:"vid"`
 	Title     string       `json:"title"`
 	Cover     string       `json:"cover"`
 	Desc      string       `json:"desc"`
 	CreatedAt time.Time    `json:"created_at"`
 	Copyright bool         `json:"copyright"`
-	Author    UserVo       `json:"author"`
+	Author    UserVO       `json:"author"`
 	Resource  []ResourceVo `json:"resources"`
 	Clicks    int64        `json:"clicks"`
 }
@@ -54,16 +54,16 @@ func ToVideoStatusVO(video model.Video, resources []model.Resource) VideoStatusV
 	}
 }
 
-func ToVideoVO(video model.Video, author model.User, resource []model.Resource) VideoVo {
+func ToVideoVO(video model.Video, author model.User, resource []model.Resource) VideoVO {
 
-	return VideoVo{
+	return VideoVO{
 		ID:        video.ID,
 		Title:     video.Title,
 		Cover:     video.Cover,
 		Desc:      video.Desc,
 		CreatedAt: video.CreatedAt,
 		Copyright: video.Copyright,
-		Author: UserVo{
+		Author: UserVO{
 			ID:     author.ID,
 			Name:   author.Username,
 			Sign:   author.Sign,

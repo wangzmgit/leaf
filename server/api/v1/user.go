@@ -15,7 +15,7 @@ func GetUserInfo(ctx *gin.Context) {
 	userId := ctx.GetUint("userId")
 	userInfo := service.GetUserInfo(userId)
 
-	resp.OK(ctx, "", gin.H{"user_info": vo.ToUserVo(userInfo)})
+	resp.OK(ctx, "", gin.H{"user_info": vo.ToUserVO(userInfo)})
 }
 
 func ModifyUserInfo(ctx *gin.Context) {

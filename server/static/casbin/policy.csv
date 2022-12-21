@@ -27,6 +27,10 @@ p, user, /api/v1/collection/add, POST
 p, user, /api/v1/collection/modify, POST
 p, user, /api/v1/collection/delete, POST
 
+p, user, /api/v1/comment/add, POST
+p, user, /api/v1/comment/delete, POST
+p, user, /api/v1/comment/reply/delete, POST
+
 p, root, /api/v1/partition/add, POST
 p, root, /api/v1/partition/delete, POST
 

@@ -13,3 +13,7 @@ func (m *MongoClient) Like() *mongo.Collection {
 func (m *MongoClient) Collect() *mongo.Collection {
 	return m.db.Collection("collect")
 }
+
+func (m *MongoClient) Comment() *mongo.Collection {
+	return m.db.Collection("comment")
+}

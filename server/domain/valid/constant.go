@@ -15,4 +15,7 @@ const (
 
 	FILE_TYPE_ERROR = "文件类型不符合要求"
 	FILE_SIZE_ERROR = "文件大小不符合要求"
+
+	// 评论校验
+	COMMENT_CONTENT_ERROR = "评论或回复内容不能为空"
 )

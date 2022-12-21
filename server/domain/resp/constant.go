@@ -38,6 +38,7 @@ var (
 	VideoNotExistError      = R{httpStatus: http.StatusOK, code: 4040, msg: "视频不存在"}
 	ResourceNotExistError   = R{httpStatus: http.StatusOK, code: 4040, msg: "资源不存在"}
 	CollectionNotExistError = R{httpStatus: http.StatusOK, code: 4040, msg: "收藏夹不存在"}
+	CommentNotExistError    = R{httpStatus: http.StatusOK, code: 4040, msg: "评论或回复不存在"}
 
 	TooManyRequestsError = R{httpStatus: http.StatusOK, code: 4050, msg: "请求数量过多"}
 
