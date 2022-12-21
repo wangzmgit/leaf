@@ -28,7 +28,7 @@ func Collect(videoId, userId uint, collectionIds []uint) error {
 	}
 	_, err := mongoClient.Collect().UpdateMany(context.TODO(), filter, bson.M{
 		"$addToSet": bson.M{
-			"videoids": videoId,
+			"video_ids": videoId,
 		},
 	})
 
@@ -45,7 +45,7 @@ func CancelCollect(videoId, userId uint, collectionIds []uint) error {
 	}
 	_, err := mongoClient.Collect().UpdateMany(context.TODO(), filter, bson.M{
 		"$pull": bson.M{
-			"videoids": videoId,
+			"video_ids": videoId,
 		},
 	})
 
@@ -56,7 +56,7 @@ func CancelCollect(videoId, userId uint, collectionIds []uint) error {
 func IsCollect(videoId, userId uint) (bool, error) {
 	c, err := mongoClient.Collect().CountDocuments(context.TODO(), bson.M{
 		"uid": userId,
-		"videoids": bson.M{
+		"video_ids": bson.M{
 			"$elemMatch": bson.M{"$eq": videoId},
 		},
 	})
@@ -75,7 +75,7 @@ func SelectCollectedInfo(userId, videoId uint) ([]uint, error) {
 		bson.M{
 			"$match": bson.M{
 				"uid": userId,
-				"videoids": bson.M{
+				"video_ids": bson.M{
 					"$elemMatch": bson.M{
 						"$eq": videoId,
 					},
@@ -84,9 +84,9 @@ func SelectCollectedInfo(userId, videoId uint) ([]uint, error) {
 		},
 		bson.M{
 			"$project": bson.M{
-				"_id":      0,
-				"uid":      0,
-				"videoids": 0,
+				"_id":       0,
+				"uid":       0,
+				"video_ids": 0,
 			},
 		},
 	})
@@ -113,7 +113,7 @@ func SelectCollectCount(videoId uint) (int32, error) {
 	cursor, err := mongoClient.Collect().Aggregate(context.TODO(), bson.A{
 		bson.M{
 			"$match": bson.M{
-				"videoids": bson.M{
+				"video_ids": bson.M{
 					"$elemMatch": bson.M{
 						"$eq": videoId,
 					},
@@ -169,11 +169,11 @@ func SelectCollectVideo(collectionId uint, page, pageSize int) ([]model.Video, i
 			"$project": bson.M{
 				"_id": 0,
 				"count": bson.M{
-					"$size": "$videoids",
+					"$size": "$video_ids",
 				},
 				"data": bson.M{
 					"$slice": bson.A{
-						"$videoids",
+						"$video_ids",
 						(page - 1) * pageSize,
 						pageSize,
 					},

@@ -21,7 +21,7 @@ func InsertLike(id uint) error {
 func Like(videoId, userId uint) error {
 	_, err := mongoClient.Like().UpdateOne(context.TODO(), bson.M{"vid": videoId}, bson.M{
 		"$addToSet": bson.M{
-			"userids": userId,
+			"user_ids": userId,
 		},
 	})
 
@@ -32,7 +32,7 @@ func Like(videoId, userId uint) error {
 func CancelLike(videoId, userId uint) error {
 	_, err := mongoClient.Like().UpdateOne(context.TODO(), bson.M{"vid": videoId}, bson.M{
 		"$pull": bson.M{
-			"userids": userId,
+			"user_ids": userId,
 		},
 	})
 
@@ -43,7 +43,7 @@ func CancelLike(videoId, userId uint) error {
 func IsLike(videoId, userId uint) (bool, error) {
 	c, err := mongoClient.Like().CountDocuments(context.TODO(), bson.M{
 		"vid": videoId,
-		"userids": bson.M{
+		"user_ids": bson.M{
 			"$elemMatch": bson.M{"$eq": userId},
 		},
 	})
@@ -66,7 +66,7 @@ func SelectLikeCount(videoId uint) (int32, error) {
 		bson.M{
 			"$project": bson.M{
 				"count": bson.M{
-					"$size": "$userids",
+					"$size": "$user_ids",
 				},
 			},
 		},
