@@ -38,17 +38,16 @@ const menuOptions = [
         icon: renderIcon(Upload),
     },
     {
-        // label: () =>
-        //     h(
-        //         RouterLink,
-        //         {
-        //             to: {
-        //                 name: "VideoManage",
-        //             }
-        //         },
-        //         { default: () => '稿件管理' }
-        //     ),
-        label: "稿件管理",
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "VideoManage",
+                    }
+                },
+                { default: () => '稿件管理' }
+            ),
         key: "content",
         icon: renderIcon(Video),
     },
@@ -76,9 +75,9 @@ onBeforeMount(() => {
         case 'UploadVideo':
             defaultOption.value = 'upload';
             break;
-        // case 'VideoManage':
-        //     defaultOption.value = 'content';
-        //     break;
+        case 'VideoManage':
+            defaultOption.value = 'content';
+            break;
         // case 'CommentManage':
         //     defaultOption.value = 'comment';
         //     break;

@@ -1,5 +1,5 @@
 <template>
-    <div class="space">
+    <div class="space" v-title :data-title="`${userInfo.name}的个人中心`">
         <header-bar></header-bar>
         <div class="space-container">
             <div class="space-header">
@@ -71,12 +71,30 @@ const notification = useNotification();
 const defaultOption = ref('');//默认激活菜单
 const menuOptions = [
     {
-        label: "首页",
-        key: "home",
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "SpaceVideo",
+                    }
+                },
+                { default: () => '投稿' }
+            ),
+        key: "video",
         icon: renderIcon(Video, '#609a8b'),
     },
     {
-        label: '收藏夹',
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "Collection",
+                    }
+                },
+                { default: () => '收藏夹' }
+            ),
         key: "collection",
         icon: renderIcon(Collection, '#e3c0aa'),
     },
@@ -110,7 +128,6 @@ const menuOptions = [
                 },
                 { default: () => '设置' }
             ),
-
         key: "setting",
         icon: renderIcon(Setting, '#808080'),
     },
@@ -182,19 +199,19 @@ const getFollowData = (id: number) => {
         if (res.data.code === statusCode.OK) {
             userData.followerCount = res.data.data.follower;
             userData.followingCount = res.data.data.following;
-        } 
+        }
     })
 }
 
 onBeforeMount(() => {
     userInfo.value = storageData.get("user_info");
     switch (route.name) {
-        // case 'SpaceInfo':
-        //     defaultOption.value = 'home';
-        //     break;
-        // case 'Collection':
-        //     defaultOption.value = 'collection';
-        //     break;
+        case 'SpaceVideo':
+            defaultOption.value = 'video';
+            break;
+        case 'Collection':
+            defaultOption.value = 'collection';
+            break;
         // case 'Announce':
         //     defaultOption.value = 'announce';
         //     break;

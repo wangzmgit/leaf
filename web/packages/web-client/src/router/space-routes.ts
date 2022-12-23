@@ -21,6 +21,18 @@ export const spaceRoutes: RouteRecordRaw = {
             ]
         },
         {
+            path: '/space/video',
+            name: 'SpaceVideo',
+            meta: { auth: true },
+            component: () => import("../views/space/video/Index.vue"),
+        },
+        {
+            path: '/space/collection',
+            name: 'Collection',
+            meta: { auth: true },
+            component: () => import("../views/space/collection/Index.vue"),
+        },
+        {
             path: '/space/following',
             name: 'Following',
             meta: { auth: true },

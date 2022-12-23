@@ -5,6 +5,7 @@ export interface BaseVideoType {
     vid: number,
     title: string,
     cover: string,
+    desc: string,
     created_at: string
 }
 
@@ -18,21 +19,13 @@ export interface UploadVideoType {
 }
 
 // 修改视频信息
-export interface ModifyVideoType {
-    vid: number,
-    title: string,
-    cover: string,
-    desc: string,
-    copyright: boolean
+export interface ModifyVideoType extends BaseVideoType {
+    copyright: boolean,
 }
 
 // 视频状态
-export interface VideoStatusType {
-    vid: number,
-    status: number
-    title: string,
-    cover: string,
-    desc: string,
+export interface VideoStatusType extends BaseVideoType {
+    status: number,
     copyright: boolean,
     partition: number,
     resources: ResourceType[]
@@ -40,9 +33,14 @@ export interface VideoStatusType {
 
 // 视频
 export interface VideoType extends BaseVideoType {
-    desc: string,
     copyright: boolean,
-    clicks: number
+    clicks: number,
     author: UserInfoType
+}
+
+// 视频
+export interface UserUploadVideoType extends BaseVideoType {
+    clicks: number,
+    status: number
 }
 

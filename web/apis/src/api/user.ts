@@ -25,3 +25,9 @@ export const modifyUserInfoAPI = (modify: ModifyUserInfoType) => {
 export const modifySpaceCoverAPI = (url: string) => {
     return request.post('v1/user/cover/modify', { spaceCover: url });
 }
+
+
+//通过用户ID获取用户信息
+export const getOtherUserInfoAPI = (uid: number) => {
+    return request.get(`v1/user/info/other?uid=${uid}`);
+}

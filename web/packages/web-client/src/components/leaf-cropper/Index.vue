@@ -29,8 +29,8 @@ const imageChange = (e: Event) => {
     }
 }
 
-const open = () => {
-    if (!imgFile) {
+const open = () => { 
+    if (!imgFile.value) {
         inputRef.value?.click();
     } else {
         showCropper.value = true;

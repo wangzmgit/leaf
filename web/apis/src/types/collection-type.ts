@@ -22,8 +22,4 @@ export interface CollectionInfoType {
     desc: string,
     open: boolean,
     created_at: string
-    author: {
-        uid: number,
-        name: string
-    }
 }

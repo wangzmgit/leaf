@@ -21,8 +21,27 @@ export const getVideoInfoAPI = (vid: number) => {
     return request.get(`v1/video/get?vid=${vid}`);
 }
 
-
 //提交审核
 export const submitReviewAPI = (id: number) => {
     return request.post('v1/video/review/submit', { id });
+}
+
+//获取收藏夹内的视频
+export const getCollectVideoAPI = (id: number, page: number, page_size: number) => {
+    return request.get(`v1/video/collect?id=${id}&page=${page}&page_size=${page_size}`);
+}
+
+//获取我的视频
+export const getUploadVideoAPI = (page: number, page_size: number) => {
+    return request.get(`v1/video/upload/get?page=${page}&page_size=${page_size}`);
+}
+
+//通过用户ID获取视频
+export const getVideoListByUidAPI = (uid: number, page: number, page_size: number) => {
+    return request.get(`v1/video/user/get?uid=${uid}&page=${page}&page_size=${page_size}`);
+}
+
+//删除视频
+export const deleteVideoAPI = (id: number) => {
+    return request.post('v1/video/delete', { id });
 }

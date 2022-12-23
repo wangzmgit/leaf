@@ -23,6 +23,7 @@ export default function useUserFollow() {
                 notification.success({
                     title: '关注成功',
                 })
+                isFollow.value = true;
             } else {
                 notification.error({
                     title: '关注失败',
@@ -40,6 +41,7 @@ export default function useUserFollow() {
                 notification.success({
                     title: '取关成功',
                 })
+                isFollow.value = false;
             } else {
                 notification.error({
                     title: '关注失败',

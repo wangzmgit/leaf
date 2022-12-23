@@ -12,5 +12,11 @@ export const uploadRoutes: RouteRecordRaw = {
             meta: { auth: true },
             component: () => import("../views/upload/upload-video/Index.vue"),
         },
+        {
+            path: '/upload/video/manage',
+            name: 'VideoManage',
+            meta: { auth: true },
+            component: () => import("../views/upload/video-manage/Index.vue"),
+        },
     ]
 }
