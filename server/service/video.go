@@ -32,6 +32,22 @@ func SelectVideoClicks(videoId uint) (clicks int64) {
 	return
 }
 
+// 查询用户视频
+func SelectVideoByUserId(userId uint, page, pageSize int) (total int64, videos []model.Video) {
+	offset := (page - 1) * pageSize
+	mysqlClient.Where("uid = ? and status = ?", userId, common.AUDIT_APPROVED).Count(&total)
+	mysqlClient.Where("uid = ? and status = ?", userId, common.AUDIT_APPROVED).Find(&videos).Limit(pageSize).Offset(offset)
+	return
+}
+
+// 查询上传的视频
+func SelectUploadVideo(userId uint, page, pageSize int) (total int64, videos []model.Video) {
+	offset := (page - 1) * pageSize
+	mysqlClient.Where("uid = ?", userId).Count(&total)
+	mysqlClient.Where("uid = ?", userId).Find(&videos).Limit(pageSize).Offset(offset)
+	return
+}
+
 func UpdateVideoInfo(modifyDTO dto.ModifyVideoDTO) error {
 	if err := mysqlClient.Model(&model.Video{}).Where("id = ?", modifyDTO.VID).Updates(
 		map[string]interface{}{
@@ -68,10 +84,10 @@ func DeleteVideo(id uint) {
 	mysqlClient.Where("id = ?", id).Delete(&model.Video{})
 }
 
-// 收藏夹是否属于用户
-func IsCollectionBelongUser(id, userId uint) bool {
-	var collection model.Collection
-	mysqlClient.Where("id = ? and uid = ?", id, userId).First(&collection)
+// 视频是否属于用户
+func IsVideoBelongUser(id, userId uint) bool {
+	var video model.Video
+	mysqlClient.Where("id = ? and uid = ?", id, userId).First(&video)
 
-	return collection.ID != 0
+	return video.ID != 0
 }

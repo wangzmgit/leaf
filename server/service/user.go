@@ -39,7 +39,7 @@ func GetUserInfo(userId uint) (user model.User) {
 	return
 }
 
-//查询用户名是否存在
+// 查询用户名是否存在
 func IsNameExist(name string) (bool, uint) {
 	var user model.User
 	mysqlClient.Where("username = ?", name).First(&user)

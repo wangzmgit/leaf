@@ -81,7 +81,7 @@ func GetFollowings(ctx *gin.Context) {
 	users := service.SelectFollowingUser(uid, page, pageSize)
 
 	// 返回给前端
-	resp.OK(ctx, "ok", gin.H{"users": vo.ToUserVoList(users)})
+	resp.OK(ctx, "ok", gin.H{"users": vo.ToBaseUserVoList(users)})
 }
 
 // 通过UID获取粉丝列表
@@ -99,7 +99,7 @@ func GetFollowers(ctx *gin.Context) {
 	users := service.SelectFollowerUser(uid, page, pageSize)
 
 	// 返回给前端
-	resp.OK(ctx, "ok", gin.H{"users": vo.ToUserVoList(users)})
+	resp.OK(ctx, "ok", gin.H{"users": vo.ToBaseUserVoList(users)})
 }
 
 // 通过UID获取粉丝数

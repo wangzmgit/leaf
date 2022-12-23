@@ -49,3 +49,11 @@ func SelectCollectionListByUid(userId uint) (collections []model.Collection) {
 func DeleteCollection(id uint) {
 	mysqlClient.Where("id = ?", id).Delete(&model.Collection{})
 }
+
+// 收藏夹是否属于用户
+func IsCollectionBelongUser(id, userId uint) bool {
+	var collection model.Collection
+	mysqlClient.Where("id = ? and uid = ?", id, userId).First(&collection)
+
+	return collection.ID != 0
+}

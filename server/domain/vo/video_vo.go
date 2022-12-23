@@ -30,13 +30,25 @@ type VideoStatusVO struct {
 	Resources []ResourceVo `json:"resources"`
 }
 
-// 收藏的视频
-type CollectVideoVO struct {
-	ID     uint   `json:"vid"`
-	Title  string `json:"title"`
-	Cover  string `json:"cover"`
-	Desc   string `json:"desc"`
-	Clicks int64  `json:"clicks"`
+// 基础视频信息
+type BaseVideoVO struct {
+	ID        uint      `json:"vid"`
+	Title     string    `json:"title"`
+	Cover     string    `json:"cover"`
+	Desc      string    `json:"desc"`
+	Clicks    int64     `json:"clicks"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// 用户上传视频
+type UserUploadVideoVO struct {
+	ID        uint      `json:"vid"`
+	Title     string    `json:"title"`
+	Cover     string    `json:"cover"`
+	Desc      string    `json:"desc"`
+	Clicks    int64     `json:"clicks"`
+	Status    int       `json:"status"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 func ToVideoStatusVO(video model.Video, resources []model.Resource) VideoStatusVO {
@@ -74,15 +86,32 @@ func ToVideoVO(video model.Video, author model.User, resource []model.Resource) 
 	}
 }
 
-func ToCollectListVO(videos []model.Video) []CollectVideoVO {
+func ToBaseVideoVoList(videos []model.Video) []BaseVideoVO {
 	length := len(videos)
-	newVideos := make([]CollectVideoVO, length)
+	newVideos := make([]BaseVideoVO, length)
 	for i := 0; i < length; i++ {
 		newVideos[i].ID = videos[i].ID
 		newVideos[i].Title = videos[i].Title
 		newVideos[i].Cover = videos[i].Cover
 		newVideos[i].Desc = videos[i].Desc
 		newVideos[i].Clicks = videos[i].Clicks
+		newVideos[i].CreatedAt = videos[i].CreatedAt
+	}
+
+	return newVideos
+}
+
+func ToUserUploadVideoVoList(videos []model.Video) []UserUploadVideoVO {
+	length := len(videos)
+	newVideos := make([]UserUploadVideoVO, length)
+	for i := 0; i < length; i++ {
+		newVideos[i].ID = videos[i].ID
+		newVideos[i].Title = videos[i].Title
+		newVideos[i].Cover = videos[i].Cover
+		newVideos[i].Desc = videos[i].Desc
+		newVideos[i].Clicks = videos[i].Clicks
+		newVideos[i].Status = videos[i].Status
+		newVideos[i].CreatedAt = videos[i].CreatedAt
 	}
 
 	return newVideos

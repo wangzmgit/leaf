@@ -179,10 +179,76 @@ func GetCollectVideo(ctx *gin.Context) {
 	videos, total, err := service.SelectCollectVideo(id, page, pageSize)
 	if err != nil {
 		resp.Response(ctx, resp.Error, "", nil)
-		zap.L().Error("获取收藏视频失败")
+		zap.L().Error("获取收藏视频失败" + err.Error())
 		return
 	}
 
 	// 返回给前端
-	resp.OK(ctx, "ok", gin.H{"total": total, "videos": vo.ToCollectListVO(videos)})
+	resp.OK(ctx, "ok", gin.H{"total": total, "videos": vo.ToBaseVideoVoList(videos)})
+}
+
+// 获取自己的视频
+func GetUploadVideoList(ctx *gin.Context) {
+	userId := ctx.GetUint("userId")
+	page := convert.StringToInt(ctx.Query("page"))
+	pageSize := convert.StringToInt(ctx.Query("page_size"))
+
+	if pageSize > 30 {
+		resp.Response(ctx, resp.TooManyRequestsError, "", nil)
+		zap.L().Error("请求数量过多 ")
+		return
+	}
+
+	total, videos := service.SelectUploadVideo(userId, page, pageSize)
+	// 更新播放量数据
+	for i := 0; i < len(videos); i++ {
+		videos[i].Clicks = service.GetVideoClicks(videos[i].ID)
+	}
+
+	// 返回给前端
+	resp.OK(ctx, "ok", gin.H{"total": total, "videos": vo.ToUserUploadVideoVoList(videos)})
+}
+
+// 通过用户ID获取视频列表
+func GetVideoListByUid(ctx *gin.Context) {
+	uid := convert.StringToUint(ctx.Query("uid"))
+	page := convert.StringToInt(ctx.Query("page"))
+	pageSize := convert.StringToInt(ctx.Query("page_size"))
+
+	if pageSize > 30 {
+		resp.Response(ctx, resp.TooManyRequestsError, "", nil)
+		zap.L().Error("请求数量过多 ")
+		return
+	}
+
+	total, videos := service.SelectVideoByUserId(uid, page, pageSize)
+	// 更新播放量数据
+	for i := 0; i < len(videos); i++ {
+		videos[i].Clicks = service.GetVideoClicks(videos[i].ID)
+	}
+
+	// 返回给前端
+	resp.OK(ctx, "ok", gin.H{"total": total, "videos": vo.ToBaseVideoVoList(videos)})
+}
+
+// 删除视频
+func DeleteVideo(ctx *gin.Context) {
+	var idDTO dto.IdDTO
+	if err := ctx.Bind(&idDTO); err != nil {
+		resp.Response(ctx, resp.RequestParamError, "", nil)
+		zap.L().Error("请求参数有误")
+		return
+	}
+
+	userId := ctx.GetUint("userId")
+	if !service.IsVideoBelongUser(idDTO.ID, userId) {
+		resp.Response(ctx, resp.VideoNotExistError, "", nil)
+		zap.L().Error("视频不存在")
+		return
+	}
+
+	service.DeleteVideo(idDTO.ID)
+
+	// 返回给前端
+	resp.OK(ctx, "ok", nil)
 }

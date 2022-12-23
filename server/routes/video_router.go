@@ -9,8 +9,10 @@ import (
 func CollectVideoRoutes(r *gin.RouterGroup) {
 	video := r.Group("video")
 	{
-		//获取视频详情
+		// 获取视频详情
 		video.GET("/get", api.GetVideoByID)
+		// 获取用户视频
+		video.GET("/user/get", api.GetVideoListByUid)
 
 		//需要用户登录
 		auth := video.Group("")
@@ -24,8 +26,12 @@ func CollectVideoRoutes(r *gin.RouterGroup) {
 			auth.GET("/status", api.GetVideoStatus)
 			// 提交审核
 			auth.POST("/review/submit", api.SubmitReview)
+			// 删除视频
+			auth.POST("/delete", api.DeleteVideo)
 			// 获取收藏视频
 			auth.GET("/collect", api.GetCollectVideo)
+			// 获取上传的视频
+			auth.GET("/upload/get", api.GetUploadVideoList)
 		}
 	}
 }

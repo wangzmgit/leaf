@@ -13,6 +13,8 @@ p, user, /api/v1/video/info/upload, POST
 p, user, /api/v1/video/info/modify, POST
 p, user, /api/v1/video/review/submit, POST
 p, user, /api/v1/video/collect, GET
+p, user, /api/v1/video/upload/get, GET
+p, user, /api/v1/video/delete, POST
 
 p, user, /api/v1/archive/has/like, GET
 p, user, /api/v1/archive/like, POST

@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"kuukaa.fun/leaf/cache"
 	"kuukaa.fun/leaf/domain/dto"
 	"kuukaa.fun/leaf/domain/resp"
 	"kuukaa.fun/leaf/domain/valid"
@@ -53,7 +54,13 @@ func ModifyCollection(ctx *gin.Context) {
 	}
 
 	userId := ctx.GetUint("userId")
-	if service.IsCollectionBelongUser(modifyCollectionDTO.ID, userId) {
+	if modifyCollectionDTO.Cover != "" && cache.GetUploadImage(modifyCollectionDTO.Cover) != userId {
+		resp.Response(ctx, resp.InvalidLinkError, "", nil)
+		zap.L().Error("文件链接无效")
+		return
+	}
+
+	if !service.IsCollectionBelongUser(modifyCollectionDTO.ID, userId) {
 		resp.Response(ctx, resp.CollectionNotExistError, "", nil)
 		zap.L().Error("收藏夹不存在")
 		return
@@ -75,7 +82,7 @@ func DeleteCollection(ctx *gin.Context) {
 	}
 
 	userId := ctx.GetUint("userId")
-	if service.IsCollectionBelongUser(idDTO.ID, userId) {
+	if !service.IsCollectionBelongUser(idDTO.ID, userId) {
 		resp.Response(ctx, resp.CollectionNotExistError, "", nil)
 		zap.L().Error("收藏夹不存在")
 		return
@@ -108,6 +115,8 @@ func GetCollectionInfo(ctx *gin.Context) {
 		return
 	}
 
+	user := service.GetUserInfo(collection.Uid)
+
 	// 返回给前端
-	resp.OK(ctx, "ok", gin.H{"collections": vo.CollectionToVo(collection)})
+	resp.OK(ctx, "ok", gin.H{"collection": vo.CollectionToVo(collection), "author": vo.ToUserVO(user)})
 }

@@ -1,6 +1,8 @@
 package api
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"kuukaa.fun/leaf/cache"
@@ -9,6 +11,7 @@ import (
 	"kuukaa.fun/leaf/domain/valid"
 	"kuukaa.fun/leaf/domain/vo"
 	"kuukaa.fun/leaf/service"
+	"kuukaa.fun/leaf/util/convert"
 )
 
 func GetUserInfo(ctx *gin.Context) {
@@ -74,4 +77,15 @@ func ModifySpaceCover(ctx *gin.Context) {
 	service.UpdateUserSpaceCover(userId, modifyDTO.SpaceCover)
 	// 返回
 	resp.OK(ctx, "ok", nil)
+}
+
+// 通过用户ID获取用户信息
+func GetUserInfoByID(ctx *gin.Context) {
+	uid := convert.StringToUint(ctx.DefaultQuery("uid", "0"))
+
+	user := service.GetUserInfo(uid)
+	fmt.Println(user)
+
+	// 返回给前端
+	resp.OK(ctx, "ok", gin.H{"user": vo.ToBaseUserVO(user)})
 }
