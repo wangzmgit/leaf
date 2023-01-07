@@ -1,10 +1,7 @@
 package api
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 	"kuukaa.fun/leaf/domain/dto"
 	"kuukaa.fun/leaf/domain/resp"
@@ -12,9 +9,10 @@ import (
 	"kuukaa.fun/leaf/domain/vo"
 	"kuukaa.fun/leaf/service"
 	"kuukaa.fun/leaf/util/convert"
+	"kuukaa.fun/leaf/util/number"
 )
 
-// 发布评论回复
+// 发布评论
 func Comment(ctx *gin.Context) {
 	var commentDTO dto.CommentDTO
 	if err := ctx.Bind(&commentDTO); err != nil {
@@ -31,23 +29,76 @@ func Comment(ctx *gin.Context) {
 	}
 
 	userId := ctx.GetUint("userId")
-	var err error
-	var id primitive.ObjectID
-	if commentDTO.ParentID == primitive.NilObjectID {
-		comment := dto.CommentDtoToComment(commentDTO, userId)
-		id, err = service.InsertComment(comment)
 
-	} else {
-		reply := dto.CommentDtoToReply(commentDTO, userId)
-		fmt.Println(commentDTO.ParentID)
-		id, err = service.InsertReply(commentDTO.ParentID, reply)
-	}
+	// 处理@的用户
+	atUserIds := service.SelectUserIdsByName(commentDTO.At)
 
+	// 将DTO转为model并存入数据库
+	comment := dto.CommentDtoToComment(commentDTO, userId, atUserIds)
+	id, err := service.InsertComment(comment)
 	if err != nil {
 		resp.Response(ctx, resp.Error, "发布失败", nil)
-		zap.L().Error("评论或回复发布失败" + err.Error())
+		zap.L().Error("评论发布失败" + err.Error())
 		return
 	}
+
+	// 获取评论的视频信息，并将回复通知写入数据库
+	video := service.SelectVideoByID(commentDTO.Vid)
+	replyMsg := dto.CommentDtoToReplyMessage(commentDTO, id, video.Uid, userId)
+	service.InsertReplyMessage(replyMsg)
+
+	// 处理@通知并写入数据库
+	atMsg := dto.UserIdsToAtMessage(atUserIds, commentDTO.Vid, userId)
+	service.InsertManyAt(atMsg)
+
+	// 返回给前端
+	resp.OK(ctx, "ok", gin.H{"id": id})
+}
+
+// 发布回复
+func Reply(ctx *gin.Context) {
+	var commentDTO dto.ReplyDTO
+	if err := ctx.Bind(&commentDTO); err != nil {
+		resp.Response(ctx, resp.RequestParamError, "", nil)
+		zap.L().Error("请求参数有误")
+		return
+	}
+
+	// 参数校验
+	if !valid.CommentContent(commentDTO.Content) {
+		resp.Response(ctx, resp.RequestParamError, valid.COMMENT_CONTENT_ERROR, nil)
+		zap.L().Error(valid.COMMENT_CONTENT_ERROR)
+		return
+	}
+
+	userId := ctx.GetUint("userId")
+
+	// 将DTO转为model
+	atUserIds := service.SelectUserIdsByName(commentDTO.At)
+	reply := dto.ReplyDtoToReply(commentDTO, userId, atUserIds)
+
+	// 存入数据库
+	id, err := service.InsertReply(commentDTO.ParentID, reply)
+	if err != nil {
+		resp.Response(ctx, resp.Error, "发布失败", nil)
+		zap.L().Error("回复发布失败" + err.Error())
+		return
+	}
+
+	// 获取回复的评论信息
+	comment, _ := service.SelectCommentByID(commentDTO.ParentID)
+	// 如果回复的用户ID不存在则通知评论作者
+	notifyUserId := number.UintMax(commentDTO.ReplyUserID, comment.Uid)
+	if notifyUserId != userId {
+		replyMsg := dto.ReplyDtoToReplyMessage(commentDTO, notifyUserId, userId, comment.Content)
+		// 回复通知
+		service.InsertReplyMessage(replyMsg)
+	}
+
+	// 处理@通知并写入数据库
+	atMsg := dto.UserIdsToAtMessage(atUserIds, commentDTO.Vid, userId)
+	service.InsertManyAt(atMsg)
+
 	// 返回给前端
 	resp.OK(ctx, "ok", gin.H{"id": id})
 }

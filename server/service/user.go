@@ -82,3 +82,17 @@ func UpdateUserSpaceCover(userId uint, url string) error {
 	}
 	return nil
 }
+
+// 通过用户名查询多个用户
+func SelectUserIdsByName(names []string) (ids []uint) {
+	mysqlClient.Model(model.User{}).Where("username in (?)", names).Pluck("id", &ids)
+	return
+}
+
+// 通过用户名查询一个用户
+func SelectUserIdByName(name string) uint {
+	var user model.User
+	mysqlClient.Where("username = ?", name).First(&user)
+
+	return user.ID
+}

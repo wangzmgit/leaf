@@ -68,6 +68,28 @@ func Auth() gin.HandlerFunc {
 	}
 }
 
+func WsAuth() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		// 读取验证token
+		tokenString := ctx.Query("token")
+		// 验证并解析token
+		_, claims, err := jwt.ParseToken(tokenString)
+		if err != nil {
+			zap.L().Info("token验证失败: " + err.Error())
+			resp.Response(ctx, resp.UnauthorizedError, "", nil)
+			ctx.Abort()
+			return
+		}
+
+		// 读取缓存
+		accessToken := cache.GetAccessToken(claims.UserId)
+		if accessToken == tokenString { // accessToken 未过期
+			ctx.Set("userId", claims.UserId)
+			ctx.Next()
+		}
+	}
+}
+
 func refreshAccessToken(ctx *gin.Context, id uint) {
 	// 生成验证token
 	var err error

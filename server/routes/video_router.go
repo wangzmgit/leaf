@@ -13,6 +13,8 @@ func CollectVideoRoutes(r *gin.RouterGroup) {
 		video.GET("/get", api.GetVideoByID)
 		// 获取用户视频
 		video.GET("/user/get", api.GetVideoListByUid)
+		//在线人数连接
+		video.GET("/online/ws", api.GetRoomConnect)
 
 		//需要用户登录
 		auth := video.Group("")

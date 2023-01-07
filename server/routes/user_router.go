@@ -17,6 +17,8 @@ func CollectUserRoutes(r *gin.RouterGroup) {
 		user.POST("emailcode", api.SendEmailCode)
 		// 通过用户ID获取用户信息
 		user.GET("info/other", api.GetUserInfoByID)
+		// 通过用户名获取用户ID
+		user.GET("uid", api.GetUserIdByName)
 
 		//需要用户登录
 		auth := user.Group("")

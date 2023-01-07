@@ -1,8 +1,6 @@
 package api
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"kuukaa.fun/leaf/cache"
@@ -84,8 +82,17 @@ func GetUserInfoByID(ctx *gin.Context) {
 	uid := convert.StringToUint(ctx.DefaultQuery("uid", "0"))
 
 	user := service.GetUserInfo(uid)
-	fmt.Println(user)
 
 	// 返回给前端
 	resp.OK(ctx, "ok", gin.H{"user": vo.ToBaseUserVO(user)})
+}
+
+// 通过用户名获取用户ID
+func GetUserIdByName(ctx *gin.Context) {
+	userName := ctx.Query("name")
+
+	userId := service.SelectUserIdByName(userName)
+
+	// 返回给前端
+	resp.OK(ctx, "ok", gin.H{"uid": userId})
 }

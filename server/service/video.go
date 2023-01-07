@@ -35,16 +35,16 @@ func SelectVideoClicks(videoId uint) (clicks int64) {
 // 查询用户视频
 func SelectVideoByUserId(userId uint, page, pageSize int) (total int64, videos []model.Video) {
 	offset := (page - 1) * pageSize
-	mysqlClient.Where("uid = ? and status = ?", userId, common.AUDIT_APPROVED).Count(&total)
-	mysqlClient.Where("uid = ? and status = ?", userId, common.AUDIT_APPROVED).Find(&videos).Limit(pageSize).Offset(offset)
+	mysqlClient.Model(&model.Video{}).Where("uid = ? and status = ?", userId, common.AUDIT_APPROVED).Count(&total)
+	mysqlClient.Where("uid = ? and status = ?", userId, common.AUDIT_APPROVED).Limit(pageSize).Offset(offset).Find(&videos)
 	return
 }
 
 // 查询上传的视频
 func SelectUploadVideo(userId uint, page, pageSize int) (total int64, videos []model.Video) {
 	offset := (page - 1) * pageSize
-	mysqlClient.Where("uid = ?", userId).Count(&total)
-	mysqlClient.Where("uid = ?", userId).Find(&videos).Limit(pageSize).Offset(offset)
+	mysqlClient.Model(&model.Video{}).Where("uid = ?", userId).Count(&total)
+	mysqlClient.Where("uid = ?", userId).Limit(pageSize).Offset(offset).Find(&videos)
 	return
 }
 

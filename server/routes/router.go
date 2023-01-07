@@ -51,6 +51,8 @@ func CollectRoutes(r *gin.Engine) *gin.Engine {
 		CollectCommentRoutes(v1)
 		// 粉丝关注相关路由
 		CollectFollowRoutes(v1)
+		// 消息相关路由
+		CollectMessageRoutes(v1)
 	}
 
 	//获取静态文件

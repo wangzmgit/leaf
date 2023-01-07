@@ -12,6 +12,7 @@ type Comment struct {
 	Uid       uint               `json:"uid" bson:"uid"`         //用户ID
 	Author    User               `bson:"-"`
 	Reply     []Reply            `json:"reply" bson:"reply"`
+	At        []uint             `json:"at" bson:"at"`
 	IsDelete  bool               `json:"is_delete" bson:"is_delete"`
 }
 
@@ -21,5 +22,6 @@ type Reply struct {
 	Content   string             `json:"content" bson:"content"` //内容
 	Uid       uint               `json:"uid" bson:"uid"`         //用户ID
 	Author    User               `bson:"-"`
+	At        []uint             `json:"at" bson:"at"`
 	IsDelete  bool               `json:"is_delete" bson:"is_delete"`
 }

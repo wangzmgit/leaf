@@ -41,4 +41,9 @@ func InitTables() {
 	mysqlClient.AutoMigrate(&model.Resource{})
 	mysqlClient.AutoMigrate(&model.Collection{})
 	mysqlClient.AutoMigrate(&model.Follow{})
+	mysqlClient.AutoMigrate(&model.Announce{})
+	mysqlClient.AutoMigrate(&model.Whisper{})
+	mysqlClient.AutoMigrate(&model.AtMessage{})
+	mysqlClient.AutoMigrate(&model.LikeMessage{})
+	mysqlClient.AutoMigrate(&model.ReplyMessage{})
 }

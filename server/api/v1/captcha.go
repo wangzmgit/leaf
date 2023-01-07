@@ -31,14 +31,14 @@ func GetSliderCaptcha(ctx *gin.Context) {
 	}
 	// 保存x坐标到缓存
 	cache.SetSliderX(email, x)
-	resp.OK(ctx, "滑块验证通过", gin.H{"slider_captcha": vo.CaptchaVo{
+	resp.OK(ctx, "滑块验证通过", gin.H{"slider_captcha": vo.CaptchaVO{
 		BgImg:     bg,
 		SliderImg: slider,
 		Y:         y,
 	}})
 }
 
-//验证滑块
+// 验证滑块
 func ValidateSlider(ctx *gin.Context) {
 	// 获取参数
 	var validateSliderDTO dto.ValidateSliderDTO

@@ -8,7 +8,7 @@ import (
 
 	"github.com/spf13/viper"
 	"kuukaa.fun/leaf/common"
-	"kuukaa.fun/leaf/util/math"
+	"kuukaa.fun/leaf/util/number"
 	"kuukaa.fun/leaf/util/transcoding"
 )
 
@@ -26,7 +26,7 @@ func PreTreatmentVideo(input string) (int, float64, error) {
 	//计算最大分辨率
 	width := videoData.Stream[0].Width
 	height := videoData.Stream[0].Height
-	quality := math.Min(getWidthRes(width), getHeigthRes(height))
+	quality := number.Min(getWidthRes(width), getHeigthRes(height))
 
 	//获取视频时长
 	duration, _ := strconv.ParseFloat(videoData.Stream[0].Duration, 64)

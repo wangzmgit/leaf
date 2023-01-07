@@ -26,7 +26,7 @@ func IsFollow(uid uint, fid uint) bool {
 func SelectFollowingUser(userId uint, page, pageSize int) (users []model.User) {
 	offset := (page - 1) * pageSize
 	userIds := mysqlClient.Model(&model.Follow{}).Select("fid").Where("uid = ?", userId)
-	mysqlClient.Where("id in (?)", userIds).Find(&users).Limit(pageSize).Offset(offset)
+	mysqlClient.Where("id in (?)", userIds).Limit(pageSize).Offset(offset).Find(&users)
 	return
 }
 
@@ -34,7 +34,7 @@ func SelectFollowingUser(userId uint, page, pageSize int) (users []model.User) {
 func SelectFollowerUser(userId uint, page int, pageSize int) (users []model.User) {
 	offset := (page - 1) * pageSize
 	userIds := mysqlClient.Model(&model.Follow{}).Select("uid").Where("fid = ?", userId)
-	mysqlClient.Where("id in (?)", userIds).Find(&users).Limit(pageSize).Offset(offset)
+	mysqlClient.Where("id in (?)", userIds).Limit(pageSize).Offset(offset).Find(&users)
 	return
 }
 

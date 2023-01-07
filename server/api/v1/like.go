@@ -31,7 +31,15 @@ func Like(ctx *gin.Context) {
 		return
 	}
 
+	// 查询视频消息
+	video := service.SelectVideoByID(idDTO.ID)
+
+	// 记录点赞内容
 	service.Like(idDTO.ID, userId)
+
+	// 添加点赞通知
+	msg := dto.ToLikeMessage(idDTO.ID, video.Uid, userId)
+	service.InsertLikeMessage(msg)
 
 	// 返回给前端
 	resp.OK(ctx, "ok", nil)
@@ -60,6 +68,9 @@ func CancelLike(ctx *gin.Context) {
 	}
 
 	service.CancelLike(idDTO.ID, userId)
+
+	// 删除点赞通知
+	service.DeleteLikeMessage(idDTO.ID, userId)
 
 	// 返回给前端
 	resp.OK(ctx, "ok", nil)

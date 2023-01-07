@@ -6,6 +6,10 @@ import (
 	"kuukaa.fun/leaf/domain/model"
 )
 
+type RoomVO struct {
+	Number int `json:"number"`
+}
+
 type VideoVO struct {
 	ID        uint         `json:"vid"`
 	Title     string       `json:"title"`
@@ -83,6 +87,17 @@ func ToVideoVO(video model.Video, author model.User, resource []model.Resource) 
 		},
 		Resource: ToResourceListVO(resource),
 		Clicks:   video.Clicks,
+	}
+}
+
+func ToBaseVideoVO(video model.Video) BaseVideoVO {
+	return BaseVideoVO{
+		ID:        video.ID,
+		Title:     video.Title,
+		Cover:     video.Cover,
+		Desc:      video.Desc,
+		Clicks:    video.Clicks,
+		CreatedAt: video.CreatedAt,
 	}
 }
 

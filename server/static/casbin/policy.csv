@@ -30,12 +30,23 @@ p, user, /api/v1/collection/modify, POST
 p, user, /api/v1/collection/delete, POST
 
 p, user, /api/v1/comment/add, POST
+p, user, /api/v1/comment/reply/add, POST
 p, user, /api/v1/comment/delete, POST
 p, user, /api/v1/comment/reply/delete, POST
 
 p, user, /api/v1/follow/status, GET
 p, user, /api/v1/follow/add, POST
 p, user, /api/v1/follow/cancel, POST
+
+p, user, /api/v1/message/like/get, GET
+p, user, /api/v1/message/at/get, GET
+p, user, /api/v1/message/reply/get, GET
+p, user, /api/v1/message/whisper/list, GET
+p, user, /api/v1/message/whisper/details, GET
+p, user, /api/v1/message/whisper/send, POST
+p, user, /api/v1/message/whisper/read, POST
+p, admin, /api/v1/message/announce/add, POST
+p, admin, /api/v1/message/announce/delete, POST
 
 p, root, /api/v1/partition/add, POST
 p, root, /api/v1/partition/delete, POST

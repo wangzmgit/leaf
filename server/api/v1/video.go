@@ -11,6 +11,7 @@ import (
 	"kuukaa.fun/leaf/domain/vo"
 	"kuukaa.fun/leaf/service"
 	"kuukaa.fun/leaf/util/convert"
+	"kuukaa.fun/leaf/ws"
 )
 
 // 上传视频信息
@@ -251,4 +252,15 @@ func DeleteVideo(ctx *gin.Context) {
 
 	// 返回给前端
 	resp.OK(ctx, "ok", nil)
+}
+
+// 视频Websocket连接(统计在线人数)
+func GetRoomConnect(ctx *gin.Context) {
+	vid := convert.StringToUint(ctx.Query("vid"))
+	if vid == 0 {
+		return
+	}
+
+	// 升级为websocket长链接
+	ws.RoomWsHandler(ctx.Writer, ctx.Request, vid)
 }

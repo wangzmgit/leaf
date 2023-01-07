@@ -18,4 +18,14 @@ const (
 
 	// 评论校验
 	COMMENT_CONTENT_ERROR = "评论或回复内容不能为空"
+
+	// 公告校验
+	ANNOUNCE_TITLE_ERROR   = "公告标题不符合长度要求"
+	ANNOUNCE_CONTENT_ERROR = "公告内容不符合长度要求"
+	ANNOUNCE_URL_ERROR     = "公告链接不符合长度要求"
+
+	// 消息校验
+	MESSAGE_SEND_ERROR    = "消息发送失败"
+	MESSAGE_CONTENT_ERROR = "消息内容不能为空"
+	SEND_YOURSELF_ERROR   = "不能发送给自己"
 )
