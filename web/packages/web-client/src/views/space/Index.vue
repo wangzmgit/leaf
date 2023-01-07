@@ -113,7 +113,16 @@ const menuOptions = [
         icon: renderIcon(Upload, '#7daebd'),
     },
     {
-        label: "消息",
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "Message",
+                    }
+                },
+                { default: () => '消息' }
+            ),
         key: "message",
         icon: renderIcon(Message, '#c79fa7'),
     },

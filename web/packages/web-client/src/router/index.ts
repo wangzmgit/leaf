@@ -3,6 +3,7 @@ import HomeView from '../views/home/Index.vue';
 import { spaceRoutes } from './space-routes';
 import { userRoutes } from './user-routes';
 import { uploadRoutes } from './upload-routes';
+import { messageRoutes } from './message-routes';
 
 const baseRoutes: Array<RouteRecordRaw> = [
     {
@@ -39,7 +40,7 @@ const baseRoutes: Array<RouteRecordRaw> = [
     }
 ]
 
-const routes = baseRoutes.concat(spaceRoutes, userRoutes, uploadRoutes);
+const routes = baseRoutes.concat(spaceRoutes, userRoutes, uploadRoutes,messageRoutes);
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),

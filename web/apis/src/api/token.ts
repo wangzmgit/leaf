@@ -1,5 +1,5 @@
 import request from '../request';
-import {storageData} from "@leaf/utils";
+import { storageData } from "@leaf/utils";
 
 // 获取access_token
 export const getAccessToken = async () => {

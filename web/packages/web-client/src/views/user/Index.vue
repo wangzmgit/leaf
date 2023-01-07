@@ -17,7 +17,7 @@
                     </div>
                     <!--关注粉丝信息-->
                     <div class="card-btn">
-                        <n-button size="small" type="default">私信</n-button>
+                        <n-button size="small" type="default" @click="goWhisper">私信</n-button>
                         <n-button size="small" v-if="isFollow" type="primary" @click="followClick">已关注</n-button>
                         <n-button size="small" v-else type="error" @click="followClick">关注</n-button>
                     </div>
@@ -127,11 +127,6 @@ const getGender = () => {
     }
 }
 
-//前往关注和粉丝页面
-const goPage = (name: string) => {
-    router.push({ name: name });
-}
-
 // 获取用户信息
 const getUserInfo = (uid: number) => {
     getOtherUserInfoAPI(uid).then((res) => {
@@ -168,6 +163,10 @@ const followClick = () => {
     }
 }
 
+// 前往私信页面
+const goWhisper = () => {
+    router.push({ name: "Whisper", query: { fid: userInfo.value.uid } });
+}
 
 onBeforeMount(() => {
     const uid = Number(route.params.uid);
@@ -186,7 +185,6 @@ onBeforeMount(() => {
             break;
     }
 })
-
 </script>
 
 

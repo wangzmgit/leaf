@@ -6,7 +6,7 @@
         <n-input class="comment-input" v-model:value="commentForm.content" placeholder="在这里写点什么吧~" maxlength="255"
             show-count type="textarea" :autosize="descSize" />
         <n-button v-if="!userInfo.uid" disabled>未登录</n-button>
-        <n-button v-else type="primary" @click="addComment">发表</n-button>
+        <n-button v-else type="primary" @click="submitComment">发表</n-button>
     </div>
     <div class="comment-item" v-for="(item, index) in commentList" :key="index">
         <!--头像和昵称-->
@@ -17,7 +17,7 @@
             </div>
             <n-time class="comment-time" type="relative" :time="new Date(item.created_at)"></n-time>
             <div class="comment-btn">
-                <n-button v-if="userInfo" text @click="showReply(index, '')">回复</n-button>
+                <n-button v-if="userInfo" text @click="showReply(index, null, true)">回复</n-button>
                 <n-button v-if="item.author.uid === userInfo.uid" text
                     @click="deleteClick(item.id, null, index)">删除</n-button>
             </div>
@@ -54,7 +54,7 @@
                         <n-time class="reply-time" type="relative" :time="new Date(reply.created_at)"></n-time>
                     </div>
                     <div class="reply-btn">
-                        <n-button v-if="userInfo" text @click="showReply(index, reply.author.name)">回复</n-button>
+                        <n-button v-if="userInfo" text @click="showReply(index, reply, false)">回复</n-button>
                         <n-button v-if="reply.author.uid === userInfo.uid" text
                             @click="deleteClick(item.id, reply.id, index, i)">删除
                         </n-button>
@@ -88,9 +88,13 @@ import useComment from '@/hooks/comment-hooks';
 import useMention from '@/hooks/mention-hooks';
 import { statusCode, storageData } from '@leaf/utils';
 import { CommonAvatar } from '@leaf/components';
-import { NButton, NInput, NTime, useNotification } from "naive-ui";
-import { addCommentAPI, type ReplyType, } from '@leaf/apis';
-import type { AddCommentType, CommentType, UserInfoType } from '@leaf/apis';
+import type { MessageReactive } from "naive-ui";
+import { NButton, NInput, NTime, useNotification, useMessage } from "naive-ui";
+import { addCommentAPI, addReplyAPI, getUserIdAPI } from '@leaf/apis';
+import type { AddCommentType, CommentType, UserInfoType, ReplyType } from '@leaf/apis';
+
+//处理@
+const { handleMention } = useMention();
 
 const props = defineProps<{
     vid: number
@@ -102,17 +106,23 @@ const descSize = {
     minRows: 3,
     maxRows: 3
 }
+// 获取评论时查询的回复数
+const replyCount = 2;
+
+let replyUserName = "";
 const commentForm = reactive<AddCommentType>({
     vid: props.vid,
     content: "",
-    parentId: "",
+    at: []
 })
 
-const replyUser = ref("");
-const replyForm = reactive({
+const replyForm = reactive<AddCommentType>({
     vid: props.vid,
     content: "",
     parentId: "",
+    replyUserId: 0,
+    replyContent: "",
+    at: []
 })
 
 const userInfo = ref<UserInfoType>({
@@ -121,12 +131,21 @@ const userInfo = ref<UserInfoType>({
     avatar: ""
 });
 
+const message = useMessage();
 const notification = useNotification();//通知
+let messageReactive: MessageReactive | null = null;
+
 const { noMore, commentList, getCommentList, getReplyListSync, deleteCommentSync } = useComment();
 
 //评论回复
-const replyCount = 2;//获取评论时查询的回复数
-const addComment = () => {
+const submitComment = () => {
+    // 处理@
+    handleMention(commentForm.content).forEach((item) => {
+        if (item.key) {
+            commentForm.at.push(item.key);
+        }
+    })
+
     addCommentAPI(commentForm).then((res) => {
         if (res.data.code === statusCode.OK) {
             //加载评论
@@ -150,6 +169,7 @@ const addComment = () => {
                 duration: 5000,
             });
             commentForm.content = "";
+            commentForm.at = [];
         } else {
             notification.error({
                 title: '发布失败',
@@ -163,14 +183,23 @@ const addComment = () => {
 //提交回复
 const submitReply = (comment: CommentType) => {
     replyForm.parentId = comment.id;
-    if (replyUser.value) {
-        replyForm.content = `回复 @${replyUser.value} :${replyForm.content}`;
+
+    // 处理@
+    handleMention(replyForm.content).forEach((item) => {
+        if (item.key) {
+            replyForm.at.push(item.key);
+        }
+    })
+
+    if (replyForm.replyUserId) {
+        replyForm.content = `回复 @${replyUserName} :${replyForm.content}`;
     }
+
     if (comment.reply.length < replyCount) {
         comment.noMore = true;
     }
 
-    addCommentAPI(replyForm).then((res) => {
+    addReplyAPI(replyForm).then((res) => {
         if (res.data.code === statusCode.OK) {
             notification.success({
                 title: '发布成功',
@@ -190,7 +219,13 @@ const submitReply = (comment: CommentType) => {
                 }
                 comment.reply.push(newReply);
             }
+
+            replyForm.at = [];
             replyForm.content = "";
+            replyForm.parentId = "";
+            replyForm.replyUserId = 0;
+            replyForm.replyContent = "";
+
             //关闭动态回复框
             showReplyFlag.value.forEach((item, index) => {
                 if (item) showReplyFlag.value[index] = false;
@@ -214,7 +249,7 @@ const goUserSpace = (uid: number) => {
 
 //显示隐藏动态回复
 const showReplyFlag = ref<Array<boolean>>([]);
-const showReply = (index: number, name: string) => {
+const showReply = (index: number, reply: ReplyType | null, isComment: boolean) => {
     if (showReplyFlag.value[index]) {
         showReplyFlag.value[index] = false;
         return;
@@ -222,9 +257,11 @@ const showReply = (index: number, name: string) => {
     for (let i = 0; i < commentList.value.length; i++) {
         showReplyFlag.value[i] = false;
     }
-    if (name) {
-        replyTip.value = `回复 @${name}: `;
-        replyUser.value = name;
+    if (!isComment && reply) {
+        replyUserName = reply.author.name;
+        replyForm.replyUserId = reply.author.uid;
+        replyForm.replyContent = reply.content;
+        replyTip.value = `回复 @${reply.author.name}: `;
     }
     showReplyFlag.value[index] = true;
 }
@@ -269,15 +306,33 @@ const deleteClick = (id: string, replyId: string | null, index: number, replyInd
     })
 }
 
-//处理@
-const { handleMention } = useMention();
+
 
 //前往@的用户
+let loadingUser = false;
 const goMention = (name: string | null) => {
-    // if (name) {
-    //     let userUrl = router.resolve({ name: 'MentionUser', params: { name: name } });
-    //     window.open(userUrl.href, '_blank');
-    // }
+    if (loadingUser) return;
+    loadingUser = true;
+    if (name) {
+        messageReactive = message.loading("加载用户信息");
+        getUserIdAPI(name).then((res) => {
+            if (messageReactive) {
+                messageReactive.destroy();
+                messageReactive = null;
+            }
+            if (res.data.code === statusCode.OK) {
+                if (res.data.data.uid !== 0) {
+                    let userUrl = router.resolve({ name: 'User', params: { uid: res.data.data.uid } });
+                    window.open(userUrl.href, '_blank');
+                } else {
+                    messageReactive = message.info("用户不存在");
+                }
+            }
+            loadingUser = false;
+        }).catch(() => {
+            loadingUser = false;
+        })
+    }
 }
 
 onBeforeMount(() => {

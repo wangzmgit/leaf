@@ -1,9 +1,14 @@
 import request from '../request';
 import { AddCommentType } from '../types/comment-type';
 
-//评论
+// 评论
 export const addCommentAPI = (postComment: AddCommentType) => {
     return request.post('v1/comment/add', postComment);
+}
+
+// 回复
+export const addReplyAPI = (postComment: AddCommentType) => {
+    return request.post('v1/comment/reply/add', postComment);
 }
 
 //获取评论

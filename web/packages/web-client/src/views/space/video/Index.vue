@@ -116,7 +116,7 @@ const modifyVideo = (vid: number, status: string) => {
 }
 
 const goVideo = (review: number, vid: number) => {
-    if (review === 2000) {
+    if (review === reviewCode.AUDIT_APPROVED) {
         router.push({ name: "Video", params: { vid: vid } });
     }
 }

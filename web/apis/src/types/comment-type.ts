@@ -3,7 +3,10 @@ import { UserInfoType } from "./user-type"
 export interface AddCommentType {
     vid: number,
     content: string,
-    parentId: string,
+    parentId?: string,
+    replyUserId?: number,
+    replyContent?: string,
+    at: Array<string>
 }
 
 

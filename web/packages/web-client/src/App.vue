@@ -1,16 +1,18 @@
 <template>
     <n-config-provider :theme-overrides="themeOverrides" :locale="zhCN" :date-locale="dateZhCN">
         <n-notification-provider>
-            <router-view></router-view>
+            <n-message-provider>
+                <router-view></router-view>
+            </n-message-provider>
         </n-notification-provider>
     </n-config-provider>
 </template>
-  
+
 <script setup lang="ts">
 import { getTheme } from "./theme";
 import { zhCN, dateZhCN } from "naive-ui";
 import type { GlobalThemeOverrides } from 'naive-ui';
-import { NNotificationProvider, NConfigProvider } from 'naive-ui';
+import { NNotificationProvider, NConfigProvider, NMessageProvider } from 'naive-ui';
 
 const theme = getTheme();
 
@@ -44,7 +46,7 @@ const themeOverrides: GlobalThemeOverrides = {
     },
 }
 </script>
-  
+
 <style>
 body {
     margin: 0;
@@ -54,4 +56,3 @@ body {
         "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 </style>
-  

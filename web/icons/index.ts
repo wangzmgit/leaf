@@ -18,6 +18,7 @@ import Forbid from "./src/Forbid.vue";
 import History from "./src/History.vue";
 
 import Like from "./src/Like.vue";
+import Link from "./src/Link.vue";
 
 import Male from "./src/Male.vue";
 import Me from "./src/Me.vue";
@@ -56,6 +57,7 @@ export {
     History,
 
     Like,
+    Link,
 
     Male,
     Me,
