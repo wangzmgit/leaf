@@ -42,7 +42,7 @@ func RoomWsHandler(w http.ResponseWriter, r *http.Request, roomId uint) {
 	})
 
 	// 广播房间人数
-	BroadcastNumber(messageChannel)
+	BroadcastNumber(roomId)
 
 	WsHandler(conn, clientId, roomId, m, deleteRoomClient)
 }
@@ -52,34 +52,34 @@ func addRoomClient(id, groupId interface{}, conn *websocket.Conn) {
 	if roomClient[groupId] == nil {
 		roomClient[groupId] = make(map[interface{}]*websocket.Conn)
 	}
-	messageClient[id] = conn
+	roomClient[groupId][id] = conn
 	roomMux.Unlock()
 }
 
 // 获取消息管道
 func getRoomMessageChannel(id, groupId interface{}) (m chan interface{}, exist bool) {
-	messageMux.Lock()
-	m, exist = messageChannel[id]
-	messageMux.Unlock()
+	roomMux.Lock()
+	m, exist = roomChannel[groupId][id]
+	roomMux.Unlock()
 	return
 }
 
 // 添加消息管道
 func addRoomMessageChannel(id, groupId interface{}, m chan interface{}) {
-	messageMux.Lock()
+	roomMux.Lock()
 	if roomChannel[groupId] == nil {
 		roomChannel[groupId] = make(map[interface{}]chan interface{})
 	}
-	messageChannel[id] = m
-	messageMux.Unlock()
+	roomChannel[groupId][id] = m
+	roomMux.Unlock()
 }
 
 // 移除客户端和管道
 func deleteRoomClient(id, groupId interface{}) {
-	messageMux.Lock()
+	roomMux.Lock()
 	delete(roomClient[groupId], id)
 	delete(roomChannel[groupId], id)
-	messageMux.Unlock()
+	roomMux.Unlock()
 	BroadcastNumber(groupId) //广播房间人数
 }
 

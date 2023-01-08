@@ -9,9 +9,9 @@ import (
 )
 
 var (
-	messageClient  = make(map[interface{}]*websocket.Conn)  // 消息通道
-	messageChannel = make(map[interface{}]chan interface{}) // websocket客户端链接池
-	messageMux     sync.Mutex                               // 互斥锁
+	whisperClient  = make(map[interface{}]*websocket.Conn)  // 消息通道
+	whisperChannel = make(map[interface{}]chan interface{}) // websocket客户端链接池
+	whisperMux     sync.Mutex                               // 互斥锁
 )
 
 func MsgWsHandler(w http.ResponseWriter, r *http.Request, id uint) {
@@ -41,43 +41,43 @@ func MsgWsHandler(w http.ResponseWriter, r *http.Request, id uint) {
 }
 
 func addMsgClient(id interface{}, conn *websocket.Conn) {
-	messageMux.Lock()
-	messageClient[id] = conn
-	messageMux.Unlock()
+	whisperMux.Lock()
+	whisperClient[id] = conn
+	whisperMux.Unlock()
 }
 
 // 获取消息管道
 func getMsgMessageChannel(id interface{}) (m chan interface{}, exist bool) {
-	messageMux.Lock()
-	m, exist = messageChannel[id]
-	messageMux.Unlock()
+	whisperMux.Lock()
+	m, exist = whisperChannel[id]
+	whisperMux.Unlock()
 	return
 }
 
 // 添加消息管道
 func addMsgMessageChannel(id interface{}, m chan interface{}) {
-	messageMux.Lock()
-	messageChannel[id] = m
-	messageMux.Unlock()
+	whisperMux.Lock()
+	whisperChannel[id] = m
+	whisperMux.Unlock()
 }
 
 // 移除客户端和管道
 func deleteMsgClient(id, groupId interface{}) {
-	messageMux.Lock()
-	delete(messageClient, id)
-	delete(messageChannel, id)
-	messageMux.Unlock()
+	whisperMux.Lock()
+	delete(whisperClient, id)
+	delete(whisperChannel, id)
+	whisperMux.Unlock()
 }
 
 // 设置消息
 func setMsgMessage(id, content interface{}) {
-	messageMux.Lock()
-	if m, exist := messageChannel[id]; exist {
+	whisperMux.Lock()
+	if m, exist := whisperChannel[id]; exist {
 		go func() {
 			m <- content
 		}()
 	}
-	messageMux.Unlock()
+	whisperMux.Unlock()
 }
 
 // 向用户发送消息
