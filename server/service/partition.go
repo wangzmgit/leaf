@@ -1,6 +1,8 @@
 package service
 
-import "kuukaa.fun/leaf/domain/model"
+import (
+	"kuukaa.fun/leaf/domain/model"
+)
 
 func SelectPartition() []model.Partition {
 	var partitions []model.Partition

@@ -25,7 +25,7 @@ func GetReplyMessage(ctx *gin.Context) {
 	// 查询对应的用户和视频
 	for i := 0; i < len(messages); i++ {
 		messages[i].User = service.GetUserInfo(messages[i].Fid)
-		messages[i].Video = service.SelectVideoByID(messages[i].Vid)
+		messages[i].Video = service.GetVideoInfo(messages[i].Vid)
 	}
 
 	// 返回给前端

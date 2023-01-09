@@ -17,7 +17,7 @@ type VideoVO struct {
 	Desc      string       `json:"desc"`
 	CreatedAt time.Time    `json:"created_at"`
 	Copyright bool         `json:"copyright"`
-	Author    UserVO       `json:"author"`
+	Author    BaseUserVO   `json:"author"`
 	Resource  []ResourceVo `json:"resources"`
 	Clicks    int64        `json:"clicks"`
 }
@@ -55,6 +55,18 @@ type UserUploadVideoVO struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
+// 搜索视频
+type SearchVideoVO struct {
+	ID        uint       `json:"vid"`
+	Title     string     `json:"title"`
+	Cover     string     `json:"cover"`
+	Desc      string     `json:"desc"`
+	CreatedAt time.Time  `json:"created_at"`
+	Copyright bool       `json:"copyright"`
+	Author    BaseUserVO `json:"author"`
+	Clicks    int64      `json:"clicks"`
+}
+
 func ToVideoStatusVO(video model.Video, resources []model.Resource) VideoStatusVO {
 	resourcesVO := ToResourceListVO(resources)
 
@@ -70,7 +82,7 @@ func ToVideoStatusVO(video model.Video, resources []model.Resource) VideoStatusV
 	}
 }
 
-func ToVideoVO(video model.Video, author model.User, resource []model.Resource) VideoVO {
+func ToVideoVO(video model.Video, resource []model.Resource) VideoVO {
 
 	return VideoVO{
 		ID:        video.ID,
@@ -79,14 +91,9 @@ func ToVideoVO(video model.Video, author model.User, resource []model.Resource) 
 		Desc:      video.Desc,
 		CreatedAt: video.CreatedAt,
 		Copyright: video.Copyright,
-		Author: UserVO{
-			ID:     author.ID,
-			Name:   author.Username,
-			Sign:   author.Sign,
-			Avatar: author.Avatar,
-		},
-		Resource: ToResourceListVO(resource),
-		Clicks:   video.Clicks,
+		Author:    ToBaseUserVO(video.Author),
+		Resource:  ToResourceListVO(resource),
+		Clicks:    video.Clicks,
 	}
 }
 
@@ -127,6 +134,23 @@ func ToUserUploadVideoVoList(videos []model.Video) []UserUploadVideoVO {
 		newVideos[i].Clicks = videos[i].Clicks
 		newVideos[i].Status = videos[i].Status
 		newVideos[i].CreatedAt = videos[i].CreatedAt
+	}
+
+	return newVideos
+}
+
+func ToSearchVideoVoList(videos []model.Video) []SearchVideoVO {
+	length := len(videos)
+	newVideos := make([]SearchVideoVO, length)
+	for i := 0; i < length; i++ {
+		newVideos[i].ID = videos[i].ID
+		newVideos[i].Title = videos[i].Title
+		newVideos[i].Cover = videos[i].Cover
+		newVideos[i].Desc = videos[i].Desc
+		newVideos[i].Clicks = videos[i].Clicks
+		newVideos[i].Copyright = videos[i].Copyright
+		newVideos[i].CreatedAt = videos[i].CreatedAt
+		newVideos[i].Author = ToBaseUserVO(videos[i].Author)
 	}
 
 	return newVideos

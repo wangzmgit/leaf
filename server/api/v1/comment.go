@@ -43,8 +43,8 @@ func Comment(ctx *gin.Context) {
 	}
 
 	// 获取评论的视频信息，并将回复通知写入数据库
-	video := service.SelectVideoByID(commentDTO.Vid)
-	replyMsg := dto.CommentDtoToReplyMessage(commentDTO, id, video.Uid, userId)
+	authorId := service.SelectVideoAuthorId(commentDTO.Vid)
+	replyMsg := dto.CommentDtoToReplyMessage(commentDTO, id, authorId, userId)
 	service.InsertReplyMessage(replyMsg)
 
 	// 处理@通知并写入数据库

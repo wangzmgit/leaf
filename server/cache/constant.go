@@ -18,11 +18,17 @@ const IMG_CODE_KEY = "img_code_key:"
 // 图片验证码过期时间 n 分钟
 const IMG_CODE_EXPIRATION_TIME = 3
 
-// 用户验证码缓存标识符
+// 用户信息缓存标识符
 const USER_KEY = "user_key:"
 
 // 用户信息过期时间 n 小时
 const USER_EXPIRATION_TIME = 24
+
+// 视频信息缓存标识符
+const VIDEO_KEY = "video_key:"
+
+// 视频信息过期时间 n 小时
+const VIDEO_EXPIRATION_TIME = 24
 
 // 验证token缓存标识符
 const ACCESS_TOKEN_KEY = "access_token_key:"

@@ -16,7 +16,7 @@ func SelectWhisper(userId, fid uint, page, pageSize int) (messages []model.Whisp
 // 查询消息(分组)列表
 func SelectWhisperGroup(userId uint) (messages []model.Whisper) {
 	messageIds := mysqlClient.Model(&model.Whisper{}).Select("max(id)").Where("uid = ?", userId).Group("fid")
-	mysqlClient.Where("id in (?)", messageIds).Find(&messages).Order("created_at desc")
+	mysqlClient.Where("id in (?)", messageIds).Order("created_at desc").Find(&messages)
 
 	return
 }

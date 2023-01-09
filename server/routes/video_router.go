@@ -11,6 +11,12 @@ func CollectVideoRoutes(r *gin.RouterGroup) {
 	{
 		// 获取视频详情
 		video.GET("/get", api.GetVideoByID)
+		// 获取视频列表
+		video.GET("/list", api.GetVideoList)
+		// 获取推荐视频列表
+		video.GET("/recommended", api.GetRecommendedVideo)
+		// 搜索视频
+		video.GET("/search", api.SearchVideo)
 		// 获取用户视频
 		video.GET("/user/get", api.GetVideoListByUid)
 		//在线人数连接

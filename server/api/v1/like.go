@@ -31,14 +31,14 @@ func Like(ctx *gin.Context) {
 		return
 	}
 
-	// 查询视频消息
-	video := service.SelectVideoByID(idDTO.ID)
+	// 查询视频作者
+	authorId := service.SelectVideoAuthorId(idDTO.ID)
 
 	// 记录点赞内容
 	service.Like(idDTO.ID, userId)
 
 	// 添加点赞通知
-	msg := dto.ToLikeMessage(idDTO.ID, video.Uid, userId)
+	msg := dto.ToLikeMessage(idDTO.ID, authorId, userId)
 	service.InsertLikeMessage(msg)
 
 	// 返回给前端

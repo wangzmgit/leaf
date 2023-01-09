@@ -12,6 +12,8 @@ type Video struct {
 	Clicks      int64  `gorm:"comment:'点击量';default:0"`
 	Status      int    `gorm:"comment:'审核状态';not null"`
 	PartitionId uint   `gorm:"comment:'分区ID';deult:0"`
+
+	Author User `gorm:"-"`
 }
 
 func (table *Video) TableName() string {

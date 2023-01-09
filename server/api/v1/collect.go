@@ -18,7 +18,7 @@ func Collect(ctx *gin.Context) {
 		return
 	}
 
-	video := service.SelectVideoByID(addCollectDTO.Vid)
+	video := service.GetVideoInfo(addCollectDTO.Vid)
 	if video.ID == 0 {
 		resp.Response(ctx, resp.VideoNotExistError, "", nil)
 		zap.L().Error("视频不存在")

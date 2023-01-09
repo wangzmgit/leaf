@@ -120,7 +120,7 @@ func completeTransCoding(resourceId uint, status int) {
 	// 如果没有转码中的视频，则更新视频为待审核
 	if count == 0 {
 		// 获取视频审核状态
-		video := SelectVideoByID(resource.Vid)
+		video := GetVideoInfo(resource.Vid)
 		if video.Status == common.SUBMIT_REVIEW {
 			UpadteVideoStatus(video.ID, common.WAITING_REVIEW)
 		}

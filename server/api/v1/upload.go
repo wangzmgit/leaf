@@ -92,7 +92,7 @@ func UploadVideo(ctx *gin.Context) {
 	filenameOnly := service.GenerateVideoFilename()
 	// 参数校验
 	userId := ctx.GetUint("userId")
-	videoInfo := service.SelectVideoByID(vid)
+	videoInfo := service.GetVideoInfo(vid)
 	if videoInfo.ID == 0 || videoInfo.Uid != userId {
 		resp.Response(ctx, resp.VideoNotExistError, "", nil)
 		zap.L().Error("视频不存在")
