@@ -82,7 +82,6 @@ const lazyLoading = (() => {
         if (timer) return;
         const target = e.target as HTMLElement;
         if (target.scrollTop + target.clientHeight >= (target.scrollHeight - 10)) {
-            console.log('noMore', noMore, loading)
             if (!noMore && !loading) {
                 page++;
                 getAtMessage();

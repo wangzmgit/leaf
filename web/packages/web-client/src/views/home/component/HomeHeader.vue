@@ -88,8 +88,8 @@ const goPage = (name: string) => {
 //搜索功能
 const keywords = ref("");
 const search = () => {
-    // let searchUrl = router.resolve({ name: "Search", params: { keywords: keywords.value } });
-    // window.open(searchUrl.href, '_blank');
+    let searchUrl = router.resolve({ name: "Search", params: { keywords: keywords.value } });
+    window.open(searchUrl.href, '_blank');
 }
 
 // 用户信息
@@ -117,6 +117,7 @@ onBeforeMount(() => {
     height: 60px;
     display: flex;
     align-items: center;
+    box-shadow: inset 0 -1px #f1f2f3;
 
     .sidebar-title {
         display: flex;

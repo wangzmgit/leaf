@@ -22,6 +22,16 @@ const baseRoutes: Array<RouteRecordRaw> = [
         component: () => import("../views/video/Index.vue")
     },
     {
+        path: '/video/list',
+        name: 'VideoList',
+        component: () => import("../views/video-list/Index.vue")
+    },
+    {
+        path: '/search/:keywords',
+        name: 'Search',
+        component: () => import("../views/search/Index.vue")
+    },
+    {
         path: "/collection/:id",
         name: "CollectionDetails",
         meta: { auth: true },

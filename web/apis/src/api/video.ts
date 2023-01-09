@@ -21,6 +21,21 @@ export const getVideoInfoAPI = (vid: number) => {
     return request.get(`v1/video/get?vid=${vid}`);
 }
 
+//获取视频列表
+export const getVideoListAPI = (page: number, pageSize: number, partition: number) => {
+    return request.get(`v1/video/list?page=${page}&page_size=${pageSize}&partition=${partition}`);
+}
+
+//获取推荐视频列表
+export const getRecommendedVideoAPI = (pageSize: number) => {
+    return request.get(`v1/video/recommended?page_size=${pageSize}`);
+}
+
+// 搜索视频
+export const searchVideoAPI = (page: number, pageSize: number, keywords: string) => {
+    return request.get(`v1/video/search?page=${page}&page_size=${pageSize}&keywords=${keywords}`);
+}
+
 //提交审核
 export const submitReviewAPI = (id: number) => {
     return request.post('v1/video/review/submit', { id });

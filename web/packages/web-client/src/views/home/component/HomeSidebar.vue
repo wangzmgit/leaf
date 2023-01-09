@@ -3,7 +3,7 @@
         <div v-if="!menuFold">
             <n-scrollbar style="max-height: calc(100vh - 56px)">
                 <div class="menu-group">
-                    <span class="menu-item menu-item-with-icon">
+                    <span class="menu-item menu-item-with-icon" @click="goSpace('Collection')">
                         <n-icon class="menu-item-icon" size="20">
                             <collection></collection>
                         </n-icon>
@@ -17,19 +17,19 @@
                     </span>
                 </div>
                 <div class="menu-group">
-                    <span class="menu-item menu-item-with-icon">
+                    <span class="menu-item menu-item-with-icon" @click="goSpace('Message')">
                         <n-icon class="menu-item-icon" size="20">
                             <message></message>
                         </n-icon>
                         <span class="menu-text">消息</span>
                     </span>
-                    <span class="menu-item menu-item-with-icon">
+                    <span class="menu-item menu-item-with-icon" @click="goSpace('Space')">
                         <n-icon class="menu-item-icon" size="20">
                             <me></me>
                         </n-icon>
                         <span class="menu-text">个人中心</span>
                     </span>
-                    <span class="menu-item menu-item-with-icon">
+                    <span class="menu-item menu-item-with-icon" @click="goSpace('Setting')">
                         <n-icon class="menu-item-icon" size="20">
                             <setting></setting>
                         </n-icon>
@@ -37,7 +37,10 @@
                     </span>
                 </div>
                 <div class="menu-group">
-                    <span class="menu-item menu-item-only-text" v-for="item in partitionList">{{ item.content }}</span>
+                    <span class="menu-item menu-item-only-text" v-for="item in partitionList"
+                        @click="goVideoList(item.id)">
+                        {{ item.content }}
+                    </span>
                 </div>
                 <div class="menu-footer">
                     <div class="links">
@@ -91,12 +94,15 @@ import { NIcon, NScrollbar } from "naive-ui";
 import { onBeforeMount, ref, watch } from "vue";
 import type { PartitionType } from "@leaf/apis";
 import { getPartitionAPI } from "@leaf/apis";
+import { useRouter } from "vue-router";
 
 const props = withDefaults(defineProps<{
     fold: boolean
 }>(), {
     fold: false
 })
+
+const router = useRouter();
 
 const menuFold = ref(props.fold);
 watch(() => props.fold, (newValue) => {
@@ -115,6 +121,17 @@ const getPartition = () => {
         }
     })
 }
+
+// 前往视频列表页
+const goVideoList = (id: number) => {
+    router.push({ name: "VideoList", query: { partition: id } });
+}
+
+// 前往个人空间
+const goSpace = (name:string) => {
+    router.push({ name: name});
+}
+
 
 onBeforeMount(() => {
     getPartition();

@@ -107,7 +107,6 @@ const addCollection = () => {
 //保存收藏
 const save = () => {
     //原数组不存在新数组存在表示添加
-    console.log('checkedValue.value', checkedValue.value, defaultChecked.value)
     const addList = checkedValue.value.filter((v) => {
         return defaultChecked.value.indexOf(v) == -1
     })

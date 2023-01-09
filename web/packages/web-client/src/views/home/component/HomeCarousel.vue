@@ -65,17 +65,17 @@ const carouselList = ref([
     {
         title: "轮播图标题测试",
         color: "#182432",
-        url: "http://localhost:9000/api/carousel/1.jpg"
+        url: "http://localhost:9000/api/img/test.jpg"
     },
     {
         title: "轮播图标题测试",
         color: "#182432",
-        url: "http://localhost:9000/api/carousel/2.jpg"
+        url: "http://localhost:9000/api/img/test.jpg"
     },
     {
         title: "轮播图标题测试",
         color: "#69885e",
-        url: "http://localhost:9000/api/carousel/3.jpg"
+        url: "http://localhost:9000/api/img/test.jpg"
     },
 ])
 

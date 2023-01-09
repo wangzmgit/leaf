@@ -1,5 +1,5 @@
 <template>
-    <div id="followBox" class="follow-list" :style="`height:${height}px`">
+    <div class="follow-list" :style="`height:${height}px`" @scroll="lazyLoading">
         <div class="follow-card" v-for="(item, index) in followList" :key="index">
             <!--头像-->
             <div class="follow-avatar">
@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import { onBeforeMount, ref, reactive, onBeforeUnmount, watch } from "vue";
+import { onBeforeMount, ref, reactive } from "vue";
 import { CommonAvatar } from "@leaf/components";
 import { statusCode } from "@leaf/utils";
 import type { UserInfoType } from '@leaf/apis';
@@ -92,12 +92,12 @@ const getFollowersList = () => {
     })
 }
 
-const lazyLoading = (e: Event) => {
-    if ((e.target as HTMLElement).id === "followBox") {
-        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        const clientHeight = document.documentElement.clientHeight;
-        const scrollHeight = document.documentElement.scrollHeight;
-        if (scrollTop + clientHeight >= scrollHeight) {
+const lazyLoading = (() => {
+    var timer: number | null = null;
+    return (e: Event) => {
+        if (timer) return;
+        const target = e.target as HTMLElement;
+        if (target.scrollTop + target.clientHeight >= (target.scrollHeight - 10)) {
             if (!noMore.value && !loading.value) {
                 pageInfo.current++;
                 loading.value = true;
@@ -108,8 +108,12 @@ const lazyLoading = (e: Event) => {
                 }
             }
         }
+
+        timer = setTimeout(() => {
+            timer = null;
+        }, 100);
     }
-}
+})();
 
 onBeforeMount(() => {
     if (props.following) {
@@ -117,11 +121,6 @@ onBeforeMount(() => {
     } else {
         getFollowersList();
     }
-    window.addEventListener('scroll', lazyLoading, true);
-})
-
-onBeforeUnmount(() => {
-    window.removeEventListener('scroll', lazyLoading);
 })
 </script>
 

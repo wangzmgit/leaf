@@ -22,7 +22,6 @@ export const thorttle = (fn: Function, delay = 1000) => {
     return function () {
         if (!timer) {
             timer = window.setTimeout(function () {
-                console.log('arguments',arguments)
                 fn(arguments);
 
                 timer = null;

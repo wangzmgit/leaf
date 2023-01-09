@@ -1,10 +1,11 @@
 <template>
-    <div class="video">
+    <div class="video" :style="initTheme()">
         <header-bar></header-bar>
         <div class="video-main">
             <div class="content-left">
                 <div v-if="!loading" class="video-player">
-                    <video-player :vid="vid" :theme="theme.primaryColor" :part="part" :resources="resources"></video-player>
+                    <video-player :vid="vid" :theme="theme.primaryColor" :part="part"
+                        :resources="resources"></video-player>
                     <div class="video-title-box">
                         <p class="video-title">{{ videoInfo!.title }}</p>
                         <p v-show="videoInfo!.copyright" class="copyright">
@@ -29,7 +30,7 @@
                     <!--视频简介-->
                     <div class="desc">
                         <div :class="['desc-content', more ? 'open' : '']">{{ videoInfo!.desc }}</div>
-                        <n-button text @click="more = !more">{{ more ? '收起' : '展开更多' }}</n-button>
+                        <n-button text @click="more = !more">{{ more? '收起': '展开更多' }}</n-button>
                     </div>
                     <!--发表评论-->
                     <comment-list :vid="videoInfo!.vid"></comment-list>
@@ -48,7 +49,7 @@
                     <part-list :resources="resources" :active="part" @change="changePart"></part-list>
                 </div>
                 <!-- 用户视频 -->
-                <!-- <author-video v-if="!loading" :uid="videoInfo!.author.uid"></author-video> -->
+                <author-video v-if="!loading && videoInfo" :uid="videoInfo.author.uid"></author-video>
             </div>
         </div>
     </div>
@@ -56,34 +57,38 @@
 
 <script setup lang="ts">
 import { getTheme } from "@/theme"
-// import config from '@/config';
 import { useRoute, useRouter } from 'vue-router';
 import { NIcon, NTime, NButton, NSkeleton } from 'naive-ui';
-import { onBeforeMount, onBeforeUnmount, reactive, ref } from 'vue';
-// import { OnlineSocketURL } from '@/utils/request';
+import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
 import CommentList from './component/CommentList.vue';
 import PartList from './component/PartList.vue';
 import HeaderBar from '@/components/header-bar/Index.vue';
 import AuthorCard from './component/AuthorCard.vue';
 import { VideoPlayer } from "@leaf/components";
-// import AuthorVideo from './components/AuthorVideo.vue';
+import AuthorVideo from './component/AuthorVideo.vue';
 import ArchiveInfo from './component/ArchiveInfo.vue';
 
 import { Forbid } from "@leaf/icons";
 import type { ResourceType, VideoType } from '@leaf/apis';
 import { getVideoInfoAPI } from '@leaf/apis';
-import { statusCode } from '@leaf/utils';
+import { globalConfig, statusCode } from '@leaf/utils';
 
 const route = useRoute();
 const router = useRouter();
 const theme = getTheme();
 const vid = parseInt(route.params.vid.toString());
-// const title = config.title;
 const part = ref(1);//当前分集
 const more = ref(false);//是否展开简介
 const loading = ref(true);
 const resources = ref<Array<ResourceType>>([]);
 const videoInfo = ref<VideoType>();
+
+const initTheme = () => {
+
+    return {
+        "--primary-color": theme.primaryColor
+    }
+}
 
 //获取视频信息
 const getVideoInfo = (vid: number) => {
@@ -97,7 +102,7 @@ const getVideoInfo = (vid: number) => {
             }
 
             //修改网站标题
-            // document.title = `${res.data.data.video.title}-${title}`
+            document.title = `${res.data.data.video.title}-${globalConfig.title}`
             loading.value = false;
         }
     })
@@ -105,21 +110,16 @@ const getVideoInfo = (vid: number) => {
 
 //websocket
 const number = ref(1);//在线人数
-const SocketURL = ref("");
-const websocket = ref<WebSocket | null>(null);
+let SocketURL = "";
+let websocket: WebSocket | null = null;
 //初始化weosocket
 const initWebSocket = (vid: number) => {
-    // const wsProtocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-    // if (OnlineSocketURL === "/api/v1/video/online/ws") {
-    //     SocketURL.value = wsProtocol + window.location.host + "/api/v1/video/online/ws";
-    // } else {
-    //     //处理协议部分
-    //     let reg = new RegExp('^http(s)?:')
-    //     SocketURL.value = OnlineSocketURL.replace(reg, wsProtocol);
-    // }
-    // SocketURL.value += `?vid=${vid}`;
-    // websocket.value = new WebSocket(SocketURL.value);
-    // websocket.value.onmessage = websocketOnmessage;
+    const wsProtocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+    const domain = globalConfig.domain || window.location.host;
+    SocketURL = wsProtocol + domain + `/api/v1/video/online/ws?vid=${vid}`;
+
+    websocket = new WebSocket(SocketURL);
+    websocket.onmessage = websocketOnmessage;
 }
 
 //数据接收
@@ -144,8 +144,8 @@ onBeforeMount(() => {
 })
 
 onBeforeUnmount(() => {
-    if (websocket.value) {
-        websocket.value.close();
+    if (websocket) {
+        websocket.close();
     }
 })
 </script>

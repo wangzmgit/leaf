@@ -86,6 +86,7 @@ importers:
       typescript: ~4.7.4
       vite: ^3.1.8
       vue: ^3.2.41
+      vue-dompurify-html: ^3.1.2
       vue-picture-cropper: ^0.5.1
       vue-router: ^4.1.5
       vue-tsc: ^1.0.8
@@ -97,6 +98,7 @@ importers:
       js-base64: 3.7.3
       pinia: 2.0.23_lrjaoqkmph6q2hmgd3qeuy6rom
       vue: 3.2.41
+      vue-dompurify-html: 3.1.2_vue@3.2.41
       vue-router: 4.1.6_vue@3.2.41
     devDependencies:
       '@rushstack/eslint-patch': 1.2.0
@@ -882,6 +884,10 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
+
+  /dompurify/2.4.3:
+    resolution: {integrity: sha512-q6QaLcakcRjebxjg8/+NP+h0rPfatOgOzc46Fst9VAA3jF2ApfKBNKMzdP4DYTqtUMXSCd5pRS/8Po/OmoCHZQ==}
+    dev: false
 
   /errno/0.1.8:
     resolution: {integrity: sha512-dJ6oBr5SQ1VSd9qkk7ByRgb/1SH4JZjCHSW/mr63/QcXO9zLVxvJ6Oy13nio03rxpSnVDDjFor75SjVeZWPW/A==}
@@ -2608,6 +2614,18 @@ packages:
         optional: true
     dependencies:
       vue: 3.2.41
+    dev: false
+
+  /vue-dompurify-html/3.1.2_vue@3.2.41:
+    resolution: {integrity: sha512-2xCnSuog5+OPUtmeAwPZY/6oV9YKuLhjgcl5EUw3jKbmhnyPo8YyCczCeRNGBorVcz1fCGm6PEOIUSXNS8I0ZA==}
+    peerDependencies:
+      vue: ^2.7.0 || ^3.0.0
+    dependencies:
+      dompurify: 2.4.3
+      vue: 3.2.41
+      vue-demi: 0.13.11_vue@3.2.41
+    transitivePeerDependencies:
+      - '@vue/composition-api'
     dev: false
 
   /vue-eslint-parser/9.1.0_eslint@8.26.0:
