@@ -9,7 +9,7 @@
                         </n-icon>
                         <span class="menu-text">收藏夹</span>
                     </span>
-                    <span class="menu-item menu-item-with-icon">
+                    <span class="menu-item menu-item-with-icon" @click="goSpace('History')">
                         <n-icon class="menu-item-icon" size="20">
                             <history></history>
                         </n-icon>
@@ -68,19 +68,19 @@
             </n-scrollbar>
         </div>
         <div v-else class="sidebar-content-fold">
-            <n-icon class="fold-menu-icon-btn" size="22">
+            <n-icon class="fold-menu-icon-btn" size="22" @click="goSpace('Collection')">
                 <collection></collection>
             </n-icon>
-            <n-icon class="fold-menu-icon-btn" size="22">
+            <n-icon class="fold-menu-icon-btn" size="22" @click="goSpace('History')">
                 <history></history>
             </n-icon>
-            <n-icon class="fold-menu-icon-btn" size="22">
+            <n-icon class="fold-menu-icon-btn" size="22" @click="goSpace('Message')">
                 <message></message>
             </n-icon>
-            <n-icon class="fold-menu-icon-btn" size="22">
+            <n-icon class="fold-menu-icon-btn" size="22" @click="goSpace('Space')">
                 <me></me>
             </n-icon>
-            <n-icon class="fold-menu-icon-btn" size="22">
+            <n-icon class="fold-menu-icon-btn" size="22" @click="goSpace('Setting')">
                 <setting></setting>
             </n-icon>
         </div>

@@ -1,5 +1,5 @@
 <template>
-    <div class="home" :style="initTheme()">
+    <div class="home" :style="initTheme()" v-title :data-title="`${globalConfig.title}`">
         <home-header class="home-header" @change-fold="changeMenuFold"></home-header>
         <div class="home-content">
             <div class="home-left" :class="menuFold ? 'home-left-fold' : ''">
@@ -25,7 +25,7 @@ import HomeHeader from "./component/HomeHeader.vue";
 import HomeCarousel from './component/HomeCarousel.vue';
 import { getRecommendedVideoAPI, type VideoType } from "@leaf/apis";
 import VideoItem from '@/components/video-item/Index.vue';
-import { statusCode } from '@leaf/utils';
+import { globalConfig, statusCode } from '@leaf/utils';
 
 
 const menuFold = ref(false);

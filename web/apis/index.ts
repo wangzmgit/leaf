@@ -46,3 +46,6 @@ export * from "./src/types/msg-at-type";
 
 export * from "./src/api/msg-reply";
 export * from "./src/types/msg-reply-type";
+
+export * from "./src/api/history";
+export * from "./src/types/history-type";

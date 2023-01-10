@@ -5,22 +5,25 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref, watch } from 'vue';
+import { onBeforeMount, ref, watch } from 'vue';
 import dashjs from "dashjs";
 import { WPlayer } from 'vue-wplayer';
 import 'vue-wplayer/dist/style.css';
-import { ResourceType } from '@leaf/apis';
+import { ResourceType, AddHistoryType } from '@leaf/apis';
+import { addHistoryAPI, getHistoryProgressAPI } from '@leaf/apis';
 import { OptionsType, QualityType } from '../types/player';
+import { statusCode } from '@leaf/utils';
 
 const props = withDefaults(defineProps<{
     vid: number,
     theme: string,
     resources: Array<ResourceType>,
-    part: number
+    part: number,
 }>(), {
-    part: 1
+    part: 1,
 })
 
+let startTime = 0;
 const playerKey = ref(0);
 let dash: dashjs.MediaPlayerClass;
 
@@ -29,7 +32,7 @@ const options: OptionsType = {
     type: "dash",
     customType: (player: HTMLVideoElement, url: string) => {
         dash = dashjs.MediaPlayer().create();
-        dash.initialize(player, url, false);
+        dash.initialize(player, url, false, startTime);
     },
     customQualityChange: (quality: string) => {
         const trackIndex = getTrackIndex(Number(quality));
@@ -62,10 +65,10 @@ const getTrackIndex = (quality: number) => {
     }
 }
 
-
+// 加载
 const loadPart = async (part: number) => {
     loadResource(part);
-
+    startTime = await getHistoryProgress();
     playerKey.value = Date.now();
 }
 
@@ -98,12 +101,33 @@ const loadResource = (part: number) => {
     options.resource = tmpResource;
 }
 
+// 获取播放进度
+const getHistoryProgress = async () => {
+    const res = await getHistoryProgressAPI(props.vid);
+    if (res.data.code === statusCode.OK) {
+        if (res.data.data.progress.part === props.part) {
+            return res.data.data.progress.time;
+        }
+    }
+}
+
 watch(() => props.part, (val) => {
     loadPart(val);
 });
 
+// 上传历史记录
+const uploadHistory = async () => {
+    const history: AddHistoryType = {
+        vid: props.vid,
+        part: props.part,
+        time: dash.time()
+    }
+    await addHistoryAPI(history);
+}
+
 onBeforeMount(() => {
     loadPart(props.part);
+    window.addEventListener("unload", uploadHistory);
 });
 </script>
 

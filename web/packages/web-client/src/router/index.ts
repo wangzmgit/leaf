@@ -32,6 +32,12 @@ const baseRoutes: Array<RouteRecordRaw> = [
         component: () => import("../views/search/Index.vue")
     },
     {
+        path: '/history',
+        name: 'History',
+        meta: { auth: true },
+        component: () => import("../views/history/Index.vue")
+    },
+    {
         path: "/collection/:id",
         name: "CollectionDetails",
         meta: { auth: true },
@@ -50,7 +56,7 @@ const baseRoutes: Array<RouteRecordRaw> = [
     }
 ]
 
-const routes = baseRoutes.concat(spaceRoutes, userRoutes, uploadRoutes,messageRoutes);
+const routes = baseRoutes.concat(spaceRoutes, userRoutes, uploadRoutes, messageRoutes);
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
