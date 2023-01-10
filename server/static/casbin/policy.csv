@@ -48,6 +48,10 @@ p, user, /api/v1/message/whisper/read, POST
 p, admin, /api/v1/message/announce/add, POST
 p, admin, /api/v1/message/announce/delete, POST
 
+p, user, /api/v1/history/add, POST
+p, user, /api/v1/history/video/get, GET
+p, user, /api/v1/history/progress/get, GET
+
 p, root, /api/v1/partition/add, POST
 p, root, /api/v1/partition/delete, POST
 

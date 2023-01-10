@@ -53,6 +53,8 @@ func CollectRoutes(r *gin.Engine) *gin.Engine {
 		CollectFollowRoutes(v1)
 		// 消息相关路由
 		CollectMessageRoutes(v1)
+		// 历史记录相关路由
+		CollectHistoryRoutes(v1)
 	}
 
 	//获取静态文件
