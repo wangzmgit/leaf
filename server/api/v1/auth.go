@@ -34,13 +34,19 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	if !valid.EmailCode(registerDTO.EmailCode) { //邮箱验证码格式验证
+	if !valid.EmailCode(registerDTO.Code) { //邮箱验证码格式验证
 		resp.Response(ctx, resp.RequestParamError, valid.EMAIL_CODE_ERROR, nil)
 		zap.L().Error(valid.EMAIL_CODE_ERROR)
 		return
 	}
 
-	if cache.GetEmailCode(registerDTO.Email) != registerDTO.EmailCode { // 验证邮箱验证码
+	if service.SelectUserByEmail(registerDTO.Email).ID != 0 {
+		resp.Response(ctx, resp.EmailExistError, "", nil)
+		zap.L().Error("邮箱已存在")
+		return
+	}
+
+	if cache.GetEmailCode(registerDTO.Email) != registerDTO.Code { // 验证邮箱验证码
 		resp.Response(ctx, resp.EmailCodeError, "", nil)
 		zap.L().Error("邮箱验证错误")
 		return
@@ -79,6 +85,14 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
+	// 如果人机验证通过，删除登录尝试次数
+	if cache.GetCaptchaStatus(loginDTO.Email) == 1 {
+		// 删除登录尝试次数
+		cache.DelLoginTryCount(loginDTO.Email)
+		// 删除人机验证状态
+		cache.DelCaptchaStatus(loginDTO.Email)
+	}
+
 	// 读取登录尝试次数，超过3次进行滑块验证
 	loginTryCount := cache.GetLoginTryCount(loginDTO.Email)
 	if loginTryCount >= 3 {
@@ -99,6 +113,72 @@ func Login(ctx *gin.Context) {
 		cache.SetLoginTryCount(loginDTO.Email, loginTryCount)
 		return
 	}
+
+	// 生成验证token
+	var err error
+	var accessToken string
+	var refreshToken string
+	if accessToken, err = jwt.GenerateAccessToken(user.ID); err != nil {
+		resp.Response(ctx, resp.Error, "验证token生成失败", nil)
+		zap.L().Error("验证token生成失败")
+		return
+	}
+	// 生成刷新token
+	if refreshToken, err = jwt.GenerateRefreshToken(user.ID); err != nil {
+		resp.Response(ctx, resp.Error, "刷新token生成失败", nil)
+		zap.L().Error("刷新token生成失败")
+		return
+	}
+
+	// 存入缓存
+	cache.SetAccessToken(user.ID, accessToken)
+	cache.SetRefreshToken(user.ID, refreshToken)
+
+	// 返回给前端
+	resp.OK(ctx, "", gin.H{"access_token": accessToken, "refresh_token": refreshToken})
+}
+
+// 邮箱登录
+func EmailLogin(ctx *gin.Context) {
+	// 获取参数
+	var loginDTO dto.EmailLoginDTO
+	if err := ctx.Bind(&loginDTO); err != nil {
+		resp.Response(ctx, resp.RequestParamError, "", nil)
+		zap.L().Error("请求参数有误")
+		return
+	}
+
+	// 参数校验
+	if !valid.Email(loginDTO.Email) { // 邮箱格式验证
+		resp.Response(ctx, resp.RequestParamError, valid.EMAIL_ERROR, nil)
+		zap.L().Error(valid.EMAIL_ERROR)
+		return
+	}
+
+	// 如果人机验证通过，删除登录尝试次数
+	if cache.GetCaptchaStatus(loginDTO.Email) == 1 {
+		// 删除登录尝试次数
+		cache.DelLoginTryCount(loginDTO.Email)
+		// 删除人机验证状态
+		cache.DelCaptchaStatus(loginDTO.Email)
+	}
+
+	loginTryCount := cache.GetLoginTryCount(loginDTO.Email)
+	if loginTryCount >= 3 {
+		resp.Response(ctx, resp.Captcha, "", nil)
+		zap.L().Info("需要人机验证")
+		return
+	}
+
+	// 验证邮箱验证码
+	if cache.GetEmailCode(loginDTO.Email) != loginDTO.Code {
+		resp.Response(ctx, resp.EmailCodeError, "", nil)
+		zap.L().Error("邮箱验证错误")
+		return
+	}
+
+	// 读取数据库
+	user := service.SelectUserByEmail(loginDTO.Email)
 
 	// 生成验证token
 	var err error

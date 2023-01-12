@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"go.uber.org/zap"
+	"golang.org/x/crypto/bcrypt"
 	"kuukaa.fun/leaf/cache"
 	"kuukaa.fun/leaf/domain/dto"
 	"kuukaa.fun/leaf/domain/model"
@@ -95,4 +96,11 @@ func SelectUserIdByName(name string) uint {
 	mysqlClient.Where("username = ?", name).First(&user)
 
 	return user.ID
+}
+
+// 更新用户密码
+func UpdateUserPwd(modifyDTO dto.ModifyPwdDTO) error {
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(modifyDTO.Password), bcrypt.DefaultCost)
+
+	return mysqlClient.Model(&model.User{}).Where("email = ?", modifyDTO.Email).Update("password", hashedPassword).Error
 }

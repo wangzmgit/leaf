@@ -53,7 +53,7 @@ func ValidateSlider(ctx *gin.Context) {
 	cache.DelSlider(validateSliderDTO.Email)
 	//与用户拖动位置对比
 	if validateSliderDTO.X > x-3 && validateSliderDTO.X < x+3 {
-		cache.DelLoginTryCount(validateSliderDTO.Email)
+		cache.SetCaptchaStatus(validateSliderDTO.Email, 1)
 		resp.OK(ctx, "滑块验证通过", nil)
 		return
 	}

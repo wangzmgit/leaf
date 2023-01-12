@@ -35,6 +35,7 @@ var (
 
 	PartitionError          = R{httpStatus: http.StatusOK, code: 4040, msg: "分区不存在"}
 	ParentPartitionError    = R{httpStatus: http.StatusOK, code: 4040, msg: "所属分区不存在"}
+	UserNotExistError       = R{httpStatus: http.StatusOK, code: 4040, msg: "用户不存在"}
 	VideoNotExistError      = R{httpStatus: http.StatusOK, code: 4040, msg: "视频不存在"}
 	ResourceNotExistError   = R{httpStatus: http.StatusOK, code: 4040, msg: "资源不存在"}
 	CollectionNotExistError = R{httpStatus: http.StatusOK, code: 4040, msg: "收藏夹不存在"}
@@ -47,7 +48,8 @@ var (
 	// 50** 服务器相关错误
 
 	// 60** 用户相关错误
-	NameExistError = R{httpStatus: http.StatusOK, code: 6000, msg: "用户名已存在"}
+	NameExistError  = R{httpStatus: http.StatusOK, code: 6000, msg: "用户名已存在"}
+	EmailExistError = R{httpStatus: http.StatusOK, code: 6000, msg: "邮箱已存在"}
 
 	// 90** 第三方服务错误
 	SendMailError = R{httpStatus: http.StatusOK, code: 9010, msg: "邮件发送失败"}

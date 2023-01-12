@@ -12,3 +12,10 @@ type ModifyUserInfoDTO struct {
 type ModifySpaceCoverDTO struct {
 	SpaceCover string
 }
+
+//修改用户信息
+type ModifyPwdDTO struct {
+	Email    string
+	Password string
+	Code     string
+}

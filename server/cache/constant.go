@@ -54,6 +54,12 @@ const SLIDER_X_KEY = "slider_x_key:"
 // 滑块x坐标过期时间 n 分钟
 const SLIDER_X_EXPRIRATION_TIME = 5
 
+// 人机验证状态
+const CAPTCHA_STATUS_KEY = "captcha_status_key:"
+
+// 人机验证状态过期时间 n 分钟
+const CAPTCHA_STATUS_EXPRIRATION_TIME = 30
+
 // 上传文件缓存标识符
 const UPLOAD_IMAGE_KEY = "upload_image_key:"
 
@@ -77,3 +83,9 @@ const VIDEO_CLICKS_LIMIT_KEY = "video_clicks_limit_key:"
 
 // 点击量过期时间  n 小时
 const VIDEO_CLICKS_LIMIT_EXPRIRATION_TIME = 72
+
+// 重置密码验证状态
+const RESET_PWD_CHECK_KEY = "reset_pwd_check_key:"
+
+// 重置密码验证状态过期时间 n 分钟
+const RESET_PWD_CHECK_EXPRIRATION_TIME = 30

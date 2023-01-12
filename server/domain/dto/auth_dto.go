@@ -17,13 +17,20 @@ type LoginDTO struct {
 	Password string
 }
 
+type EmailLoginDTO struct {
+	// 邮箱
+	Email string
+	// 验证码
+	Code string
+}
+
 type RegisterDTO struct {
 	// 邮箱
 	Email string
 	// 密码
 	Password string
 	// 邮箱验证码
-	EmailCode string
+	Code string
 }
 
 /**
