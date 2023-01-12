@@ -35,20 +35,6 @@ export default function useComment() {
         })
     }
 
-    // const getManageCommentList = (vid: number, page: number, pageSize: number) => {
-    //     getManageCommentListAPI(vid, page, pageSize).then((res) => {
-    //         if (res.data.code === statusCode.OK) {
-    //             total.value = res.data.data.count;
-    //             commentList.value = res.data.data.comments;
-    //         } else {
-    //             notification.error({
-    //                 title: '获取失败',
-    //                 duration: 5000,
-    //             })
-    //         }
-    //     })
-    // }
-
     const getReplyListSync = async (cid: string, page: number, pageSize: number) => {
         try {
             const res = await getReplyListAPI(cid, page, pageSize);
@@ -95,7 +81,6 @@ export default function useComment() {
         getCommentList,
         getReplyListSync,
         deleteCommentSync,
-        // getManageCommentList
     }
 }
 

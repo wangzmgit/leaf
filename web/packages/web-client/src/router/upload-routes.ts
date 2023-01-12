@@ -18,5 +18,11 @@ export const uploadRoutes: RouteRecordRaw = {
             meta: { auth: true },
             component: () => import("../views/upload/video-manage/Index.vue"),
         },
+        {
+            path: '/upload/comment/manage',
+            name: 'CommentManage',
+            meta: { auth: true },
+            component: () => import("../views/upload/comment-manage/Index.vue"),
+        },
     ]
 }

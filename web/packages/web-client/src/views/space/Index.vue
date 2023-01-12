@@ -20,7 +20,7 @@
                     <div class="user-data">
                         <div>
                             <p class="data-title">投稿</p>
-                            <p>{{ userData.videoCount }}</p>
+                            <p>{{ videoCount }}</p>
                         </div>
                         <div>
                             <p class="data-title">关注</p>
@@ -62,6 +62,8 @@ import { NIcon, NMenu, useNotification } from "naive-ui";
 import HeaderBar from "@/components/header-bar/Index.vue";
 import LeafCropper from "@/components/leaf-cropper/Index.vue";
 import SpaceCoverCropper from "@/components/leaf-cropper/component/SpaceCoverCropper.vue";
+import { storeToRefs } from "pinia";
+import { useVideoCountStore } from "@/stores/video-count-store";
 
 const route = useRoute();
 const router = useRouter();
@@ -142,6 +144,9 @@ const menuOptions = [
     },
 ];
 
+const videoCountStore = useVideoCountStore();
+const { videoCount } = storeToRefs(videoCountStore);
+
 const userInfo = ref<UserInfoType>({
     uid: 0,
     name: "",
@@ -150,7 +155,6 @@ const userInfo = ref<UserInfoType>({
 });
 
 const userData = reactive({
-    videoCount: 0,
     followingCount: 0,
     followerCount: 0
 })

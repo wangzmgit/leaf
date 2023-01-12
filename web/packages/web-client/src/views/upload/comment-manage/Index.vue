@@ -7,7 +7,7 @@
             <div class="item-center">
                 <p class="title">
                     <span class="user-name" @click="goUserSpace(item.user.uid)">{{ item.user.name }}</span>
-                    <span v-if="item.root_content"> 回复了你的评论</span>
+                    <span v-if="item.root_content"> 回复的你的评论</span>
                     <span v-else> 对你的视频发表评论</span>
                 </p>
                 <p class="content">{{ item.content }}</p>

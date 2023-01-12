@@ -52,23 +52,20 @@ const menuOptions = [
         icon: renderIcon(Video),
     },
     {
-        // label: () =>
-        //     h(
-        //         RouterLink,
-        //         {
-        //             to: {
-        //                 name: "CommentManage",
-        //             }
-        //         },
-        //         { default: () => '评论管理' }
-        //     ),
-        label: "评论管理",
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "CommentManage",
+                    }
+                },
+                { default: () => '评论管理' }
+            ),
         key: "comment",
         icon: renderIcon(Comment),
     },
 ];
-
-
 
 onBeforeMount(() => {
     switch (route.name) {
@@ -78,9 +75,9 @@ onBeforeMount(() => {
         case 'VideoManage':
             defaultOption.value = 'content';
             break;
-        // case 'CommentManage':
-        //     defaultOption.value = 'comment';
-        //     break;
+        case 'CommentManage':
+            defaultOption.value = 'comment';
+            break;
         default:
             defaultOption.value = 'upload';
             break;

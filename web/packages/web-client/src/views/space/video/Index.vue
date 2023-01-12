@@ -60,6 +60,7 @@ import { Delete, Edit } from '@leaf/icons';
 import { deleteVideoAPI, getUploadVideoAPI } from '@leaf/apis';
 import type { UserUploadVideoType } from '@leaf/apis';
 import { reviewCode, statusCode } from '@leaf/utils';
+import { useVideoCountStore } from '@/stores/video-count-store';
 
 const pageSize = 8;
 const page = ref(1);
@@ -70,11 +71,13 @@ const router = useRouter();
 const notification = useNotification();//通知
 
 //获取我的视频
+const videoCountStore = useVideoCountStore();
 const getMyVideo = () => {
     getUploadVideoAPI(page.value, pageSize).then((res) => {
         if (res.data.code === statusCode.OK) {
             count.value = res.data.data.total;
             videoList.value = res.data.data.videos;
+            videoCountStore.setVideoCountState(count.value);
         }
     })
 }
