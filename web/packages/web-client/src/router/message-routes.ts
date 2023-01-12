@@ -3,12 +3,14 @@ import type { RouteRecordRaw } from "vue-router";
 export const messageRoutes: RouteRecordRaw = {
     path: '/message',
     name: 'Message',
+    meta: { auth: true },
     component: () => import("../views/message/Index.vue"),
     redirect: '/message/announce',
     children: [
         {
             path: '/message/announce',
             name: 'Announce',
+            meta: { auth: true },
             component: () => import("../views/message/announce/Index.vue"),
         },
         {

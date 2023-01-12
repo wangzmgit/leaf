@@ -1,6 +1,6 @@
 <template>
     <div class="login-bg">
-        <login-card :close="true" @close="closeCard"></login-card>
+        <login-card :close="true" @close="closeCard" @success="closeCard"></login-card>
     </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="header-bar" :style="themeStyle">
+    <div class="header-bar" :style="themeStyle()">
         <div class="header-content">
             <div class="header-left" @click="goPage('Home')">
                 <h1 class="title">{{ globalConfig.title }}</h1>
@@ -8,7 +8,7 @@
                 <n-input v-model:value="keywords" round placeholder="搜索" @keydown.enter="search">
                     <template #suffix>
                         <n-icon @click="search">
-                            <search></search>
+                            <search-icon />
                         </n-icon>
                     </template>
                 </n-input>
@@ -63,13 +63,13 @@
 </template>
 
 <script setup lang="ts" >
-import { computed, onBeforeMount, ref } from 'vue';
+import {  onBeforeMount, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { CommonAvatar } from '@leaf/components';
 import { NInput, NIcon, NButton } from 'naive-ui';
 import type { UserInfoType } from '@leaf/apis';
 import { globalConfig, storageData } from "@leaf/utils"
-import { Search, Upload, Message, History } from "@leaf/icons";
+import { Search as SearchIcon, Upload, Message, History } from "@leaf/icons";
 import { getTheme } from '@/theme';
 
 const router = useRouter();
@@ -79,6 +79,7 @@ const logout = () => {
     storageData.remove("refresh_token");
     storageData.remove("access_token");
     storageData.remove('user_info');
+    isLogin.value = false;
 }
 
 const goPage = (name: string) => {
@@ -88,8 +89,8 @@ const goPage = (name: string) => {
 //搜索功能
 const keywords = ref("");
 const search = () => {
-    // let searchUrl = router.resolve({ name: "Search", params: { keywords: keywords.value } });
-    // window.open(searchUrl.href, '_blank');
+    let searchUrl = router.resolve({ name: "Search", params: { keywords: keywords.value } });
+    window.open(searchUrl.href, '_blank');
 }
 
 const isLogin = ref(false);
@@ -100,12 +101,12 @@ const userInfo = ref<UserInfoType>({
 });
 
 // 主题
-const themeStyle = computed(() => {
+const themeStyle = () => {
     const theme = getTheme();
     return {
         "--header-bar-btn-active-color": theme.primaryColor
     }
-})
+}
 
 onBeforeMount(() => {
     const tmpUserInfo = storageData.get("user_info");

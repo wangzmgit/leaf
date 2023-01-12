@@ -11,7 +11,7 @@
                         <n-input placeholder="请输入密码" type="password" v-model:value="registerForm.password" />
                     </n-form-item>
                     <n-form-item label="验证码" path="emailcode">
-                        <n-input placeholder="请输入验证码" v-model:value="registerForm.emailcode" />
+                        <n-input placeholder="请输入验证码" v-model:value="registerForm.code" />
                         <n-button :disabled="disabledSend" @click="beforeSendCode">{{ sendBtnText }}</n-button>
                     </n-form-item>
                 </n-form>
@@ -24,6 +24,7 @@
             <n-button type="primary" @click="sendRegisterRequest">注册</n-button>
         </div>
     </div>
+    <slider-captcha v-model:show="showCaptcha" :email="registerForm.email" @success="beforeSendCode"></slider-captcha>
 </template>
 
 <script setup lang="ts">
@@ -32,21 +33,26 @@ import useSendCode from '@/hooks/send-code-hooks';
 
 import type { UserRegisterType } from "@leaf/apis";
 import { registerAPI } from "@leaf/apis";
-import { isEmail } from '@leaf/utils';
+import { isEmail, statusCode } from '@leaf/utils';
 
 import type { FormRules, FormInst } from 'naive-ui';
 import { NTabs, NTabPane, NForm, NFormItem, NInput, NButton, useNotification } from 'naive-ui';
+
+import { SliderCaptcha } from "@leaf/components";
 
 const emits = defineEmits(["changeForm"]);
 
 //通知组件
 const notification = useNotification();
 
+// 显示滑块验证
+const showCaptcha = ref(false);
+
 //登录表单
 const registerForm = reactive<UserRegisterType>({
     email: "",
     password: "",
-    emailcode: ""
+    code: ""
 });
 
 //校验规则
@@ -60,14 +66,17 @@ const rules: FormRules = {
 }
 
 //发送验证码相关
-const { disabledSend, sendBtnText, sendEmailCode } = useSendCode();
+const { disabledSend, sendBtnText, sendEmailCodeAsync } = useSendCode();
 const beforeSendCode = () => {
     if (!registerForm.email || !isEmail(registerForm.email)) {
         return;
     }
-    sendEmailCode(registerForm.email);
+    sendEmailCodeAsync(registerForm.email).then((res) => {
+        if (res === statusCode.CAPTCHA_REQUIRED) {
+            showCaptcha.value = true;
+        }
+    })
 }
-
 
 //登录相关
 const emailFormRef = ref<FormInst | null>(null);
@@ -77,7 +86,12 @@ const sendRegisterRequest = () => {
     emailFormRef.value?.validate((err) => {
         if (!err) {
             registerAPI(registerForm).then((res) => {
-                console.log('res', res)
+                if (res.data.code === statusCode.OK) {
+                    notification.success({
+                        title: '注册成功',
+                        duration: 3000,
+                    })
+                }
             });
         } else {
             notification.error({

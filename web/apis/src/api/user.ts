@@ -1,9 +1,14 @@
 import request from '../request';
-import type { ModifyUserInfoType, UserLoginType, UserRegisterType } from '../types/user-type'
+import type { ModifyPwdType, ModifyUserInfoType, UserLoginType, UserRegisterType } from '../types/user-type'
 
 // 登录
 export const loginAPI = (login: UserLoginType) => {
     return request.post('v1/user/login', login);
+}
+
+// 邮箱登录
+export const emailLoginAPI = (login: UserLoginType) => {
+    return request.post('v1/user/login/email', login);
 }
 
 // 注册
@@ -34,4 +39,14 @@ export const getOtherUserInfoAPI = (uid: number) => {
 //通过用户名获取用户ID
 export const getUserIdAPI = (name: string) => {
     return request.get(`v1/user/uid?name=${name}`);
+}
+
+// 重置密码验证
+export const resetpwdCheckAPI = (email: string) => {
+    return request.get(`v1/user/resetpwd/check?email=${email}`);
+}
+
+// 重置密码
+export const mpdifyPwdAPI = (modifyPwd: ModifyPwdType) => {
+    return request.post('v1/user/pwd/modify', modifyPwd);
 }

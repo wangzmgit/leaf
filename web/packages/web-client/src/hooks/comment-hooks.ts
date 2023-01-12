@@ -7,10 +7,12 @@ import { getCommentListAPI, getReplyListAPI, deleteCommentAPI } from '@leaf/apis
 export default function useComment() {
     const total = ref(0);
     const noMore = ref(false);
+    const loadingComment = ref(false);
     const commentList = ref<Array<CommentType>>([]);
     const notification = useNotification();//通知
 
     const getCommentList = (vid: number, page: number, pageSize: number) => {
+        loadingComment.value = true;
         getCommentListAPI(vid, page, pageSize).then((res) => {
             if (res.data.code === statusCode.OK) {
                 const resComment = res.data.data.comments;
@@ -22,11 +24,13 @@ export default function useComment() {
                 } else {
                     noMore.value = true;
                 }
+                loadingComment.value = false;
             } else {
                 notification.error({
                     title: '获取失败',
                     duration: 5000,
                 })
+                loadingComment.value = false;
             }
         })
     }
@@ -87,6 +91,7 @@ export default function useComment() {
         total,
         noMore,
         commentList,
+        loadingComment,
         getCommentList,
         getReplyListSync,
         deleteCommentSync,

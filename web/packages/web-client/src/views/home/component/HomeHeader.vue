@@ -43,27 +43,47 @@
                 投稿
             </n-button>
         </div>
-        <login-dialog v-if="showLogin" @close="(showLogin = false)"></login-dialog>
+        <login-dialog v-if="showLogin" @close="loginClose"></login-dialog>
     </div>
 </template>
 
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue';
 import { globalConfig, storageData } from "@leaf/utils";
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { CommonAvatar } from '@leaf/components';
 import { NInput, NIcon, NButton } from 'naive-ui';
 import type { UserInfoType } from "@leaf/apis";
+import { useLoginStore } from '@/stores/login-store';
 import { Search as SearchIcon, Upload, MenuOutline } from "@leaf/icons"
 import LoginDialog from "@/components/login-dialog/Index.vue";
+import { storeToRefs } from 'pinia';
 
 
 const emits = defineEmits(["changeFold"]);
 
 const isLogin = ref(false);
-const showLogin = ref(false);
 const router = useRouter();
-const route = useRoute();
+
+const loginStore = useLoginStore();
+const { showLogin } = storeToRefs(loginStore);
+
+// 用户信息
+const userInfo = ref<UserInfoType>({
+    uid: 0,
+    name: "",
+    avatar: "",
+    spacecover: ""
+});
+
+// 加载用户信息
+const loadUserInfo = () => {
+    const info = storageData.get('user_info');
+    if (info) {
+        userInfo.value = Object.assign(userInfo.value, info);
+        isLogin.value = true;
+    }
+}
 
 // 左侧菜单
 const menuFold = ref(false);
@@ -92,20 +112,13 @@ const search = () => {
     window.open(searchUrl.href, '_blank');
 }
 
-// 用户信息
-const userInfo = ref<UserInfoType>({
-    uid: 0,
-    name: "",
-    avatar: "",
-    spacecover: ""
-});
+const loginClose = () => {
+    loadUserInfo();
+    loginStore.setLoginState(false);
+}
 
 onBeforeMount(() => {
-    const info = storageData.get('user_info');
-    if (info) {
-        userInfo.value = Object.assign(userInfo.value, info);
-        isLogin.value = true;
-    }
+    loadUserInfo();
 })
 </script>
 

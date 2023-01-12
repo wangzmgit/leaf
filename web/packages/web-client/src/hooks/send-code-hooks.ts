@@ -1,22 +1,21 @@
 import { ref } from 'vue';
-import { useNotification } from 'naive-ui';
-import { sendRegisterCodeAPI } from '@leaf/apis';
+import { useMessage } from 'naive-ui';
+import { sendEmailCodeAPI } from '@leaf/apis';
+import { statusCode } from '@leaf/utils';
 
 export default function useSendCode() {
 
     const disabledSend = ref(false);//禁用发送按钮
     const sendBtnText = ref("发送验证码");//发送按钮文字
-    const notification = useNotification();//通知
+    const message = useMessage();//通知
 
-    const sendEmailCode = (email: string) => {
+    const sendEmailCodeAsync = async (email: string) => {
         //禁用发送按钮
         disabledSend.value = true;
-        sendRegisterCodeAPI(email).then((res) => {
-            if (res.data.code === 200) {
-                notification.success({
-                    content: '发送成功',
-                    duration: 5000,
-                });
+        try {
+            const res = await sendEmailCodeAPI(email)
+            if (res.data.code === statusCode.OK) {
+                message.success('发送成功');
                 //开启倒计时
                 let count = 0;
                 let tag = setInterval(() => {
@@ -28,22 +27,21 @@ export default function useSendCode() {
                     }
                     sendBtnText.value = `${60 - count}秒后获取`;
                 }, 1000);
+            } else {
+                disabledSend.value = false;
             }
-        }).catch((err) => {
+            return res.data.code;
+        } catch {
             disabledSend.value = false;
             sendBtnText.value = "发送验证码";
-            notification.error({
-                title: '发送失败',
-                content: "原因:" + err.response.data.msg,
-                duration: 5000,
-            });
-        });
+            message.error('发送失败');
+        }
     }
 
     return {
         disabledSend,
         sendBtnText,
-        sendEmailCode
+        sendEmailCodeAsync
     }
 }
 

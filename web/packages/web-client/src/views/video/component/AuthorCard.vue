@@ -64,7 +64,7 @@ watch(() => props.loading, (val) => {
 })
 
 onBeforeMount(() => {
-    if (storageData.get("user_info").uid) {
+    if (storageData.get("user_info")?.uid) {
         isLogin.value = true;
     }
 })

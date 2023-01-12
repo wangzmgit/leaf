@@ -23,7 +23,7 @@ import { Refresh } from "@leaf/icons";
 import { onMounted, reactive, ref, watch } from "vue";
 import { getSliderAPI, validateSliderAPI } from "@leaf/apis"
 
-const emits = defineEmits(["update:show"]);
+const emits = defineEmits(["update:show", "success"]);
 const props = defineProps<{
     email: string,
     show: boolean,
@@ -83,6 +83,7 @@ const setMsg = (status: string) => {
         case "success":
             state.msgText = "验证通过";
             state.msgBgColor = "rgba(131, 206, 63, .8)";
+            emits("success");
             break;
         case "fail":
             state.msgText = "验证不通过";

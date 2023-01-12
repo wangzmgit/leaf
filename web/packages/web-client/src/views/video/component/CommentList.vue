@@ -75,10 +75,6 @@
             </div>
         </div>
     </div>
-    <!-- 加载更多 -->
-    <div v-if="!noMore" class="more-btn">
-        <n-button @click="getMore">加载更多</n-button>
-    </div>
 </template>
 
 <script setup lang="ts">
@@ -135,7 +131,7 @@ const message = useMessage();
 const notification = useNotification();//通知
 let messageReactive: MessageReactive | null = null;
 
-const { noMore, commentList, getCommentList, getReplyListSync, deleteCommentSync } = useComment();
+const { noMore, loadingComment, commentList, getCommentList, getReplyListSync, deleteCommentSync } = useComment();
 
 //评论回复
 const submitComment = () => {
@@ -286,12 +282,18 @@ const getMoreReply = (cid: string, index: number) => {
     })
 }
 
-//加载更多
-const getMore = () => {
-    page.value++;
-    getCommentList(props.vid, page.value, 8);
+// 加载更多评论
+const lazyLoading = () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const clientHeight = document.documentElement.clientHeight;
+    const scrollHeight = document.documentElement.scrollHeight;
+    if (scrollTop + clientHeight >= (scrollHeight - 10)) {
+        if (!noMore.value && !loadingComment.value) {
+            page.value++;
+            getCommentList(props.vid, page.value, 8);
+        }
+    }
 }
-
 
 //删除评论回复
 const deleteClick = (id: string, replyId: string | null, index: number, replyIndex: number | null = null) => {
@@ -305,8 +307,6 @@ const deleteClick = (id: string, replyId: string | null, index: number, replyInd
         }
     })
 }
-
-
 
 //前往@的用户
 let loadingUser = false;
@@ -336,8 +336,11 @@ const goMention = (name: string | null) => {
 }
 
 onBeforeMount(() => {
-    userInfo.value = storageData.get("user_info");
+    if (storageData.get("user_info")) {
+        userInfo.value = storageData.get("user_info");
+    }
     getCommentList(props.vid, page.value, 8);
+    window.removeEventListener('scroll', lazyLoading);
 })
 </script>
 
@@ -499,9 +502,5 @@ onBeforeMount(() => {
         cursor: pointer;
         padding: 0 2px;
     }
-}
-
-.more-btn {
-    text-align: center;
 }
 </style>
