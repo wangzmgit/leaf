@@ -127,14 +127,19 @@ const modifyUserInfo = () => {
                 title: '修改成功',
                 duration: 5000,
             })
+        } else {
+            notification.error({
+                title: '修改失败',
+                content: res.data.msg,
+                duration: 5000,
+            })
         }
     }).catch((err) => {
         notification.error({
             title: '修改失败',
-            content: "原因:" + err.response.data.msg,
+            content: err.response.data.msg,
             duration: 5000,
         })
-
     });
 }
 
@@ -142,7 +147,7 @@ const modifyUserInfo = () => {
 const getUserInfo = () => {
     getUserInfoAPI().then((res) => {
         if (res.data.code === statusCode.OK) {
-            storageData.update("user_info", res.data.data.userInfo);
+            storageData.update("user_info", res.data.data.user_info);
         }
     })
 }

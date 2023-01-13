@@ -3,13 +3,13 @@
         <div v-if="!menuFold">
             <n-scrollbar style="max-height: calc(100vh - 56px)">
                 <div class="menu-group">
-                    <span class="menu-item menu-item-with-icon">
+                    <span class="menu-item menu-item-with-icon" @click="goSpace('Collection')">
                         <n-icon class="menu-item-icon" size="20">
                             <collection></collection>
                         </n-icon>
                         <span class="menu-text">收藏夹</span>
                     </span>
-                    <span class="menu-item menu-item-with-icon">
+                    <span class="menu-item menu-item-with-icon" @click="goSpace('History')">
                         <n-icon class="menu-item-icon" size="20">
                             <history></history>
                         </n-icon>
@@ -17,19 +17,19 @@
                     </span>
                 </div>
                 <div class="menu-group">
-                    <span class="menu-item menu-item-with-icon">
+                    <span class="menu-item menu-item-with-icon" @click="goSpace('Message')">
                         <n-icon class="menu-item-icon" size="20">
                             <message></message>
                         </n-icon>
                         <span class="menu-text">消息</span>
                     </span>
-                    <span class="menu-item menu-item-with-icon">
+                    <span class="menu-item menu-item-with-icon" @click="goSpace('Space')">
                         <n-icon class="menu-item-icon" size="20">
                             <me></me>
                         </n-icon>
                         <span class="menu-text">个人中心</span>
                     </span>
-                    <span class="menu-item menu-item-with-icon">
+                    <span class="menu-item menu-item-with-icon" @click="goSpace('Setting')">
                         <n-icon class="menu-item-icon" size="20">
                             <setting></setting>
                         </n-icon>
@@ -37,20 +37,10 @@
                     </span>
                 </div>
                 <div class="menu-group">
-                    <span class="menu-item menu-item-only-text">动画</span>
-                    <span class="menu-item menu-item-only-text">生活</span>
-                    <span class="menu-item menu-item-only-text">游戏</span>
-
-                    <span class="menu-item menu-item-only-text">动画</span>
-                    <span class="menu-item menu-item-only-text">生活</span>
-                    <span class="menu-item menu-item-only-text">游戏</span>
-
-                    <span class="menu-item menu-item-only-text">动画</span>
-                    <span class="menu-item menu-item-only-text">生活</span>
-                    <span class="menu-item menu-item-only-text">游戏</span>
-                    <span class="menu-item menu-item-only-text">动画</span>
-                    <span class="menu-item menu-item-only-text">生活</span>
-                    <span class="menu-item menu-item-only-text">游戏</span>
+                    <span class="menu-item menu-item-only-text" v-for="item in partitionList"
+                        @click="goVideoList(item.id)">
+                        {{ item.content }}
+                    </span>
                 </div>
                 <div class="menu-footer">
                     <div class="links">
@@ -78,19 +68,19 @@
             </n-scrollbar>
         </div>
         <div v-else class="sidebar-content-fold">
-            <n-icon class="fold-menu-icon-btn" size="22">
+            <n-icon class="fold-menu-icon-btn" size="22" @click="goSpace('Collection')">
                 <collection></collection>
             </n-icon>
-            <n-icon class="fold-menu-icon-btn" size="22">
+            <n-icon class="fold-menu-icon-btn" size="22" @click="goSpace('History')">
                 <history></history>
             </n-icon>
-            <n-icon class="fold-menu-icon-btn" size="22">
+            <n-icon class="fold-menu-icon-btn" size="22" @click="goSpace('Message')">
                 <message></message>
             </n-icon>
-            <n-icon class="fold-menu-icon-btn" size="22">
+            <n-icon class="fold-menu-icon-btn" size="22" @click="goSpace('Space')">
                 <me></me>
             </n-icon>
-            <n-icon class="fold-menu-icon-btn" size="22">
+            <n-icon class="fold-menu-icon-btn" size="22" @click="goSpace('Setting')">
                 <setting></setting>
             </n-icon>
         </div>
@@ -98,10 +88,13 @@
 </template>
 
 <script setup lang="ts">
-import { globalConfig } from "@leaf/utils";
+import { globalConfig, statusCode } from "@leaf/utils";
 import { History, Collection, Me, Message, Setting } from "@leaf/icons";
 import { NIcon, NScrollbar } from "naive-ui";
-import { ref, watch } from "vue";
+import { onBeforeMount, ref, watch } from "vue";
+import type { PartitionType } from "@leaf/apis";
+import { getPartitionAPI } from "@leaf/apis";
+import { useRouter } from "vue-router";
 
 const props = withDefaults(defineProps<{
     fold: boolean
@@ -109,12 +102,40 @@ const props = withDefaults(defineProps<{
     fold: false
 })
 
-const menuFold = ref(props.fold);
+const router = useRouter();
 
+const menuFold = ref(props.fold);
 watch(() => props.fold, (newValue) => {
     menuFold.value = newValue;
 });
 
+// 获取分区
+const partitionList = ref<Array<PartitionType>>([])
+const getPartition = () => {
+    getPartitionAPI().then((res) => {
+        if (res.data.code === statusCode.OK) {
+            const partitions = res.data.data.partitions as PartitionType[];
+            partitionList.value = partitions.filter((item) => {
+                return item.parent_id === 0;
+            })
+        }
+    })
+}
+
+// 前往视频列表页
+const goVideoList = (id: number) => {
+    router.push({ name: "VideoList", query: { partition: id } });
+}
+
+// 前往个人空间
+const goSpace = (name:string) => {
+    router.push({ name: name});
+}
+
+
+onBeforeMount(() => {
+    getPartition();
+})
 </script>
 
 <style lang="less" scoped>

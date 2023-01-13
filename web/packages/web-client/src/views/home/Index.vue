@@ -1,5 +1,5 @@
 <template>
-    <div class="home" :style="initTheme()">
+    <div class="home" :style="initTheme()" v-title :data-title="`${globalConfig.title}`">
         <home-header class="home-header" @change-fold="changeMenuFold"></home-header>
         <div class="home-content">
             <div class="home-left" :class="menuFold ? 'home-left-fold' : ''">
@@ -10,18 +10,7 @@
                     <div class="recommended-carousel">
                         <HomeCarousel></HomeCarousel>
                     </div>
-                    <VideoItem></VideoItem>
-                    <VideoItem></VideoItem>
-                    <VideoItem></VideoItem>
-                    <VideoItem></VideoItem>
-                    <VideoItem></VideoItem>
-                    <VideoItem></VideoItem>
-                    <VideoItem></VideoItem>
-                    <VideoItem></VideoItem>
-                    <VideoItem></VideoItem>
-                    <VideoItem></VideoItem>
-                    <VideoItem></VideoItem>
-                    <VideoItem></VideoItem>
+                    <video-item v-for="item in videoList" :info="item"></video-item>
                 </div>
             </div>
         </div>
@@ -29,18 +18,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { getTheme } from '@/theme';
 import HomeSidebar from './component/HomeSidebar.vue';
 import HomeHeader from "./component/HomeHeader.vue";
 import HomeCarousel from './component/HomeCarousel.vue';
-import VideoItem from '@/components/VideoItem.vue';
+import { getRecommendedVideoAPI, type VideoType } from "@leaf/apis";
+import VideoItem from '@/components/video-item/Index.vue';
+import { globalConfig, statusCode } from '@leaf/utils';
 
 
 const menuFold = ref(false);
 const changeMenuFold = (val: boolean) => {
     menuFold.value = val;
-    console.log('val', val)
 }
 
 const initTheme = () => {
@@ -50,6 +40,19 @@ const initTheme = () => {
         "--primary-color": theme.primaryColor
     }
 }
+
+const videoList = ref<Array<VideoType>>([]);
+const getRecommendedVideo = () => {
+    getRecommendedVideoAPI(12).then((res) => {
+        if (res.data.code === statusCode.OK) {
+            videoList.value = res.data.data.videos;
+        }
+    })
+}
+
+onBeforeMount(() => {
+    getRecommendedVideo();
+})
 </script>
 
 <style lang="less" scoped>
@@ -70,6 +73,7 @@ const initTheme = () => {
 .home-content {
     display: flex;
     margin-top: 60px;
+
     .home-left {
         width: 220px;
         transition: width .25s;

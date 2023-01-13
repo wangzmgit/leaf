@@ -5,9 +5,9 @@ export interface UserLoginType {
 }
 
 export interface UserRegisterType {
-    emailcode: string //验证码
     email: string
     password: string
+    code: string //验证码
 }
 
 export interface UserInfoType {
@@ -27,4 +27,10 @@ export interface ModifyUserInfoType {
     gender: number,
     sign: string,
     birthday: string
+}
+
+export interface ModifyPwdType {
+    email: string
+    password: string
+    code: string //验证码
 }

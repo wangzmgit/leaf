@@ -4,7 +4,7 @@ import { UploadOptions } from "../types/upload-options-type";
 import { statusCode } from '@leaf/utils';
 
 // 上传图片
-export const uploadImgAPI = ({
+export const uploadFileAPI = ({
     name,
     file,
     action,

@@ -1,5 +1,5 @@
 <template>
-    <div class="space">
+    <div class="space" v-title :data-title="`${userInfo.name}的个人中心`">
         <header-bar></header-bar>
         <div class="space-container">
             <div class="space-header">
@@ -20,15 +20,15 @@
                     <div class="user-data">
                         <div>
                             <p class="data-title">投稿</p>
-                            <p>{{ userData.videoCount }}</p>
+                            <p>{{ videoCount }}</p>
                         </div>
                         <div>
                             <p class="data-title">关注</p>
-                            <p class="data-content">{{ userData.followingCount }}</p>
+                            <p class="data-content" @click="goPage('Following')">{{ userData.followingCount }}</p>
                         </div>
                         <div>
                             <p class="data-title">粉丝</p>
-                            <p class="data-content">{{ userData.followersCount }}</p>
+                            <p class="data-content" @click="goPage('Follower')">{{ userData.followerCount }}</p>
                         </div>
                     </div>
                 </div>
@@ -51,9 +51,9 @@
 
 <script setup lang="ts">
 import { h, ref, onBeforeMount, reactive } from "vue";
-import { RouterLink, useRoute } from 'vue-router';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { Video, Collection, Upload, Message, Setting, Male, Female } from "@leaf/icons";
-import type { UserInfoType } from "@leaf/apis";
+import { getFollowDataAPI, type UserInfoType } from "@leaf/apis";
 import { statusCode, storageData } from "@leaf/utils";
 import { modifySpaceCoverAPI, getUserInfoAPI } from "@leaf/apis";
 import useRenderIcon from "@/hooks/render-icon-hooks";
@@ -62,30 +62,69 @@ import { NIcon, NMenu, useNotification } from "naive-ui";
 import HeaderBar from "@/components/header-bar/Index.vue";
 import LeafCropper from "@/components/leaf-cropper/Index.vue";
 import SpaceCoverCropper from "@/components/leaf-cropper/component/SpaceCoverCropper.vue";
+import { storeToRefs } from "pinia";
+import { useVideoCountStore } from "@/stores/video-count-store";
 
 const route = useRoute();
+const router = useRouter();
 const { renderIcon } = useRenderIcon();
 const notification = useNotification();
 
 const defaultOption = ref('');//默认激活菜单
 const menuOptions = [
     {
-        label: "首页",
-        key: "home",
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "SpaceVideo",
+                    }
+                },
+                { default: () => '投稿' }
+            ),
+        key: "video",
         icon: renderIcon(Video, '#609a8b'),
     },
     {
-        label: '收藏夹',
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "Collection",
+                    }
+                },
+                { default: () => '收藏夹' }
+            ),
         key: "collection",
         icon: renderIcon(Collection, '#e3c0aa'),
     },
     {
-        label: '投稿',
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "Upload",
+                    }
+                },
+                { default: () => '投稿' }
+            ),
         key: "upload",
         icon: renderIcon(Upload, '#7daebd'),
     },
     {
-        label: "消息",
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "Message",
+                    }
+                },
+                { default: () => '消息' }
+            ),
         key: "message",
         icon: renderIcon(Message, '#c79fa7'),
     },
@@ -100,11 +139,13 @@ const menuOptions = [
                 },
                 { default: () => '设置' }
             ),
-
         key: "setting",
         icon: renderIcon(Setting, '#808080'),
     },
 ];
+
+const videoCountStore = useVideoCountStore();
+const { videoCount } = storeToRefs(videoCountStore);
 
 const userInfo = ref<UserInfoType>({
     uid: 0,
@@ -114,10 +155,14 @@ const userInfo = ref<UserInfoType>({
 });
 
 const userData = reactive({
-    videoCount: 0,
     followingCount: 0,
-    followersCount: 0
+    followerCount: 0
 })
+
+//前往关注和粉丝页面
+const goPage = (name: string) => {
+    router.push({ name: name });
+}
 
 const cropperRef = ref<InstanceType<typeof LeafCropper> | null>(null)
 const uploadClick = () => {
@@ -154,9 +199,19 @@ const changeUpload = (status: string, data: any) => {
 const getUserInfo = () => {
     getUserInfoAPI().then((res) => {
         if (res.data.code === statusCode.OK) {
-            const tmpInfo = res.data.data.userInfo as UserInfoType;
+            const tmpInfo = res.data.data.user_info as UserInfoType;
             userInfo.value = tmpInfo;
             storageData.update("user_info", tmpInfo);
+        }
+    })
+}
+
+//获取关注数和粉丝数
+const getFollowData = (id: number) => {
+    getFollowDataAPI(id).then((res) => {
+        if (res.data.code === statusCode.OK) {
+            userData.followerCount = res.data.data.follower;
+            userData.followingCount = res.data.data.following;
         }
     })
 }
@@ -164,12 +219,12 @@ const getUserInfo = () => {
 onBeforeMount(() => {
     userInfo.value = storageData.get("user_info");
     switch (route.name) {
-        // case 'SpaceInfo':
-        //     defaultOption.value = 'home';
-        //     break;
-        // case 'Collection':
-        //     defaultOption.value = 'collection';
-        //     break;
+        case 'SpaceVideo':
+            defaultOption.value = 'video';
+            break;
+        case 'Collection':
+            defaultOption.value = 'collection';
+            break;
         // case 'Announce':
         //     defaultOption.value = 'announce';
         //     break;
@@ -183,6 +238,7 @@ onBeforeMount(() => {
             defaultOption.value = 'home';
             break;
     }
+    getFollowData(userInfo.value.uid);
 })
 
 </script>

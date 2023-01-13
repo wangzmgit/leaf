@@ -1,13 +1,20 @@
 <template>
-    <div class="login-bg">
+    <div class="login-bg" v-title :data-title="`登录-${globalConfig.title}`">
         <img src="@/assets/login-bg.svg" />
     </div>
-    <login-card></login-card>
+    <login-card @success="loginSuccess"></login-card>
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 import LoginCard from '@/components/login-card/Index.vue';
+import { globalConfig } from '@leaf/utils';
 
+const router = useRouter();
+
+const loginSuccess = () => {
+    router.push({ name: "Home" });
+}
 </script>
 
 <style lang="less" scoped>

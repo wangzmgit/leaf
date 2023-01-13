@@ -10,7 +10,7 @@
                     <n-form-item label="密码" path="password">
                         <n-input placeholder="请输入密码" v-model:value="loginForm.password" type="password">
                             <template #suffix>
-                                <n-button type="primary" text>找回密码</n-button>
+                                <n-button type="primary" text @click="findPassword">找回密码</n-button>
                             </template>
                         </n-input>
                     </n-form-item>
@@ -34,7 +34,7 @@
             <n-button type="primary" @click="sendLoginRequest">登录</n-button>
         </div>
     </div>
-    <slider-captcha v-model:show="captcha.show" :email="loginForm.email"></slider-captcha>
+    <slider-captcha v-model:show="showCaptcha" :email="loginForm.email" @success="captchaSuccess"></slider-captcha>
 </template>
 
 <script setup lang="ts">
@@ -42,34 +42,23 @@ import { reactive, ref } from 'vue';
 import useSendCode from '@/hooks/send-code-hooks';
 
 import type { UserLoginType } from "@leaf/apis";
-import { loginAPI, getUserInfoAPI } from "@leaf/apis";
-import { isEmail, storageData, statusCode } from '@leaf/utils';
+import { loginAPI, emailLoginAPI, getUserInfoAPI } from "@leaf/apis";
+import { storageData, statusCode } from '@leaf/utils';
 
 import type { FormRules, FormInst } from 'naive-ui';
 import { NTabs, NTabPane, NForm, NFormItem, NInput, NButton, useNotification } from 'naive-ui';
 
-import { SliderCaptcha } from "@leaf/components"
+import { SliderCaptcha } from "@leaf/components";
+import { useRouter } from 'vue-router';
 
-const emits = defineEmits(["changeForm"]);
+const emits = defineEmits(["changeForm", "success"]);
 
+const router = useRouter();
 //通知组件
 const notification = useNotification();
 
-const captcha = reactive<{
-    marking: string,
-    show: boolean,
-    bg: string,
-    slider: string,
-    y: number
-    key: number
-}>({
-    key: Date.now(),
-    marking: "",
-    show: false,
-    bg: "",
-    slider: "",
-    y: 0
-})
+// 显示滑块验证
+const showCaptcha = ref(false);
 
 //登录表单
 const loginForm = reactive<UserLoginType>({
@@ -89,19 +78,33 @@ const rules: FormRules = {
     code: { required: true, message: '请输入验证码', trigger: ['blur', 'input'] },
 }
 
+// 滑块验证通过
+let captchaUsers = "";// 人机验证使用者
+const captchaSuccess = () => {
+    if (captchaUsers === "login") {
+        sendLoginRequest();
+    } else {
+        beforeSendCode();
+    }
+}
+
 //发送验证码相关
-const { disabledSend, sendBtnText, sendEmailCode } = useSendCode();
+const { disabledSend, sendBtnText, sendEmailCodeAsync } = useSendCode();
 const beforeSendCode = () => {
     if (!loginForm.email) {
         return;
     }
-    sendEmailCode(loginForm.email);
+    sendEmailCodeAsync(loginForm.email).then((res) => {
+        if (res === statusCode.CAPTCHA_REQUIRED) {
+            captchaUsers = "emailcode";
+            showCaptcha.value = true;
+        }
+    })
 }
 
 // 登录方式切换
 const currentTabName = ref("account");
-const loginTypeChange = (tabName: any) => {
-    // loginForm.loginType = tabName === "account" ? 1 : 2;
+const loginTypeChange = (tabName: string) => {
     currentTabName.value = tabName;
 }
 
@@ -113,27 +116,30 @@ const sendLoginRequest = () => {
     let currentRef: FormInst | null = null;
     switch (currentTabName.value) {
         case "account":
+            emailLoginAPI
             currentRef = accountFormRef.value;
             break;
         case "email":
             currentRef = emailFormRef.value;
             break;
     }
-
     currentRef?.validate((err) => {
         if (!err) {
-            loginAPI(loginForm).then((res) => {
+            const loginRequest = currentTabName.value === "account" ? loginAPI : emailLoginAPI;
+            loginRequest(loginForm).then((res) => {
                 switch (res.data.code) {
                     case statusCode.CAPTCHA_REQUIRED:
-                        captcha.show = true;
+                    captchaUsers = "login";
+                        showCaptcha.value = true;
                         break;
                     case statusCode.OK:
                         storageData.set("access_token", res.data.data.access_token, 5);
                         storageData.set("refresh_token", res.data.data.refresh_token, 14 * 24 * 60);
                         getUserInfoAPI().then((infoRes) => {
                             if (infoRes.data.code === statusCode.OK) {
-                                storageData.set("user_info", infoRes.data.data.userInfo, 14 * 24 * 60);
+                                storageData.set("user_info", infoRes.data.data.user_info, 14 * 24 * 60);
                             }
+                            emits("success");
                         })
                         break;
                     default:
@@ -150,6 +156,11 @@ const sendLoginRequest = () => {
             })
         }
     });
+}
+
+const findPassword = () => {
+    let findPasswordUrl = router.resolve({ name: "FindPassword" });
+    window.open(findPasswordUrl.href, '_blank');
 }
 </script>
 

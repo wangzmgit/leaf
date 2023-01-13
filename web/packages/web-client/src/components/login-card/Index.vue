@@ -11,7 +11,7 @@
         <div class="card-right">
             <transition name="fade" mode="out-in">
                 <div v-if="isLogin" key="login">
-                    <login-form @change-form="isLogin = false"></login-form>
+                    <login-form @change-form="isLogin = false" @success="success"></login-form>
                 </div>
 
                 <div v-else key="register">
@@ -36,7 +36,7 @@ import LoginIllustration from "./component/LoginIllustration.vue";
 import LoginForm from './component/LoginForm.vue'
 import RegisterForm from './component/RegisterForm.vue'
 
-const emits = defineEmits(["close"]);
+const emits = defineEmits(["close","success"]);
 const props = withDefaults(defineProps<{
     close?: boolean,
 }>(), {
@@ -48,6 +48,10 @@ const isLogin = ref(true);
 
 const closeClick = () => {
     emits("close");
+}
+
+const success = () => {
+    emits("success");
 }
 </script>
 
