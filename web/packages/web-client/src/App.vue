@@ -44,6 +44,22 @@ const themeOverrides: GlobalThemeOverrides = {
         textColorTextHover: theme.primaryColor,
         textColorTextPressed: theme.primaryColor
     },
+    Select: {
+        peers: {
+            InternalSelection: {
+                textColor: theme.primaryColor,
+                borderFocus: theme.primaryColor,
+                borderHover: theme.primaryColor
+            },
+        },
+    },
+    Input: {
+        borderFocus: theme.primaryColor,
+        borderHover: theme.primaryColor,
+    },
+    Menu: {
+        itemTextColorHoverHorizontal: theme.primaryHoverColor,
+    }
 }
 </script>
 

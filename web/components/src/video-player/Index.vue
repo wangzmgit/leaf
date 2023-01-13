@@ -9,7 +9,7 @@ import { onBeforeMount, ref, watch } from 'vue';
 import dashjs from "dashjs";
 import { WPlayer } from 'vue-wplayer';
 import 'vue-wplayer/dist/style.css';
-import { ResourceType, AddHistoryType } from '@leaf/apis';
+import { ResourceType, AddHistoryType, AddDanmakuType, sendDanmakuAPI, getDanmakuAPI } from '@leaf/apis';
 import { addHistoryAPI, getHistoryProgressAPI } from '@leaf/apis';
 import { OptionsType, QualityType } from '../types/player';
 import { statusCode } from '@leaf/utils';
@@ -47,6 +47,9 @@ const options: OptionsType = {
     danmaku: {
         open: true,
         data: [],
+        send: (danmaku: AddDanmakuType) => {
+            sendDanmaku(danmaku);
+        }
     }
 }
 
@@ -69,6 +72,7 @@ const getTrackIndex = (quality: number) => {
 const loadPart = async (part: number) => {
     loadResource(part);
     startTime = await getHistoryProgress();
+    await getDanmaku(part);
     playerKey.value = Date.now();
 }
 
@@ -123,6 +127,23 @@ const uploadHistory = async () => {
         time: dash.time()
     }
     await addHistoryAPI(history);
+}
+
+const sendDanmaku = (danmakuForm: AddDanmakuType) => {
+    danmakuForm.vid = props.vid;
+    danmakuForm.part = props.part;
+    sendDanmakuAPI(danmakuForm);
+}
+
+const getDanmaku = async (part: number) => {
+    if (options.danmaku.data) options.danmaku.data = [];
+    const res = await getDanmakuAPI(props.vid, part);
+    if (res.data.code === statusCode.OK) {
+        const list = res.data.data.danmaku;
+        if (list) {
+            options.danmaku!.data = list;
+        }
+    }
 }
 
 onBeforeMount(() => {
