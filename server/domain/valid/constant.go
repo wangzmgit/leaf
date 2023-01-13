@@ -28,4 +28,7 @@ const (
 	MESSAGE_SEND_ERROR    = "消息发送失败"
 	MESSAGE_CONTENT_ERROR = "消息内容不能为空"
 	SEND_YOURSELF_ERROR   = "不能发送给自己"
+
+	// 弹幕
+	DANMAKU_TEXT_ERROR = "弹幕内容不能为空"
 )

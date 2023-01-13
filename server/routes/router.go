@@ -55,6 +55,8 @@ func CollectRoutes(r *gin.Engine) *gin.Engine {
 		CollectMessageRoutes(v1)
 		// 历史记录相关路由
 		CollectHistoryRoutes(v1)
+		// 弹幕相关路由
+		CollectDanmakuRoutes(v1)
 	}
 
 	//获取静态文件
