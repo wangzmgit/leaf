@@ -83,18 +83,17 @@ func ParseToken(tokenString string) (*jwt.Token, *Claims, error) {
 	// 获取jwt的荷载数据
 	claims, err := GetTokenClaims(tokenString)
 	if err != nil {
-		zap.L().Error("token荷载解析失败")
+		zap.L().Error("token荷载解析失败: " + err.Error())
 	}
 	// 判断类型 选择不同的密钥
 	var secret []byte
 	if claims.TokenType == 0 { // accessToken
-		secret = []byte(viper.GetString("server.access_jwt_secret"))
+		secret = []byte(viper.GetString("security.access_jwt_secret"))
 	} else if claims.TokenType == 1 { // refreshToken
-		secret = []byte(viper.GetString("server.refresh_jwt_secret"))
+		secret = []byte(viper.GetString("security.refresh_jwt_secret"))
 	} else {
 
 	}
-
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (i interface{}, e error) {
 		return secret, nil
 	})
@@ -116,5 +115,3 @@ func generateToken(key []byte, claims *Claims) (string, error) {
 	}
 	return tokenString, nil
 }
-
-

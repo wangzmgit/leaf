@@ -17,7 +17,7 @@ func Init() {
 	dns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?%s",
 		viper.GetString("mysql.username"),
 		viper.GetString("mysql.password"),
-		viper.GetString("mysql.hostname"),
+		viper.GetString("mysql.host"),
 		viper.GetString("mysql.port"),
 		viper.GetString("mysql.datasource"),
 		viper.GetString("mysql.param"))
@@ -36,4 +36,16 @@ func GetMysqlClient() *gorm.DB {
 
 func InitTables() {
 	mysqlClient.AutoMigrate(&model.User{})
+	mysqlClient.AutoMigrate(&model.Partition{})
+	mysqlClient.AutoMigrate(&model.Video{})
+	mysqlClient.AutoMigrate(&model.Resource{})
+	mysqlClient.AutoMigrate(&model.Collection{})
+	mysqlClient.AutoMigrate(&model.Follow{})
+	mysqlClient.AutoMigrate(&model.Announce{})
+	mysqlClient.AutoMigrate(&model.Whisper{})
+	mysqlClient.AutoMigrate(&model.AtMessage{})
+	mysqlClient.AutoMigrate(&model.LikeMessage{})
+	mysqlClient.AutoMigrate(&model.ReplyMessage{})
+	mysqlClient.AutoMigrate(&model.History{})
+	mysqlClient.AutoMigrate(&model.Danmaku{})
 }

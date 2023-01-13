@@ -17,13 +17,20 @@ type LoginDTO struct {
 	Password string
 }
 
+type EmailLoginDTO struct {
+	// 邮箱
+	Email string
+	// 验证码
+	Code string
+}
+
 type RegisterDTO struct {
 	// 邮箱
 	Email string
 	// 密码
 	Password string
 	// 邮箱验证码
-	EmailCode string
+	Code string
 }
 
 /**
@@ -48,4 +55,21 @@ func RegisterToUser(registerDTO RegisterDTO) model.User {
 func generateUniqueUsername() string {
 	// 前缀 + 时间戳(36进制) + 3位随机数
 	return viper.GetString("user.prefix") + strconv.FormatInt(time.Now().UnixNano(), 36) + random.GenerateNumberCode(3)
+}
+
+/**
+ * 获取角色编号对应的角色名
+ * return: 角色名字符串
+ */
+func GetRoleString(role int) string {
+	switch role {
+	case 1:
+		return "auditor"
+	case 2:
+		return "admin"
+	case 3:
+		return "root"
+	default:
+		return "user"
+	}
 }
