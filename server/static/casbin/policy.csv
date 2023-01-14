@@ -54,6 +54,9 @@ p, user, /api/v1/history/progress/get, GET
 
 p, user, /api/v1/danmaku/send, POST
 
+p, admin, /api/v1/carousel/add, POST
+p, admin, /api/v1/carousel/delete, POST
+
 p, root, /api/v1/partition/add, POST
 p, root, /api/v1/partition/delete, POST
 
