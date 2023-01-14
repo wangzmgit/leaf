@@ -4,10 +4,10 @@
         <n-tabs default-value="account" size="large" justify-content="space-evenly" @update:value="loginTypeChange">
             <n-tab-pane class="form-container" name="account" tab="账号登录">
                 <n-form ref="accountFormRef" :rules="rules" :model="loginForm" label-placement="left" label-width="70">
-                    <n-form-item label="账号" path="account">
+                    <n-form-item path="account">
                         <n-input placeholder="请输入邮箱" v-model:value="loginForm.email" />
                     </n-form-item>
-                    <n-form-item label="密码" path="password">
+                    <n-form-item path="password">
                         <n-input placeholder="请输入密码" v-model:value="loginForm.password" type="password">
                             <template #suffix>
                                 <n-button type="primary" text @click="findPassword">找回密码</n-button>
@@ -19,10 +19,10 @@
             <!-- 邮箱登录 -->
             <n-tab-pane class="form-container" name="email" tab="邮箱验证">
                 <n-form ref="emailFormRef" :rules="rules" :model="loginForm" label-placement="left" label-width="70">
-                    <n-form-item label="邮箱" path="email">
+                    <n-form-item path="email">
                         <n-input placeholder="请输入邮箱" v-model:value="loginForm.email" />
                     </n-form-item>
-                    <n-form-item label="验证码" path="code">
+                    <n-form-item path="code">
                         <n-input placeholder="请输入验证码" v-model:value="loginForm.code" />
                         <n-button :disabled="disabledSend" @click="beforeSendCode">{{ sendBtnText }}</n-button>
                     </n-form-item>
@@ -30,7 +30,6 @@
             </n-tab-pane>
         </n-tabs>
         <div class="login-btn">
-            <n-button @click="emits('changeForm')">立即注册</n-button>
             <n-button type="primary" @click="sendLoginRequest">登录</n-button>
         </div>
     </div>
@@ -51,7 +50,7 @@ import { NTabs, NTabPane, NForm, NFormItem, NInput, NButton, useNotification } f
 import { SliderCaptcha } from "@leaf/components";
 import { useRouter } from 'vue-router';
 
-const emits = defineEmits(["changeForm", "success"]);
+const emits = defineEmits(["success"]);
 
 const router = useRouter();
 //通知组件
@@ -129,7 +128,7 @@ const sendLoginRequest = () => {
             loginRequest(loginForm).then((res) => {
                 switch (res.data.code) {
                     case statusCode.CAPTCHA_REQUIRED:
-                    captchaUsers = "login";
+                        captchaUsers = "login";
                         showCaptcha.value = true;
                         break;
                     case statusCode.OK:
@@ -137,7 +136,15 @@ const sendLoginRequest = () => {
                         storageData.set("refresh_token", res.data.data.refresh_token, 14 * 24 * 60);
                         getUserInfoAPI().then((infoRes) => {
                             if (infoRes.data.code === statusCode.OK) {
-                                storageData.set("user_info", infoRes.data.data.user_info, 14 * 24 * 60);
+                                const userInfo = infoRes.data.data.user_info;
+                                storageData.set("user_info", userInfo, 14 * 24 * 60);
+                                if (userInfo.role === 0) {
+                                    notification.error({
+                                        title: '暂无权限',
+                                        duration: 3000,
+                                    });
+                                    return;
+                                }
                             }
                             emits("success");
                         })
@@ -173,11 +180,11 @@ const findPassword = () => {
 
     .login-btn {
         display: flex;
-        justify-content: space-between;
+        width: 100%;
         margin: 20px 30px 0;
 
         button {
-            width: 160px;
+            width: calc(100% - 60px);
         }
     }
 }
