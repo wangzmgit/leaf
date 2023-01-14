@@ -4,7 +4,7 @@
             :style="`width: ${data.containerWidth}%;transition: ${data.transition};transform: ${data.transform}`"
             @mouseover="manualSwitching(null, false)" @mouseleave="manualSwitching(null, true)">
             <div class="carousel-item" :style="`width: ${data.itemWidth}% `" v-for="item in data.playList">
-                <img class="carousel-img" :src="item.url" :alt="item.title" />
+                <img class="carousel-img" :src="item.img" :alt="item.title" />
                 <div class="carousel-mask" :style="`background-color: ${item.color}`"></div>
             </div>
         </div>
@@ -33,8 +33,11 @@
 </template>
 
 <script lang="ts" setup>
+import type { CarouselType } from "@leaf/apis";
 import { ArrowLeft, ArrowRight } from "@leaf/icons";
-import { nextTick, onMounted, reactive, ref } from 'vue';
+import { nextTick, onBeforeMount, onMounted, reactive, ref } from 'vue';
+import { getCarouselAPI } from "@leaf/apis";
+import { statusCode } from "@leaf/utils";
 
 const data = reactive<{
     carouselCount: number
@@ -42,11 +45,7 @@ const data = reactive<{
     containerWidth: number
     currentIndex: number
     carouselTimer: null | number
-    playList: Array<{
-        title: string
-        url: string
-        color: string
-    }>
+    playList: Array<CarouselType>
     transition: string
     transform: string
 }>({
@@ -61,24 +60,7 @@ const data = reactive<{
 });
 
 
-const carouselList = ref([
-    {
-        title: "轮播图标题测试",
-        color: "#182432",
-        url: "http://localhost:9000/api/img/test.jpg"
-    },
-    {
-        title: "轮播图标题测试",
-        color: "#182432",
-        url: "http://localhost:9000/api/img/test.jpg"
-    },
-    {
-        title: "轮播图标题测试",
-        color: "#69885e",
-        url: "http://localhost:9000/api/img/test.jpg"
-    },
-])
-
+const carouselList = ref<Array<CarouselType>>([]);
 
 const carouselContainer = ref<HTMLElement | null>(null);
 
@@ -104,7 +86,7 @@ const initCarousel = () => {
 const startInterval = () => {
     data.carouselTimer = setInterval(() => {
         changeCurrentImg(true);
-    }, 2000)
+    }, 3000)
 }
 
 //切换当前图片
@@ -183,9 +165,14 @@ const handelSequence = (data: any[], start: number) => {
     return [...data.slice(start, data.length), ...before];
 }
 
-onMounted(() => {
-    initCarousel();
-    startInterval();
+onBeforeMount(() => {
+    getCarouselAPI().then((res) => {
+        if (res.data.code === statusCode.OK) {
+            carouselList.value = res.data.data.carousels;
+            initCarousel();
+            startInterval();
+        }
+    })
 })
 </script>
   

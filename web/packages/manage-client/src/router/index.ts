@@ -15,6 +15,11 @@ const router = createRouter({
                     path: '/partition',
                     name: 'Partition',
                     component: () => import("../views/partition/Index.vue"),
+                },
+                {
+                    path: '/carousel',
+                    name: 'Carousel',
+                    component: () => import("../views/carousel/Index.vue"),
                 }
             ]
         },

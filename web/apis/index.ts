@@ -52,3 +52,6 @@ export * from "./src/types/history-type";
 
 export * from "./src/api/danmaku";
 export * from "./src/types/danmaku-type";
+
+export * from "./src/api/carousel";
+export * from "./src/types/carousel-type";

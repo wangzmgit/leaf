@@ -69,6 +69,7 @@ importers:
     specifiers:
       '@leaf/apis': workspace:^1.0.0
       '@leaf/components': workspace:^1.0.0
+      '@leaf/icons': workspace:^1.0.0
       '@leaf/utils': workspace:^1.0.0
       '@rushstack/eslint-patch': ^1.1.4
       '@types/node': ^18.11.12
@@ -88,6 +89,7 @@ importers:
     dependencies:
       '@leaf/apis': link:../../apis
       '@leaf/components': link:../../components
+      '@leaf/icons': link:../../icons
       '@leaf/utils': link:../../utils
       naive-ui: 2.33.5_vue@3.2.45
       pinia: 2.0.28_e7lp6ggkpgyi5vqd44m2kxvk6i

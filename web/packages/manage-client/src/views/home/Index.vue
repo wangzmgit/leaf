@@ -107,17 +107,16 @@ const menuOptions = [
         // icon: renderIcon(CheckboxOutline),
     },
     {
-        // label: () =>
-        //     h(
-        //         RouterLink,
-        //         {
-        //             to: {
-        //                 name: "Carousel",
-        //             }
-        //         },
-        //         { default: () => '轮播图管理' }
-        //     ),
-        label: "轮播图管理",
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "Carousel",
+                    }
+                },
+                { default: () => '轮播图管理' }
+            ),
         key: "carousel",
         // icon: renderIcon(ImageOutline),
     },

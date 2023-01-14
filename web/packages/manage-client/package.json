@@ -13,6 +13,7 @@
   "dependencies": {
     "@leaf/apis": "workspace:^1.0.0",
     "@leaf/components": "workspace:^1.0.0",
+    "@leaf/icons": "workspace:^1.0.0",
     "@leaf/utils": "workspace:^1.0.0",
     "naive-ui": "^2.33.5",
     "pinia": "^2.0.28",
