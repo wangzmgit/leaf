@@ -108,13 +108,6 @@ const sendRegisterRequest = () => {
     .form-container {
         box-sizing: border-box;
         padding: 30px 30px 0 30px;
-
-        .login-type-text {
-            display: block;
-            text-align: center;
-            font-size: 22px;
-            margin: 16px 0;
-        }
     }
 
     .login-btn {

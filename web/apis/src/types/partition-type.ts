@@ -3,3 +3,8 @@ export interface PartitionType {
     content: string
     parent_id: number
 }
+
+export interface AddPartitionType {
+    content: string
+    parentId: number
+}
