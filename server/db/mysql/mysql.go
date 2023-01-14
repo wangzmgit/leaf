@@ -48,4 +48,5 @@ func InitTables() {
 	mysqlClient.AutoMigrate(&model.ReplyMessage{})
 	mysqlClient.AutoMigrate(&model.History{})
 	mysqlClient.AutoMigrate(&model.Danmaku{})
+	mysqlClient.AutoMigrate(&model.Carousel{})
 }
