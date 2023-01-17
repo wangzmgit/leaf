@@ -12,13 +12,21 @@ const router = createRouter({
             component: homeView,
             children: [
                 {
+                    path: '/user',
+                    name: 'User',
+                    meta: { auth: true },
+                    component: () => import("../views/user/Index.vue"),
+                },
+                {
                     path: '/partition',
                     name: 'Partition',
+                    meta: { auth: true },
                     component: () => import("../views/partition/Index.vue"),
                 },
                 {
                     path: '/carousel',
                     name: 'Carousel',
+                    meta: { auth: true },
                     component: () => import("../views/carousel/Index.vue"),
                 }
             ]

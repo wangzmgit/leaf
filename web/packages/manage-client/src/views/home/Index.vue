@@ -62,17 +62,16 @@ const menuOptions = [
         // icon: renderIcon(CreateOutline),
     },
     {
-        // label: () =>
-        //     h(
-        //         RouterLink,
-        //         {
-        //             to: {
-        //                 name: "User",
-        //             }
-        //         },
-        //         { default: () => '用户管理' }
-        //     ),
-        label: "用户管理",
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "User",
+                    }
+                },
+                { default: () => '用户管理' }
+            ),
         key: "user",
         // icon: renderIcon(PersonOutline),
     },

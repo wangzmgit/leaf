@@ -19,6 +19,8 @@ export interface UserInfoType {
     gender?: number
     sign?: string
     birthday?: string
+    created_at?: string
+    role?: number
 }
 
 export interface ModifyUserInfoType {
@@ -33,4 +35,11 @@ export interface ModifyPwdType {
     email: string
     password: string
     code: string //验证码
+}
+
+export interface AdminModifyUserInfoType {
+    id: number,
+    email: string,
+    name: string,
+    sign: string,
 }
