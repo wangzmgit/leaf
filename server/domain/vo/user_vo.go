@@ -19,11 +19,13 @@ type UserVO struct {
 	ID         uint      `json:"uid"`
 	Name       string    `json:"name"`
 	Sign       string    `json:"sign"`
+	Email      string    `json:"email"`
 	Avatar     string    `json:"avatar"`
 	SpaceCover string    `json:"spacecover"`
 	Gender     int       `json:"gender"`
 	Role       int       `json:"role"`
 	Birthday   time.Time `json:"birthday"`
+	CreatedAt  time.Time `json:"created_at"`
 }
 
 func ToUserVO(user model.User) UserVO {
@@ -57,10 +59,12 @@ func ToUserVoList(users []model.User) []UserVO {
 		newUsers[i].ID = users[i].ID
 		newUsers[i].Name = users[i].Username
 		newUsers[i].Sign = users[i].Sign
+		newUsers[i].Email = users[i].Email
 		newUsers[i].Avatar = users[i].Avatar
 		newUsers[i].SpaceCover = users[i].SpaceCover
 		newUsers[i].Gender = users[i].Gender
 		newUsers[i].Birthday = users[i].Birthday
+		newUsers[i].CreatedAt = users[i].CreatedAt
 		newUsers[i].Role = users[i].Role
 	}
 

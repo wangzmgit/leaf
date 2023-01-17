@@ -40,6 +40,20 @@ func CollectUserRoutes(r *gin.RouterGroup) {
 			auth.POST("/cover/modify", api.ModifySpaceCover)
 		}
 
+		manage := auth.Group("manage")
+		{
+			// 管理员获取用户列表
+			manage.GET("list", api.AdminGetUserList)
+			// 管理员搜索用户信息
+			manage.GET("search", api.AdminSearchUserInfo)
+			// 管理员更新用户信息
+			manage.POST("modify", api.AdminModifyUserInfo)
+			// 管理员更新用户权限信息
+			manage.POST("role/modify", api.AdminModifyUserRole)
+			// 管理员删除用户
+			manage.POST("delete", api.AdminDeleteUser)
+		}
+
 	}
 
 }

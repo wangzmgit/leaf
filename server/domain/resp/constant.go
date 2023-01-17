@@ -14,6 +14,10 @@ var (
 	Captcha = R{httpStatus: http.StatusOK, code: -1, msg: "需要人机验证"}
 
 	// 10** 通用错误
+	CreateError             = R{httpStatus: http.StatusOK, code: 1000, msg: "创建失败"}
+	SelectError             = R{httpStatus: http.StatusOK, code: 1000, msg: "查询失败"}
+	UpdateError             = R{httpStatus: http.StatusOK, code: 1000, msg: "更新失败"}
+	DeleteError             = R{httpStatus: http.StatusOK, code: 1000, msg: "删除失败"}
 	SliderVerificationError = R{httpStatus: http.StatusOK, code: 1010, msg: "滑块验证失败"}
 	InvalidLinkError        = R{httpStatus: http.StatusOK, code: 1020, msg: "链接已经失效"}
 

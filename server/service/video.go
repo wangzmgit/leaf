@@ -155,3 +155,9 @@ func IsVideoBelongUser(id, userId uint) bool {
 
 	return video.ID != 0
 }
+
+// 删除用户
+func DeleteUser(id uint) {
+	cache.DelUser(id)
+	mysqlClient.Where("id = ?", id).Delete(&model.User{})
+}

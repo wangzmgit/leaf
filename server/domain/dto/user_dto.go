@@ -19,3 +19,17 @@ type ModifyPwdDTO struct {
 	Password string
 	Code     string
 }
+
+//管理员修改用户信息
+type AdminModifyUserInfoDTO struct {
+	ID    uint
+	Email string
+	Name  string
+	Sign  string
+}
+
+//管理员修改用户权限
+type ModifyRoleDTO struct {
+	ID   uint
+	Role int
+}
