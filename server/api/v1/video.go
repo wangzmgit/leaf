@@ -270,13 +270,13 @@ func GetVideoList(ctx *gin.Context) {
 	var videos []model.Video
 	if partitionId == 0 {
 		//不传分区参数默认查询全部
-		videos = service.SelectAuditApprovedVideoList(page, pageSize)
+		_, videos = service.SelectAuditApprovedVideoList(page, pageSize)
 	} else if service.IsSubpartition(partitionId) {
 		// 如果为子分区，查询分区下的视频
-		videos = service.SelectVideoListBySubpartition(partitionId, page, pageSize)
+		_, videos = service.SelectVideoListBySubpartition(partitionId, page, pageSize)
 	} else {
 		// 获取该分区下的视频
-		videos = service.SelectVideoListByPartition(partitionId, page, pageSize)
+		_, videos = service.SelectVideoListByPartition(partitionId, page, pageSize)
 	}
 
 	// 更新播放量数据和作者信息
@@ -312,7 +312,7 @@ func GetRecommendedVideo(ctx *gin.Context) {
 	resp.OK(ctx, "ok", gin.H{"videos": vo.ToSearchVideoVoList(videos)})
 }
 
-// 获取推荐视频
+// 搜索视频
 func SearchVideo(ctx *gin.Context) {
 	keywords := ctx.Query("keywords")
 	page := convert.StringToInt(ctx.Query("page"))
@@ -326,7 +326,7 @@ func SearchVideo(ctx *gin.Context) {
 
 	var videos []model.Video
 	if len(keywords) == 0 {
-		videos = service.SelectAuditApprovedVideoList(page, pageSize)
+		_, videos = service.SelectAuditApprovedVideoList(page, pageSize)
 	} else {
 		// 直接用mysql模糊查询，之后可能会更换为es
 		videos = service.SelectVideoListByKeywords(keywords, page, pageSize)
@@ -340,6 +340,80 @@ func SearchVideo(ctx *gin.Context) {
 
 	// 返回给前端
 	resp.OK(ctx, "ok", gin.H{"videos": vo.ToSearchVideoVoList(videos)})
+}
+
+// 管理员获取视频列表
+func AdminGetVideoList(ctx *gin.Context) {
+	page := convert.StringToInt(ctx.Query("page"))
+	pageSize := convert.StringToInt(ctx.Query("page_size"))
+	partitionId := convert.StringToUint(ctx.DefaultQuery("partition", "0")) //分区
+
+	if pageSize > 30 {
+		resp.Response(ctx, resp.TooManyRequestsError, "", nil)
+		zap.L().Error("请求数量过多 ")
+		return
+	}
+
+	var total int64
+	var videos []model.Video
+	if partitionId == 0 {
+		//不传分区参数默认查询全部
+		total, videos = service.SelectAuditApprovedVideoList(page, pageSize)
+	} else if service.IsSubpartition(partitionId) {
+		// 如果为子分区，查询分区下的视频
+		total, videos = service.SelectVideoListBySubpartition(partitionId, page, pageSize)
+	} else {
+		// 获取该分区下的视频
+		total, videos = service.SelectVideoListByPartition(partitionId, page, pageSize)
+	}
+
+	// 更新播放量数据和作者信息
+	for i := 0; i < len(videos); i++ {
+		videos[i].Clicks = service.GetVideoClicks(videos[i].ID)
+		videos[i].Author = service.GetUserInfo(videos[i].Uid)
+	}
+
+	// 返回给前端
+	resp.OK(ctx, "ok", gin.H{"total": total, "videos": vo.ToSearchVideoVoList(videos)})
+}
+
+// 管理员搜索视频
+func AdminSearchVideo(ctx *gin.Context) {
+	keywords := ctx.Query("keywords")
+	page := convert.StringToInt(ctx.Query("page"))
+	pageSize := convert.StringToInt(ctx.Query("page_size"))
+
+	if pageSize > 30 {
+		resp.Response(ctx, resp.TooManyRequestsError, "", nil)
+		zap.L().Error("请求数量过多 ")
+		return
+	}
+
+	total, videos := service.AdminSelectVideoListByKeywords(keywords, page, pageSize)
+
+	// 更新播放量数据和作者信息
+	for i := 0; i < len(videos); i++ {
+		videos[i].Clicks = service.GetVideoClicks(videos[i].ID)
+		videos[i].Author = service.GetUserInfo(videos[i].Uid)
+	}
+
+	// 返回给前端
+	resp.OK(ctx, "ok", gin.H{"total": total, "videos": vo.ToSearchVideoVoList(videos)})
+}
+
+// 删除视频
+func AdminDeleteVideo(ctx *gin.Context) {
+	var idDTO dto.IdDTO
+	if err := ctx.Bind(&idDTO); err != nil {
+		resp.Response(ctx, resp.RequestParamError, "", nil)
+		zap.L().Error("请求参数有误")
+		return
+	}
+
+	service.DeleteVideo(idDTO.ID)
+
+	// 返回给前端
+	resp.OK(ctx, "ok", nil)
 }
 
 // 视频Websocket连接(统计在线人数)

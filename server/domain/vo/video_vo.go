@@ -18,7 +18,7 @@ type VideoVO struct {
 	CreatedAt time.Time    `json:"created_at"`
 	Copyright bool         `json:"copyright"`
 	Author    BaseUserVO   `json:"author"`
-	Resource  []ResourceVo `json:"resources"`
+	Resource  []ResourceVO `json:"resources"`
 	Clicks    int64        `json:"clicks"`
 }
 
@@ -31,7 +31,7 @@ type VideoStatusVO struct {
 	Status    int          `json:"status"`
 	Partition uint         `json:"partition"`
 	Copyright bool         `json:"copyright"`
-	Resources []ResourceVo `json:"resources"`
+	Resources []ResourceVO `json:"resources"`
 }
 
 // 基础视频信息

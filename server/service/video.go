@@ -41,24 +41,27 @@ func GetVideoInfo(videoId uint) (video model.Video) {
 }
 
 // 通过分区查询视频列表(通过审核)
-func SelectVideoListByPartition(partitionId uint, page, pageSize int) (videos []model.Video) {
+func SelectVideoListByPartition(partitionId uint, page, pageSize int) (total int64, videos []model.Video) {
 	partitionIds := mysqlClient.Model(&model.Partition{}).Select("id").Where("parent_id = ?", partitionId)
-	mysqlClient.Where("status = ? and partition_id in (?)", common.AUDIT_APPROVED, partitionIds).
-		Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
+	client := mysqlClient.Where("status = ? and partition_id in (?)", common.AUDIT_APPROVED, partitionIds)
+	client.Model(&model.Video{}).Count(&total)
+	client.Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
 	return
 }
 
 // 通过子分区查询视频列表(通过审核)
-func SelectVideoListBySubpartition(partitionId uint, page, pageSize int) (videos []model.Video) {
-	mysqlClient.Where("status = ? and partition_id = ?", common.AUDIT_APPROVED, partitionId).
-		Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
+func SelectVideoListBySubpartition(partitionId uint, page, pageSize int) (total int64, videos []model.Video) {
+	client := mysqlClient.Where("status = ? and partition_id = ?", common.AUDIT_APPROVED, partitionId)
+	client.Model(&model.Video{}).Count(&total)
+	client.Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
 	return
 }
 
 // 查询通过审核视频列表
-func SelectAuditApprovedVideoList(page, pageSize int) (videos []model.Video) {
-	mysqlClient.Where("status = ?", common.AUDIT_APPROVED).
-		Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
+func SelectAuditApprovedVideoList(page, pageSize int) (total int64, videos []model.Video) {
+	client := mysqlClient.Where("status = ?", common.AUDIT_APPROVED)
+	client.Model(&model.Video{}).Count(&total)
+	client.Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
 	return
 }
 
@@ -66,6 +69,15 @@ func SelectAuditApprovedVideoList(page, pageSize int) (videos []model.Video) {
 func SelectVideoListByKeywords(keywords string, page, pageSize int) (videos []model.Video) {
 	mysqlClient.Where("status = ? and title like ?", common.AUDIT_APPROVED, "%"+keywords+"%").
 		Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
+
+	return
+}
+
+// 管理员通过关键词查询视频
+func AdminSelectVideoListByKeywords(keywords string, page, pageSize int) (total int64, videos []model.Video) {
+	search := mysqlClient.Where("status = ? and title like ?", common.AUDIT_APPROVED, "%"+keywords+"%")
+	search.Model(&model.Video{}).Count(&total)
+	search.Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
 
 	return
 }

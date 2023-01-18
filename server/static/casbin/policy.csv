@@ -20,6 +20,9 @@ p, user, /api/v1/video/review/submit, POST
 p, user, /api/v1/video/collect, GET
 p, user, /api/v1/video/upload/get, GET
 p, user, /api/v1/video/delete, POST
+p, auditor, /api/v1/video/manage/list, GET
+p, auditor, /api/v1/video/manage/search, GET
+p, auditor, /api/v1/video/manage/delete, POST
 
 p, user, /api/v1/archive/has/like, GET
 p, user, /api/v1/archive/like, POST
