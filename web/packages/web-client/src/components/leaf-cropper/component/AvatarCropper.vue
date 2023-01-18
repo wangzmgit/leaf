@@ -22,7 +22,7 @@ const props = defineProps<{
     file?: File
 }>();
 
-const cropperRef = ref<InstanceType<typeof PicCropper> | null>(null); (null);
+const cropperRef = ref<InstanceType<typeof PicCropper> | null>(null);
 
 const previewURL = ref("");
 const imgChange = (url: string) => {

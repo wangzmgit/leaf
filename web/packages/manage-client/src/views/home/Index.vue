@@ -76,17 +76,16 @@ const menuOptions = [
         // icon: renderIcon(PersonOutline),
     },
     {
-        // label: () =>
-        //     h(
-        //         RouterLink,
-        //         {
-        //             to: {
-        //                 name: "Video",
-        //             }
-        //         },
-        //         { default: () => '视频管理' }
-        //     ),
-        label: "视频管理",
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "Video",
+                    }
+                },
+                { default: () => '视频管理' }
+            ),
         key: "video",
         // icon: renderIcon(VideocamOutline),
     },

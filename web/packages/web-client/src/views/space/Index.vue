@@ -164,7 +164,7 @@ const goPage = (name: string) => {
     router.push({ name: name });
 }
 
-const cropperRef = ref<InstanceType<typeof LeafCropper> | null>(null)
+const cropperRef = ref<InstanceType<typeof LeafCropper> | null>(null);
 const uploadClick = () => {
     cropperRef.value?.open();
 }
