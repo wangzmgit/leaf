@@ -75,3 +75,23 @@ export const adminSearchVideoAPI = (page: number, pageSize: number, keywords: st
 export const adminDeleteVideoAPI = (id: number) => {
     return request.post('v1/video/manage/delete', { id });
 }
+
+//获取审核视频列表
+export const getReviewListAPI = (page: number, page_size: number) => {
+    return request.get(`v1/video/manage/review/list?page=${page}&page_size=${page_size}`);
+}
+
+//获取审核资源列表
+export const getResourceListAPI = (vid: number) => {
+    return request.get(`v1/video/manage/review/resource/list?vid=${vid}`);
+}
+
+//审核视频
+export const reviewVideoAPI = (id: number, status: number) => {
+    return request.post('v1/video/manage/review/video', { id, status });
+}
+
+//审核资源
+export const reviewResourceAPI = (id: number, status: number) => {
+    return request.post('v1/video/manage/review/resource', { id, status });
+}

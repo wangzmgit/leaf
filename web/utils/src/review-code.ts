@@ -8,6 +8,6 @@ export const reviewCode = {
 
     //审核不通过
     WRONG_VIDEO_INFO: 2100, //视频信息存在问题
-    WRONG_VIDEO_Content: 2200, //视频内容存在问题
+    WRONG_VIDEO_CONTENT: 2200, //视频内容存在问题
     PROCESSING_FAIL: 2300, //视频处理失败
 }

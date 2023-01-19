@@ -24,6 +24,12 @@ const router = createRouter({
                     component: () => import("../views/video/Index.vue"),
                 },
                 {
+                    path: '/review',
+                    name: 'Review',
+                    meta: { auth: true },
+                    component: () => import("../views/review/Index.vue"),
+                },
+                {
                     path: '/partition',
                     name: 'Partition',
                     meta: { auth: true },

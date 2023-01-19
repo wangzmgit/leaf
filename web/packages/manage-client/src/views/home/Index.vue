@@ -47,17 +47,16 @@ const menuOptions = [
         // icon: renderIcon(BarChartOutline),
     },
     {
-        // label: () =>
-        //     h(
-        //         RouterLink,
-        //         {
-        //             to: {
-        //                 name: "Review",
-        //             }
-        //         },
-        //         { default: () => '视频审核' }
-        //     ),
-        label: "视频审核",
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "Review",
+                    }
+                },
+                { default: () => '视频审核' }
+            ),
         key: "review",
         // icon: renderIcon(CreateOutline),
     },
