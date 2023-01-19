@@ -270,7 +270,7 @@ func GetVideoList(ctx *gin.Context) {
 	var videos []model.Video
 	if partitionId == 0 {
 		//不传分区参数默认查询全部
-		_, videos = service.SelectAuditApprovedVideoList(page, pageSize)
+		_, videos = service.SelectVideoListByStatus(page, pageSize, common.AUDIT_APPROVED)
 	} else if service.IsSubpartition(partitionId) {
 		// 如果为子分区，查询分区下的视频
 		_, videos = service.SelectVideoListBySubpartition(partitionId, page, pageSize)
@@ -326,7 +326,7 @@ func SearchVideo(ctx *gin.Context) {
 
 	var videos []model.Video
 	if len(keywords) == 0 {
-		_, videos = service.SelectAuditApprovedVideoList(page, pageSize)
+		_, videos = service.SelectVideoListByStatus(page, pageSize, common.AUDIT_APPROVED)
 	} else {
 		// 直接用mysql模糊查询，之后可能会更换为es
 		videos = service.SelectVideoListByKeywords(keywords, page, pageSize)
@@ -340,6 +340,84 @@ func SearchVideo(ctx *gin.Context) {
 
 	// 返回给前端
 	resp.OK(ctx, "ok", gin.H{"videos": vo.ToSearchVideoVoList(videos)})
+}
+
+// 获取待审核视频列表
+func GetReviewVideoList(ctx *gin.Context) {
+	//获取参数
+	page := convert.StringToInt(ctx.Query("page"))
+	pageSize := convert.StringToInt(ctx.Query("page_size"))
+
+	if pageSize > 30 {
+		resp.Response(ctx, resp.TooManyRequestsError, "", nil)
+		zap.L().Error("请求数量过多 ")
+		return
+	}
+
+	total, videos := service.SelectVideoListByStatus(page, pageSize, common.WAITING_REVIEW)
+
+	// 返回给前端
+	resp.OK(ctx, "ok", gin.H{"total": total, "videos": vo.ToSearchVideoVoList(videos)})
+}
+
+// 审核视频
+func ReviewVideo(ctx *gin.Context) {
+	var reviewDTO dto.ReviewDTO
+	if err := ctx.Bind(&reviewDTO); err != nil {
+		resp.Response(ctx, resp.RequestParamError, "", nil)
+		zap.L().Error("请求参数有误")
+		return
+	}
+
+	if !valid.ReviewStatus(reviewDTO.Status) {
+		resp.Response(ctx, resp.RequestParamError, valid.REVIEW_STATUS_ERROR, nil)
+		zap.L().Error(valid.REVIEW_STATUS_ERROR)
+		return
+	}
+
+	if reviewDTO.Status == common.AUDIT_APPROVED {
+		if service.SelectResourceCountByStatus(reviewDTO.ID, common.AUDIT_APPROVED) == 0 {
+			resp.Response(ctx, resp.ResourceNotExistError, "", nil)
+			zap.L().Error("资源不存在")
+			return
+		}
+	}
+
+	service.UpadteVideoStatus(reviewDTO.ID, reviewDTO.Status)
+
+	// 返回给前端
+	resp.OK(ctx, "ok", nil)
+}
+
+// 审核视频资源
+func ReviewResource(ctx *gin.Context) {
+	var reviewDTO dto.ReviewDTO
+	if err := ctx.Bind(&reviewDTO); err != nil {
+		resp.Response(ctx, resp.RequestParamError, "", nil)
+		zap.L().Error("请求参数有误")
+		return
+	}
+
+	if !valid.ReviewStatus(reviewDTO.Status) {
+		resp.Response(ctx, resp.RequestParamError, valid.REVIEW_STATUS_ERROR, nil)
+		zap.L().Error(valid.REVIEW_STATUS_ERROR)
+		return
+	}
+
+	service.UpadteResourceStatus(reviewDTO.ID, reviewDTO.Status)
+
+	// 返回给前端
+	resp.OK(ctx, "ok", nil)
+}
+
+// 通过视频ID获取待审核视频资源
+func GetReviewVideoByID(ctx *gin.Context) {
+	vid := convert.StringToUint(ctx.Query("vid"))
+
+	resources := service.SelectResourceByVideo(vid, false)
+
+	// 返回给前端
+	resp.OK(ctx, "ok", gin.H{"resources": vo.ToResourceVoList(resources)})
 }
 
 // 管理员获取视频列表
@@ -358,7 +436,7 @@ func AdminGetVideoList(ctx *gin.Context) {
 	var videos []model.Video
 	if partitionId == 0 {
 		//不传分区参数默认查询全部
-		total, videos = service.SelectAuditApprovedVideoList(page, pageSize)
+		total, videos = service.SelectVideoListByStatus(page, pageSize, common.AUDIT_APPROVED)
 	} else if service.IsSubpartition(partitionId) {
 		// 如果为子分区，查询分区下的视频
 		total, videos = service.SelectVideoListBySubpartition(partitionId, page, pageSize)

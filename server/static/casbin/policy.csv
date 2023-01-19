@@ -23,6 +23,10 @@ p, user, /api/v1/video/delete, POST
 p, auditor, /api/v1/video/manage/list, GET
 p, auditor, /api/v1/video/manage/search, GET
 p, auditor, /api/v1/video/manage/delete, POST
+p, auditor, /api/v1/video/manage/review/list, GET
+p, auditor, /api/v1/video/manage/review/resource/list, GET
+p, auditor, /api/v1/video/manage/review/video, POST
+p, auditor, /api/v1/video/manage/review/resource, POST
 
 p, user, /api/v1/archive/has/like, GET
 p, user, /api/v1/archive/like, POST

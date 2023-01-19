@@ -22,6 +22,12 @@ type ModifyVideoDTO struct {
 	Copyright bool
 }
 
+// 审核视频
+type ReviewDTO struct {
+	ID     uint
+	Status int
+}
+
 /**
  * 上传视频DTO结构体转化为Video结构体
  * param: userId 用户Id

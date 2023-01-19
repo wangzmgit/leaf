@@ -146,3 +146,9 @@ func UpdateUserPwd(modifyDTO dto.ModifyPwdDTO) error {
 
 	return mysqlClient.Model(&model.User{}).Where("email = ?", modifyDTO.Email).Update("password", hashedPassword).Error
 }
+
+// 删除用户
+func DeleteUser(id uint) {
+	cache.DelUser(id)
+	mysqlClient.Where("id = ?", id).Delete(&model.User{})
+}

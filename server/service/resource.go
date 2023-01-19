@@ -1,6 +1,7 @@
 package service
 
 import (
+	"kuukaa.fun/leaf/common"
 	"kuukaa.fun/leaf/domain/dto"
 	"kuukaa.fun/leaf/domain/model"
 )
@@ -31,7 +32,7 @@ func SelectResourceCountByStatus(videoId uint, status int) (count int64) {
 func SelectResourceByVideo(videoId uint, pass bool) (resources []model.Resource) {
 	db := mysqlClient.Model(&model.Resource{}).Where("vid = ?", videoId)
 	if pass {
-		db.Where("status = 0")
+		db.Where("status = ?", common.AUDIT_APPROVED)
 	}
 
 	db.Find(&resources)

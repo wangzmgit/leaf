@@ -65,10 +65,11 @@ type SearchVideoVO struct {
 	Copyright bool       `json:"copyright"`
 	Author    BaseUserVO `json:"author"`
 	Clicks    int64      `json:"clicks"`
+	Partition uint       `json:"partition"`
 }
 
 func ToVideoStatusVO(video model.Video, resources []model.Resource) VideoStatusVO {
-	resourcesVO := ToResourceListVO(resources)
+	resourcesVO := ToResourceVoList(resources)
 
 	return VideoStatusVO{
 		ID:        video.ID,
@@ -92,7 +93,7 @@ func ToVideoVO(video model.Video, resource []model.Resource) VideoVO {
 		CreatedAt: video.CreatedAt,
 		Copyright: video.Copyright,
 		Author:    ToBaseUserVO(video.Author),
-		Resource:  ToResourceListVO(resource),
+		Resource:  ToResourceVoList(resource),
 		Clicks:    video.Clicks,
 	}
 }
@@ -151,6 +152,7 @@ func ToSearchVideoVoList(videos []model.Video) []SearchVideoVO {
 		newVideos[i].Copyright = videos[i].Copyright
 		newVideos[i].CreatedAt = videos[i].CreatedAt
 		newVideos[i].Author = ToBaseUserVO(videos[i].Author)
+		newVideos[i].Partition = videos[i].PartitionId
 	}
 
 	return newVideos

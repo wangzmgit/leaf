@@ -57,19 +57,19 @@ func SelectVideoListBySubpartition(partitionId uint, page, pageSize int) (total 
 	return
 }
 
-// 查询通过审核视频列表
-func SelectAuditApprovedVideoList(page, pageSize int) (total int64, videos []model.Video) {
-	client := mysqlClient.Where("status = ?", common.AUDIT_APPROVED)
-	client.Model(&model.Video{}).Count(&total)
-	client.Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
-	return
-}
-
 // 通过关键词查询视频
 func SelectVideoListByKeywords(keywords string, page, pageSize int) (videos []model.Video) {
 	mysqlClient.Where("status = ? and title like ?", common.AUDIT_APPROVED, "%"+keywords+"%").
 		Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
 
+	return
+}
+
+// 通过视频状态查询视频列表
+func SelectVideoListByStatus(page, pageSize, status int) (total int64, videos []model.Video) {
+	client := mysqlClient.Where("status = ?", status)
+	client.Model(&model.Video{}).Count(&total)
+	client.Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
 	return
 }
 
@@ -88,6 +88,7 @@ func SelectVideoListByClicks(pageSize int) (videos []model.Video) {
 	return
 }
 
+// 查询视频播放量
 func SelectVideoClicks(videoId uint) (clicks int64) {
 	mysqlClient.Model(model.Video{}).Where("id = ?", videoId).Pluck("clicks", &clicks)
 	return
@@ -115,6 +116,7 @@ func SelectUploadVideo(userId uint, page, pageSize int) (total int64, videos []m
 	return
 }
 
+// 更新视频信息
 func UpdateVideoInfo(modifyDTO dto.ModifyVideoDTO) error {
 	if err := mysqlClient.Model(&model.Video{}).Where("id = ?", modifyDTO.VID).Updates(
 		map[string]interface{}{
@@ -134,6 +136,7 @@ func UpdateVideoInfo(modifyDTO dto.ModifyVideoDTO) error {
 	return nil
 }
 
+// 更新播放量
 func UpdateClicks(videoId uint, clicks int64) error {
 	err := mysqlClient.Model(&model.Video{}).Where("id = ?", videoId).Update("clicks", clicks).Error
 	if err != nil {
@@ -142,6 +145,7 @@ func UpdateClicks(videoId uint, clicks int64) error {
 	return nil
 }
 
+// 更新视频状态
 func UpadteVideoStatus(videoId uint, status int) error {
 	err := mysqlClient.Model(&model.Video{}).Where("id = ?", videoId).Update("status", status).Error
 	if err != nil {
@@ -166,10 +170,4 @@ func IsVideoBelongUser(id, userId uint) bool {
 	mysqlClient.Where("id = ? and uid = ?", id, userId).First(&video)
 
 	return video.ID != 0
-}
-
-// 删除用户
-func DeleteUser(id uint) {
-	cache.DelUser(id)
-	mysqlClient.Where("id = ?", id).Delete(&model.User{})
 }

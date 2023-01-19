@@ -16,7 +16,7 @@ type ResourceVO struct {
 	Quality int `json:"quality"`
 }
 
-func ToResourceListVO(resources []model.Resource) []ResourceVO {
+func ToResourceVoList(resources []model.Resource) []ResourceVO {
 	length := len(resources)
 	newResources := make([]ResourceVO, length)
 	for i := 0; i < length; i++ {

@@ -19,6 +19,9 @@ const (
 	// 用户
 	ROLE_ERROR = "无效的角色"
 
+	// 视频
+	REVIEW_STATUS_ERROR = "无效的视频状态"
+
 	// 评论校验
 	COMMENT_CONTENT_ERROR = "评论或回复内容不能为空"
 
