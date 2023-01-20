@@ -2,7 +2,7 @@ package vo
 
 import "kuukaa.fun/leaf/domain/model"
 
-type ResourceVo struct {
+type ResourceVO struct {
 	ID uint `json:"id"`
 	// 分P使用的标题
 	Title string `json:"title"`
@@ -16,9 +16,9 @@ type ResourceVo struct {
 	Quality int `json:"quality"`
 }
 
-func ToResourceListVO(resources []model.Resource) []ResourceVo {
+func ToResourceVoList(resources []model.Resource) []ResourceVO {
 	length := len(resources)
-	newResources := make([]ResourceVo, length)
+	newResources := make([]ResourceVO, length)
 	for i := 0; i < length; i++ {
 		newResources[i].ID = resources[i].ID
 		newResources[i].Title = resources[i].Title

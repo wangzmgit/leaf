@@ -149,7 +149,7 @@ func UploadVideo(ctx *gin.Context) {
 	go service.VideoTransCoding(rid, quality, filenameOnly)
 
 	// 记录日志
-	// zap.L().Info("用户上传图片:" + fileName + ",用户ID:" + convert.UintToString(userId))
+	zap.L().Info("用户上传视频:" + filenameOnly + ",用户ID:" + convert.UintToString(userId))
 
 	// 返回给前端
 	resp.OK(ctx, "", nil)

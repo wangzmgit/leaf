@@ -1,6 +1,11 @@
 p, user, /api/v1/user/info/get, GET
 p, user, /api/v1/user/info/modify, POST
 p, user, /api/v1/user/cover/modify, POST
+p, admin, /api/v1/user/manage/list, GET
+p, admin, /api/v1/user/manage/search, GET
+p, admin, /api/v1/user/manage/modify, POST
+p, admin, /api/v1/user/manage/delete, POST
+p, root, /api/v1/user/manage/role/modify, POST
 
 p, user, /api/v1/upload/image, POST
 p, user, /api/v1/upload/video/:vid, POST
@@ -15,6 +20,13 @@ p, user, /api/v1/video/review/submit, POST
 p, user, /api/v1/video/collect, GET
 p, user, /api/v1/video/upload/get, GET
 p, user, /api/v1/video/delete, POST
+p, auditor, /api/v1/video/manage/list, GET
+p, auditor, /api/v1/video/manage/search, GET
+p, auditor, /api/v1/video/manage/delete, POST
+p, auditor, /api/v1/video/manage/review/list, GET
+p, auditor, /api/v1/video/manage/review/resource/list, GET
+p, auditor, /api/v1/video/manage/review/video, POST
+p, auditor, /api/v1/video/manage/review/resource, POST
 
 p, user, /api/v1/archive/has/like, GET
 p, user, /api/v1/archive/like, POST

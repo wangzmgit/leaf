@@ -41,24 +41,19 @@ func GetVideoInfo(videoId uint) (video model.Video) {
 }
 
 // 通过分区查询视频列表(通过审核)
-func SelectVideoListByPartition(partitionId uint, page, pageSize int) (videos []model.Video) {
+func SelectVideoListByPartition(partitionId uint, page, pageSize int) (total int64, videos []model.Video) {
 	partitionIds := mysqlClient.Model(&model.Partition{}).Select("id").Where("parent_id = ?", partitionId)
-	mysqlClient.Where("status = ? and partition_id in (?)", common.AUDIT_APPROVED, partitionIds).
-		Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
+	client := mysqlClient.Where("status = ? and partition_id in (?)", common.AUDIT_APPROVED, partitionIds)
+	client.Model(&model.Video{}).Count(&total)
+	client.Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
 	return
 }
 
 // 通过子分区查询视频列表(通过审核)
-func SelectVideoListBySubpartition(partitionId uint, page, pageSize int) (videos []model.Video) {
-	mysqlClient.Where("status = ? and partition_id = ?", common.AUDIT_APPROVED, partitionId).
-		Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
-	return
-}
-
-// 查询通过审核视频列表
-func SelectAuditApprovedVideoList(page, pageSize int) (videos []model.Video) {
-	mysqlClient.Where("status = ?", common.AUDIT_APPROVED).
-		Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
+func SelectVideoListBySubpartition(partitionId uint, page, pageSize int) (total int64, videos []model.Video) {
+	client := mysqlClient.Where("status = ? and partition_id = ?", common.AUDIT_APPROVED, partitionId)
+	client.Model(&model.Video{}).Count(&total)
+	client.Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
 	return
 }
 
@@ -70,12 +65,30 @@ func SelectVideoListByKeywords(keywords string, page, pageSize int) (videos []mo
 	return
 }
 
+// 通过视频状态查询视频列表
+func SelectVideoListByStatus(page, pageSize, status int) (total int64, videos []model.Video) {
+	client := mysqlClient.Where("status = ?", status)
+	client.Model(&model.Video{}).Count(&total)
+	client.Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
+	return
+}
+
+// 管理员通过关键词查询视频
+func AdminSelectVideoListByKeywords(keywords string, page, pageSize int) (total int64, videos []model.Video) {
+	search := mysqlClient.Where("status = ? and title like ?", common.AUDIT_APPROVED, "%"+keywords+"%")
+	search.Model(&model.Video{}).Count(&total)
+	search.Limit(pageSize).Offset((page - 1) * pageSize).Find(&videos)
+
+	return
+}
+
 // 查询点击量高的视频
 func SelectVideoListByClicks(pageSize int) (videos []model.Video) {
 	mysqlClient.Debug().Where("status = ?", common.AUDIT_APPROVED).Limit(pageSize).Order("clicks").Find(&videos)
 	return
 }
 
+// 查询视频播放量
 func SelectVideoClicks(videoId uint) (clicks int64) {
 	mysqlClient.Model(model.Video{}).Where("id = ?", videoId).Pluck("clicks", &clicks)
 	return
@@ -103,6 +116,7 @@ func SelectUploadVideo(userId uint, page, pageSize int) (total int64, videos []m
 	return
 }
 
+// 更新视频信息
 func UpdateVideoInfo(modifyDTO dto.ModifyVideoDTO) error {
 	if err := mysqlClient.Model(&model.Video{}).Where("id = ?", modifyDTO.VID).Updates(
 		map[string]interface{}{
@@ -122,6 +136,7 @@ func UpdateVideoInfo(modifyDTO dto.ModifyVideoDTO) error {
 	return nil
 }
 
+// 更新播放量
 func UpdateClicks(videoId uint, clicks int64) error {
 	err := mysqlClient.Model(&model.Video{}).Where("id = ?", videoId).Update("clicks", clicks).Error
 	if err != nil {
@@ -130,6 +145,7 @@ func UpdateClicks(videoId uint, clicks int64) error {
 	return nil
 }
 
+// 更新视频状态
 func UpadteVideoStatus(videoId uint, status int) error {
 	err := mysqlClient.Model(&model.Video{}).Where("id = ?", videoId).Update("status", status).Error
 	if err != nil {

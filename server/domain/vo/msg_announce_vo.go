@@ -12,6 +12,7 @@ type AnnounceVO struct {
 	Content   string    `json:"content"`
 	Url       string    `json:"url"`
 	CreatedAt time.Time `json:"created_at"`
+	Important bool      `json:"important"`
 }
 
 func ToAnnounceVoList(announces []model.Announce) []AnnounceVO {
@@ -24,6 +25,7 @@ func ToAnnounceVoList(announces []model.Announce) []AnnounceVO {
 		newAnnounces[i].Content = announces[i].Content
 		newAnnounces[i].Url = announces[i].Url
 		newAnnounces[i].CreatedAt = announces[i].CreatedAt
+		newAnnounces[i].Important = announces[i].Important
 	}
 
 	return newAnnounces

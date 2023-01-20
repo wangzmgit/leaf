@@ -3,9 +3,10 @@ package dto
 import "kuukaa.fun/leaf/domain/model"
 
 type AnnounceDTO struct {
-	Title   string
-	Content string
-	Url     string
+	Title     string
+	Content   string
+	Url       string
+	Important bool
 }
 
 /**
@@ -15,8 +16,9 @@ type AnnounceDTO struct {
  */
 func AnnounceDtoToAnnounce(announceDTO AnnounceDTO) model.Announce {
 	return model.Announce{
-		Title:   announceDTO.Title,
-		Content: announceDTO.Content,
-		Url:     announceDTO.Url,
+		Title:     announceDTO.Title,
+		Content:   announceDTO.Content,
+		Url:       announceDTO.Url,
+		Important: announceDTO.Important,
 	}
 }
