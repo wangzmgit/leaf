@@ -2,7 +2,7 @@
     <div class="home" :style="initTheme()" v-title data-title="后台管理系统">
         <div class="home-menu">
             <span class="title">{{ globalConfig.title }}</span>
-            <n-menu :options="menuOptions" />
+            <n-menu :default-value="defaultKey" :options="menuOptions" />
         </div>
         <div class="home-box">
             <header-bar></header-bar>
@@ -14,13 +14,14 @@
 </template>
 
 <script setup lang="ts">
-import { h } from "vue";
+import { h, ref, onBeforeMount } from "vue";
+import { getTheme } from '@/theme';
+import { RouterLink, useRoute } from 'vue-router';
 import { globalConfig } from '@leaf/utils';
 import { NMenu } from "naive-ui";
-import { RouterLink } from 'vue-router';
 import HeaderBar from '@/components/header-bar/Index.vue';
-import { getTheme } from '@/theme';
-// import useRenderIcon from "@/hooks/render-icon-hooks";
+
+const route = useRoute();
 
 const initTheme = () => {
     const theme = getTheme();
@@ -30,22 +31,8 @@ const initTheme = () => {
     }
 }
 
+const defaultKey = ref("");
 const menuOptions = [
-    {
-        // label: () =>
-        //     h(
-        //         RouterLink,
-        //         {
-        //             to: {
-        //                 name: "Dashboard",
-        //             }
-        //         },
-        //         { default: () => '仪表盘' }
-        //     ),
-        label: "仪表盘",
-        key: "dashboard",
-        // icon: renderIcon(BarChartOutline),
-    },
     {
         label: () =>
             h(
@@ -58,7 +45,6 @@ const menuOptions = [
                 { default: () => '视频审核' }
             ),
         key: "review",
-        // icon: renderIcon(CreateOutline),
     },
     {
         label: () =>
@@ -72,7 +58,6 @@ const menuOptions = [
                 { default: () => '用户管理' }
             ),
         key: "user",
-        // icon: renderIcon(PersonOutline),
     },
     {
         label: () =>
@@ -86,7 +71,6 @@ const menuOptions = [
                 { default: () => '视频管理' }
             ),
         key: "video",
-        // icon: renderIcon(VideocamOutline),
     },
     {
         label: () =>
@@ -100,7 +84,6 @@ const menuOptions = [
                 { default: () => '公告管理' }
             ),
         key: "announce",
-        // icon: renderIcon(CheckboxOutline),
     },
     {
         label: () =>
@@ -114,7 +97,6 @@ const menuOptions = [
                 { default: () => '轮播图管理' }
             ),
         key: "carousel",
-        // icon: renderIcon(ImageOutline),
     },
     {
         label: () =>
@@ -128,25 +110,31 @@ const menuOptions = [
                 { default: () => '分区管理' }
             ),
         key: "partition",
-        // icon: renderIcon(GitMergeOutline),
-    },
-    {
-        // label: () =>
-        //     h(
-        //         RouterLink,
-        //         {
-        //             to: {
-        //                 name: "About",
-        //             }
-        //         },
-        //         { default: () => '关于' }
-        //     ),
-        label: "关于",
-        key: "about",
-        // icon: renderIcon(InformationCircleOutline),
-    },
+    }
 ];
 
+const routeNameToKey = () => {
+    switch (route.name) {
+        case "Review":
+            return "review";
+        case "User":
+            return "user";
+        case "Video":
+            return "video";
+        case "Announce":
+            return "announce";
+        case "Carousel":
+            return "carousel";
+        case "Partition":
+            return "partition";
+        default:
+            return "";
+    }
+}
+
+onBeforeMount(() => {
+    defaultKey.value = routeNameToKey();
+})
 </script>
 
 <style lang="less" scoped>

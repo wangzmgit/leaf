@@ -8,11 +8,7 @@
                         <n-input placeholder="请输入邮箱" v-model:value="loginForm.email" />
                     </n-form-item>
                     <n-form-item path="password">
-                        <n-input placeholder="请输入密码" v-model:value="loginForm.password" type="password">
-                            <template #suffix>
-                                <n-button type="primary" text @click="findPassword">找回密码</n-button>
-                            </template>
-                        </n-input>
+                        <n-input placeholder="请输入密码" v-model:value="loginForm.password" type="password" />
                     </n-form-item>
                 </n-form>
             </n-tab-pane>
@@ -163,11 +159,6 @@ const sendLoginRequest = () => {
             })
         }
     });
-}
-
-const findPassword = () => {
-    let findPasswordUrl = router.resolve({ name: "FindPassword" });
-    window.open(findPasswordUrl.href, '_blank');
 }
 </script>
 
