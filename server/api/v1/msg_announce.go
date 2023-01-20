@@ -22,10 +22,10 @@ func GetAnnounce(ctx *gin.Context) {
 		return
 	}
 
-	announces := service.SelectAnnounce(page, pageSize)
+	total, announces := service.SelectAnnounce(page, pageSize)
 
 	// 返回给前端
-	resp.OK(ctx, "ok", gin.H{"announces": vo.ToAnnounceVoList(announces)})
+	resp.OK(ctx, "ok", gin.H{"total": total, "announces": vo.ToAnnounceVoList(announces)})
 }
 
 // 添加公告

@@ -14,7 +14,8 @@ func DeleteAnnounce(id uint) {
 }
 
 // 查询公告
-func SelectAnnounce(page, pageSize int) (announces []model.Announce) {
+func SelectAnnounce(page, pageSize int) (total int64, announces []model.Announce) {
+	mysqlClient.Model(&model.Announce{}).Count(&total)
 	mysqlClient.Limit(pageSize).Offset((page - 1) * pageSize).Find(&announces)
 	return
 }
