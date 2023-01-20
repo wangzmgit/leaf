@@ -30,6 +30,12 @@ const router = createRouter({
                     component: () => import("../views/review/Index.vue"),
                 },
                 {
+                    path: '/announce',
+                    name: 'Announce',
+                    meta: { auth: true },
+                    component: () => import("../views/announce/Index.vue"),
+                },
+                {
                     path: '/partition',
                     name: 'Partition',
                     meta: { auth: true },

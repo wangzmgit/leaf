@@ -89,17 +89,16 @@ const menuOptions = [
         // icon: renderIcon(VideocamOutline),
     },
     {
-        // label: () =>
-        //     h(
-        //         RouterLink,
-        //         {
-        //             to: {
-        //                 name: "Announce",
-        //             }
-        //         },
-        //         { default: () => '公告管理' }
-        //     ),
-        label: "公告管理",
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "Announce",
+                    }
+                },
+                { default: () => '公告管理' }
+            ),
         key: "announce",
         // icon: renderIcon(CheckboxOutline),
     },
