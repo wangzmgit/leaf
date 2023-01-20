@@ -1,5 +1,5 @@
 import request from '../request';
-import type { ModifyPwdType, ModifyUserInfoType, UserLoginType, UserRegisterType } from '../types/user-type'
+import type { AdminModifyUserInfoType, ModifyPwdType, ModifyUserInfoType, UserLoginType, UserRegisterType } from '../types/user-type'
 
 // 登录
 export const loginAPI = (login: UserLoginType) => {
@@ -49,4 +49,29 @@ export const resetpwdCheckAPI = (email: string) => {
 // 重置密码
 export const mpdifyPwdAPI = (modifyPwd: ModifyPwdType) => {
     return request.post('v1/user/pwd/modify', modifyPwd);
+}
+
+// 管理员获取用户列表
+export const adminGetUserListAPI = (page: number, pageSize: number) => {
+    return request.get(`v1/user/manage/list?page=${page}&page_size=${pageSize}`)
+}
+
+// 管理员搜索用户
+export const adminSearchUserAPI = (keyword: string, page: number, pageSize: number) => {
+    return request.get(`v1/user/manage/search?keyword=${keyword}&page=${page}&page_size=${pageSize}`)
+}
+
+// 管理员修改用户信息
+export const adminModifyUserInfoAPI = (modify: AdminModifyUserInfoType) => {
+    return request.post('v1/user/manage/modify', modify);
+}
+
+// 管理员修改用户角色
+export const adminModifyUserRoleAPI = (id: number, role: number) => {
+    return request.post('v1/user/manage/role/modify', { id, role });
+}
+
+// 管理员删除用户
+export const adminDeleteUserAPI = (id: number) => {
+    return request.post("v1/user/manage/delete", { id })
 }

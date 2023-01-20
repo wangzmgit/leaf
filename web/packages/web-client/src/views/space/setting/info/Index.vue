@@ -77,7 +77,7 @@ const updateBirthday = (value: number, formattedValue: string) => {
     userInfo.value.birthday = formattedValue;
 }
 
-const cropperRef = ref<InstanceType<typeof LeafCropper> | null>(null)
+const cropperRef = ref<InstanceType<typeof LeafCropper> | null>(null);
 const avatarClick = () => {
     cropperRef.value?.open();
 }

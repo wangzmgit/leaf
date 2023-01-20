@@ -35,7 +35,8 @@ export interface VideoStatusType extends BaseVideoType {
 export interface VideoType extends BaseVideoType {
     copyright: boolean,
     clicks: number,
-    author: UserInfoType
+    author: UserInfoType,
+    partition?: number
 }
 
 // 视频
