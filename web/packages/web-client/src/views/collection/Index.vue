@@ -1,5 +1,5 @@
 <template>
-    <div class="collection" v-title data-title="收藏夹详情">
+    <div class="collection" :style="initTheme()" v-title data-title="收藏夹详情">
         <header-bar></header-bar>
         <div class="collection-main">
             <div v-if="loadingContent" class="content-left">
@@ -12,8 +12,8 @@
                     </div>
                     <div class="card-center">
                         <p class="title" @click="goVideo(item.vid)">{{ item.title }}</p>
-                        <span class="desc">播放：{{ item.clicks }}</span>
-                        <span class="desc">简介：{{ item.desc }}</span>
+                        <span class="desc">{{ t("common.clicks") }}：{{ item.clicks }}</span>
+                        <span class="desc">{{ t("common.desc") }}：{{ item.desc }}</span>
                     </div>
                     <div class="card-right" v-if="uid === author?.uid">
                         <n-icon class="edit" size="20" @click="removeVideo(item.vid)">
@@ -37,11 +37,11 @@
                 </div>
                 <div class="info">
                     <span class="title">{{ collection?.name }}</span>
-                    <span class="desc">简介：{{ collection?.desc }}</span>
+                    <span class="desc">{{ t("common.desc") }}：{{ collection?.desc }}</span>
                     <div class="desc">
                         <n-time type="date" :time="new Date(collection?.created_at || 0)"></n-time>
                         <span>・</span>
-                        <span class="open">{{ collection?.open ? '公开' : '私密' }}</span>
+                        <span class="open">{{ collection?.open? t("common.open"): t("common.private") }}</span>
                         <span class="author" @click="goSpace(author?.uid || 0)">{{ author?.name }}</span>
                     </div>
                 </div>
@@ -51,6 +51,7 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import { onBeforeMount, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import HeaderBar from '@/components/header-bar/Index.vue';
@@ -59,11 +60,23 @@ import { statusCode, storageData } from '@leaf/utils';
 import type { UserInfoType, CollectionInfoType, VideoType } from '@leaf/apis';
 import { getCollectionInfoAPI, getCollectVideoAPI, collectAPI } from '@leaf/apis';
 import { NTime, NIcon, NPagination, NEmpty, useNotification } from 'naive-ui';
+import { getTheme } from '@/theme';
+
+// i18n
+const { t } = useI18n();
 
 const id = ref(0);
 const uid = ref(0);//用户ID
 const route = useRoute();
 const notification = useNotification();
+
+const initTheme = () => {
+    const theme = getTheme();
+
+    return {
+        "--hover-color": theme.primaryColor
+    }
+}
 
 // 加载中
 const loadingInfo = ref(false);
@@ -216,7 +229,7 @@ onBeforeMount(() => {
             -webkit-box-orient: vertical;
 
             &:hover {
-                color: #36ad6a;
+                color: var(--hover-color);
             }
         }
 
@@ -245,7 +258,7 @@ onBeforeMount(() => {
             margin-right: 20px;
 
             &:hover {
-                color: #36ad6a;
+                color: var(--hover-color);
             }
         }
     }
@@ -309,7 +322,7 @@ onBeforeMount(() => {
                 cursor: pointer;
 
                 &:hover {
-                    color: #36ad6a;
+                    color: var(--hover-color);
                 }
             }
         }

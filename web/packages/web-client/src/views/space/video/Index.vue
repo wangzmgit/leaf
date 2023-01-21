@@ -1,6 +1,6 @@
 <template>
     <div class="video-box">
-        <p class="video-title">我的视频</p>
+        <p class="video-title">{{ t('space.myVideos') }}</p>
         <div class="card-list">
             <div class="v-card" v-for="(item, index) in videoList" :key="index">
                 <div class="card-item" @click="goVideo(item.status, item.vid)">
@@ -8,7 +8,7 @@
                     <div class="info">
                         <p class="title">{{ item.title }}</p>
                         <!--播放量-->
-                        <p class="clicks">播放&ensp;{{ item.clicks }}</p>
+                        <p class="clicks">{{ t('common.clicks') }}&ensp;{{ item.clicks }}</p>
                     </div>
                 </div>
                 <div class="my-upload-card-btn">
@@ -18,7 +18,7 @@
                                 <edit></edit>
                             </n-icon>
                         </template>
-                        查看状态
+                        {{ t('space.viewStatus') }}
                     </n-button>
                     <n-button text v-else @mouseover="showMenu(index, true)" @mouseleave="showMenu(index, false)">
                         <template #icon>
@@ -26,7 +26,7 @@
                                 <edit></edit>
                             </n-icon>
                         </template>
-                        修改内容
+                        {{ t('space.modifyContent') }}
                     </n-button>
                     <n-button text @click="deleteVideo(item.vid)">
                         <template #icon>
@@ -34,15 +34,19 @@
                                 <delete></delete>
                             </n-icon>
                         </template>
-                        删除
+                        {{ t('common.delete') }}
                     </n-button>
                     <!--修改视频-->
                     <div v-show="modifyMenu[index]" class="modify-menu" @mouseleave="showMenu(index, false)">
                         <div class="menu-item">
-                            <span class="modify-btn" @click="modifyVideo(item.vid, 'video')">修改视频</span>
+                            <span class="modify-btn" @click="modifyVideo(item.vid, 'video')">
+                                {{ t('space.modifyVideo') }}
+                            </span>
                         </div>
                         <div class="menu-item">
-                            <span class="modify-btn" @click="modifyVideo(item.vid, 'info')">修改信息</span>
+                            <span class="modify-btn" @click="modifyVideo(item.vid, 'info')">
+                                {{ t('space.modifyInfo') }}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -53,6 +57,7 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { ref, onBeforeMount } from 'vue';
 import { NButton, NIcon, NPagination, useNotification } from 'naive-ui';
@@ -62,16 +67,18 @@ import type { UserUploadVideoType } from '@leaf/apis';
 import { reviewCode, statusCode } from '@leaf/utils';
 import { useVideoCountStore } from '@/stores/video-count-store';
 
-const pageSize = 8;
-const page = ref(1);
-const count = ref(0);
+// i18n
+const { t } = useI18n();
 
-const videoList = ref<Array<UserUploadVideoType>>([]);
 const router = useRouter();
 const notification = useNotification();//通知
 
 //获取我的视频
+const pageSize = 8;
+const page = ref(1);
+const count = ref(0);
 const videoCountStore = useVideoCountStore();
+const videoList = ref<Array<UserUploadVideoType>>([]);
 const getMyVideo = () => {
     getUploadVideoAPI(page.value, pageSize).then((res) => {
         if (res.data.code === statusCode.OK) {
@@ -212,7 +219,7 @@ onBeforeMount(() => {
     }
 
     .modify-menu {
-        width: 160px;
+        width: 180px;
         height: 92px;
         z-index: 999;
         position: absolute;
@@ -222,7 +229,7 @@ onBeforeMount(() => {
 
         .menu-item {
             margin-top: 7px;
-            width: 120px;
+            width: 144px;
             height: 36px;
             margin-left: 20px;
             -webkit-user-select: none;

@@ -39,6 +39,10 @@ const themeOverrides: GlobalThemeOverrides = {
         colorPressedPrimary: theme.primaryHoverColor,
         borderPressedPrimary: theme.primaryHoverColor,
 
+        // primary-ghost
+        textColorGhostHoverPrimary: theme.primaryHoverColor,
+        textColorGhostPressedPrimary: theme.primaryHoverColor,
+
         //text-default
         textColorText: '#999',
         textColorTextHover: theme.primaryColor,

@@ -1,18 +1,19 @@
 <template>
     <div class="video-head">
-        <span class="head-title">TA的视频</span>
+        <span class="head-title">{{ t("video.userVideo") }}</span>
     </div>
     <div class="card-box" v-for="item in videoList" @click="govideo(item.vid)">
         <img class="cover" :src="item.cover" />
         <div class="info">
             <span class="title">{{ item.title }}</span>
             <n-time class="time" :time="new Date(item.created_at)"></n-time>
-            <span class="clicks">播放: {{ item.clicks }}</span>
+            <span class="clicks">{{ t("common.clicks") }}: {{ item.clicks }}</span>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 import { NTime } from "naive-ui";
@@ -24,6 +25,9 @@ import { statusCode } from "@leaf/utils";
 const props = defineProps<{
     uid: number
 }>();
+
+// i18n
+const { t } = useI18n();
 
 const uid = ref(props.uid);
 const router = useRouter();

@@ -3,7 +3,7 @@
         <header-bar></header-bar>
         <div class="message-container">
             <div class="message-side-bar">
-                <span class="title">消息中心</span>
+                <span class="title">{{ t("message.messageCenter") }}</span>
                 <ul class="list">
                     <li class="item" :class="defaultOption === item.link ? 'active' : ''" v-for="item in menuOption"
                         @click="changeMenu(item.link)">{{ item.label }}</li>
@@ -18,11 +18,16 @@
 
 
 <script setup lang="ts">
+import i18n from '@/locale';
+import { useI18n } from "vue-i18n";
 import { ref, onBeforeMount, computed } from "vue";
 import { useRoute, useRouter } from 'vue-router';
 import HeaderBar from '@/components/header-bar/Index.vue';
 import { globalConfig } from "@leaf/utils";
 import { getTheme } from "@/theme";
+
+// i18n
+const { t } = useI18n();
 
 const themeStyle = computed(() => {
     const theme = getTheme();
@@ -31,29 +36,29 @@ const themeStyle = computed(() => {
     }
 })
 
-
 const route = useRoute();
 const router = useRouter();
 const defaultOption = ref('');//默认激活菜单
+
 const menuOption = [
     {
-        label: "公告",
+        label: i18n.global.t("message.announce"),
         link: "Announce",
     },
     {
-        label: "赞",
+        label: i18n.global.t("message.like"),
         link: "Like",
     },
     {
-        label: "回复",
+        label: i18n.global.t("message.reply"),
         link: "Reply",
     },
     {
-        label: "@我的",
+        label: i18n.global.t("message.at"),
         link: "At",
     },
     {
-        label: "私信",
+        label: i18n.global.t("message.whisper"),
         link: "Whisper",
     }
 ]

@@ -2,29 +2,30 @@
     <div class="upload-video-info">
         <cover-uploader class="upload" v-if="showUpload" :cover="videoInfo.cover" @finish="finishUpload" />
         <n-form class="info-form" label-placement="left" label-width="auto">
-            <n-form-item label="标题">
+            <n-form-item :label="t('common.title')">
                 <n-input v-model:value="videoInfo.title" placeholder="请输入标题" maxlength="50" show-count />
             </n-form-item>
-            <n-form-item label="视频简介">
+            <n-form-item :label="t('upload.videoDesc')">
                 <n-input v-model:value="videoInfo.desc" placeholder="简单介绍一下视频~" maxlength="200" show-count
                     type="textarea" :autosize="descSize" />
             </n-form-item>
-            <n-form-item label="禁止转载">
+            <n-form-item :label="t('upload.copyright')">
                 <n-switch v-model:value="videoInfo.copyright" />
             </n-form-item>
-            <n-form-item label="分区">
+            <n-form-item :label="t('common.partition')">
                 <n-input v-if="partitionText" disabled :value="partitionText"></n-input>
                 <partition-selector v-else @selected="selectedPartition"></partition-selector>
             </n-form-item>
             <div class="upload-next-btn">
-                <n-button v-if="isModify" type="primary" @click="modifyVideoInfo">修改</n-button>
-                <n-button v-else type="primary" @click="uploadInfo">下一步</n-button>
+                <n-button v-if="isModify" type="primary" @click="modifyVideoInfo">{{ t('common.modify') }}</n-button>
+                <n-button v-else type="primary" @click="uploadInfo">{{ t('common.next') }}</n-button>
             </div>
         </n-form>
     </div>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { ref, onMounted, reactive } from "vue";
 import CoverUploader from "./CoverUploader.vue";
 import PartitionSelector from "./PartitionSelector.vue";
@@ -38,6 +39,9 @@ const emits = defineEmits(["finish"]);
 const props = defineProps<{
     info: VideoStatusType
 }>();
+
+// i18n
+const { t } = useI18n();
 
 //简介输入框大小
 const descSize = {
@@ -54,6 +58,7 @@ const videoInfo = reactive({
     desc: "",
     copyright: true,
     partition: 0,
+    created_at: ""
 })
 
 const isModify = ref(false);

@@ -1,14 +1,17 @@
 <template>
     <div class="video-list">
-        <p class="create-title">稿件管理</p>
+        <p class="create-title">{{ t("upload.manuscriptManagement") }}</p>
         <div class="card-item" v-for="(item, index) in videoList" :key="index">
             <div class="card-left">
                 <img v-if="item.cover" :src="item.cover" alt="视频封面">
             </div>
             <div class="card-center">
                 <p class="title" @click="govideo(item.vid)">{{ item.title }}</p>
-                <span class="desc">简介：{{ item.desc }}</span>
-                <span class="desc">创建于：<n-time :time="new Date(item.created_at)"></n-time></span>
+                <span class="desc">{{ `${t("common.desc")}：${item.desc}` }}</span>
+                <span class="desc">
+                    {{ t("common.createdAt") }}：
+                    <n-time :time="new Date(item.created_at)"></n-time>
+                </span>
             </div>
             <div class="card-right">
                 <n-button class="edit-item" text @click="modifyVideo(item.vid, 'info')">
@@ -44,24 +47,26 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { ref, onBeforeMount } from 'vue';
 import { Edit, Delete } from '@leaf/icons';
 import { statusCode } from '@leaf/utils';
 import { NTime, NIcon, NPagination, NButton, NPopconfirm, useNotification } from 'naive-ui';
-import { getUploadVideoAPI,deleteVideoAPI } from '@leaf/apis';
+import { getUploadVideoAPI, deleteVideoAPI } from '@leaf/apis';
 import type { UserUploadVideoType } from '@leaf/apis';
 
+// i18n
+const { t } = useI18n();
 
+const notification = useNotification();
+
+//获取用户上传的视频
 const pageSize = 5;
 const page = ref(1);
 const count = ref(0);
 const videoList = ref<Array<UserUploadVideoType>>([]);
-
-const notification = useNotification();
-
-//获取我的视频
-const getMyVideo = () => {
+const getUploadVideo = () => {
     getUploadVideoAPI(page.value, pageSize).then((res) => {
         if (res.data.code === statusCode.OK) {
             count.value = res.data.data.total;
@@ -74,12 +79,12 @@ const getMyVideo = () => {
 const deleteVideo = (id: number) => {
     deleteVideoAPI(id).then((res) => {
         if (res.data.code === statusCode.OK) {
-            getMyVideo();
+            getUploadVideo();
         } else {
             notification.error({
-            title: '删除失败',
-            duration: 5000,
-        })
+                title: '删除失败',
+                duration: 5000,
+            })
         }
     })
 }
@@ -87,7 +92,7 @@ const deleteVideo = (id: number) => {
 //页码改变
 const pageChange = (target: number) => {
     page.value = target;
-    getMyVideo();
+    getUploadVideo();
 }
 
 //前往视频详情
@@ -103,7 +108,7 @@ const modifyVideo = (vid: number, status: string) => {
 }
 
 onBeforeMount(() => {
-    getMyVideo();
+    getUploadVideo();
 })
 </script>
 

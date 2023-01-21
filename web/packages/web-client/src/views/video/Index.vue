@@ -9,10 +9,10 @@
                     <div class="video-title-box">
                         <p class="video-title">{{ videoInfo!.title }}</p>
                         <p v-show="videoInfo!.copyright" class="copyright">
-                            <n-icon color='#fd6d6f'>
+                            <n-icon class="icon" color='#fd6d6f'>
                                 <forbid />
                             </n-icon>
-                            <span>未经作者授权，禁止转载</span>
+                            <span>{{ t("video.copyright") }}</span>
                         </p>
                     </div>
                     <!-- 点赞收藏等数据 -->
@@ -22,15 +22,20 @@
                         </div>
                         <!-- 日期播放和在线人数 -->
                         <div class="toolbar-right">
-                            <span>{{ number }}人在看</span>
-                            <span>{{ videoInfo!.clicks }}播放</span>
-                            <span>上传于<n-time :time="new Date(videoInfo!.created_at)"></n-time></span>
+                            <span>{{ number }} {{ t("video.online") }}</span>
+                            <span>{{ videoInfo!.clicks }} {{ t("video.clicks") }}</span>
+                            <span>
+                                {{ t("video.uploadedAt") }}
+                                <n-time :time="new Date(videoInfo!.created_at)"></n-time>
+                            </span>
                         </div>
                     </div>
                     <!--视频简介-->
                     <div class="desc">
                         <div :class="['desc-content', more ? 'open' : '']">{{ videoInfo!.desc }}</div>
-                        <n-button text @click="more = !more">{{ more? '收起': '展开更多' }}</n-button>
+                        <n-button text @click="more = !more">
+                            {{ more? t("video.fold"): t("video.unfold") }}
+                        </n-button>
                     </div>
                     <!--发表评论-->
                     <comment-list :vid="videoInfo!.vid"></comment-list>
@@ -56,6 +61,7 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { getTheme } from "@/theme"
 import { useRoute, useRouter } from 'vue-router';
 import { NIcon, NTime, NButton, NSkeleton } from 'naive-ui';
@@ -73,24 +79,28 @@ import type { ResourceType, VideoType } from '@leaf/apis';
 import { getVideoInfoAPI } from '@leaf/apis';
 import { globalConfig, statusCode } from '@leaf/utils';
 
+// i18n
+const { t } = useI18n();
+
 const route = useRoute();
 const router = useRouter();
 const theme = getTheme();
 const vid = parseInt(route.params.vid.toString());
 const part = ref(1);//当前分集
 const more = ref(false);//是否展开简介
-const loading = ref(true);
-const resources = ref<Array<ResourceType>>([]);
-const videoInfo = ref<VideoType>();
 
 const initTheme = () => {
 
     return {
-        "--primary-color": theme.primaryColor
+        "--primary-color": theme.primaryColor,
+        "--hover-color": theme.primaryHoverColor
     }
 }
 
 //获取视频信息
+const loading = ref(true);
+const resources = ref<Array<ResourceType>>([]);
+const videoInfo = ref<VideoType>();
 const getVideoInfo = (vid: number) => {
     getVideoInfoAPI(vid).then((res) => {
         if (res.data.code === statusCode.OK) {
@@ -136,8 +146,8 @@ const changePart = (target: number) => {
 }
 
 onBeforeMount(() => {
-    initWebSocket(Number(route.params.vid));
-    getVideoInfo(Number(route.params.vid));
+    initWebSocket(vid);
+    getVideoInfo(vid);
     if (route.query.p) {
         part.value = Number(route.query.p);
     }
@@ -198,12 +208,16 @@ onBeforeUnmount(() => {
         }
 
         .copyright {
-            width: 160px;
+            width: 180px;
             display: flex;
             align-items: center;
             justify-content: flex-end;
             font-size: 12px;
             color: #636363;
+
+            .icon {
+                padding: 0 6px;
+            }
         }
     }
 

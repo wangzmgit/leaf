@@ -4,6 +4,7 @@ export const spaceRoutes: RouteRecordRaw = {
     path: '/space',
     name: 'Space',
     component: () => import("../views/space/Index.vue"),
+    redirect: "/space/video",
     children: [
         {
             path: '/space/setting',
@@ -17,6 +18,12 @@ export const spaceRoutes: RouteRecordRaw = {
                     name: 'InfoSetting',
                     meta: { auth: true },
                     component: () => import("../views/space/setting/info/Index.vue"),
+                },
+                {
+                    path: '/space/setting/security',
+                    name: 'SecuritySetting',
+                    meta: { auth: true },
+                    component: () => import("../views/space/setting/security/Index.vue"),
                 },
             ]
         },

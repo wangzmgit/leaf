@@ -1,6 +1,6 @@
 <template>
-    <div class="collection-list">
-        <p class="create-title">收藏夹</p>
+    <div class="collection-list" :style="initTheme()">
+        <p class="create-title">{{ t('common.collection') }}</p>
         <n-scrollbar style="max-height: 550px;">
             <div class="card-item" v-for="(item, index) in collections" :key="index">
                 <div class="card-left">
@@ -11,8 +11,11 @@
                 </div>
                 <div class="card-center">
                     <p class="title" @click="goCollectionDetails(item.id)">{{ item.name }}</p>
-                    <span class="desc">简介：{{ item.desc }}</span>
-                    <span class="desc">创建于：<n-time :time="new Date(item.created_at!)"></n-time></span>
+                    <span class="desc">{{ t('common.desc') }}：{{ item.desc }}</span>
+                    <span class="desc">
+                        {{ t('common.createdAt') }}：
+                        <n-time :time="new Date(item.created_at!)" />
+                    </span>
                 </div>
                 <div class="card-right">
                     <n-icon class="edit" size="20" @click="beforeEdit(item)">
@@ -31,21 +34,21 @@
         </n-scrollbar>
     </div>
     <n-drawer v-model:show="active" :width="500" placement="right">
-        <n-drawer-content title="编辑收藏夹">
+        <n-drawer-content :title="t('space.editCollection')">
             <cover-uploader :cover="collectionInfo.cover" @finish="finishUpload"></cover-uploader>
             <n-form class="info-form">
-                <n-form-item label="名称">
+                <n-form-item :label="t('space.collectionName')">
                     <n-input v-model:value="collectionInfo.name" placeholder="请输入名称" maxlength="20" show-count />
                 </n-form-item>
-                <n-form-item label="简介">
+                <n-form-item :label="t('common.desc')">
                     <n-input v-model:value="collectionInfo.desc" placeholder="收藏夹简介~" maxlength="150" show-count
                         type="textarea" :autosize="descSize" />
                 </n-form-item>
-                <n-form-item label="公开">
+                <n-form-item :label="t('common.open')">
                     <n-switch v-model:value="collectionInfo.open" />
                 </n-form-item>
                 <div class="upload-next-btn">
-                    <n-button type="primary" @click="modifyCollection">保存</n-button>
+                    <n-button type="primary" @click="modifyCollection">{{ t('common.save') }}</n-button>
                 </div>
             </n-form>
         </n-drawer-content>
@@ -53,6 +56,8 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+import { getTheme } from "@/theme";
 import { useRouter } from 'vue-router';
 import { ref, reactive, onBeforeMount } from 'vue';
 import useCollection from '@/hooks/collection-hooks';
@@ -65,6 +70,17 @@ import {
     NScrollbar, NPopconfirm, NDrawer, NDrawerContent, useNotification
 } from 'naive-ui';
 import { statusCode } from '@leaf/utils';
+
+// i18n
+const { t } = useI18n();
+
+const initTheme = () => {
+    const theme = getTheme();
+
+    return {
+        "--hover-color": theme.primaryHoverColor
+    }
+}
 
 //简介输入框大小
 const descSize = {
@@ -209,7 +225,7 @@ onBeforeMount(() => {
         -webkit-box-orient: vertical;
 
         &:hover {
-            color: #36ad6a;
+            color: var(--hover-color);
         }
     }
 
@@ -238,7 +254,7 @@ onBeforeMount(() => {
         margin-right: 20px;
 
         &:hover {
-            color: #36ad6a;
+            color: var(--hover-color);
         }
     }
 }

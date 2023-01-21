@@ -7,13 +7,13 @@
                         <n-icon class="menu-item-icon" size="20">
                             <collection></collection>
                         </n-icon>
-                        <span class="menu-text">收藏夹</span>
+                        <span class="menu-text">{{ t('common.collection') }}</span>
                     </span>
                     <span class="menu-item menu-item-with-icon" @click="goSpace('History')">
                         <n-icon class="menu-item-icon" size="20">
                             <history></history>
                         </n-icon>
-                        <span class="menu-text">历史记录</span>
+                        <span class="menu-text">{{ t('common.history') }}</span>
                     </span>
                 </div>
                 <div class="menu-group">
@@ -21,19 +21,19 @@
                         <n-icon class="menu-item-icon" size="20">
                             <message></message>
                         </n-icon>
-                        <span class="menu-text">消息</span>
+                        <span class="menu-text">{{ t('common.message') }}</span>
                     </span>
                     <span class="menu-item menu-item-with-icon" @click="goSpace('Space')">
                         <n-icon class="menu-item-icon" size="20">
                             <me></me>
                         </n-icon>
-                        <span class="menu-text">个人中心</span>
+                        <span class="menu-text">{{ t('common.space') }}</span>
                     </span>
                     <span class="menu-item menu-item-with-icon" @click="goSpace('Setting')">
                         <n-icon class="menu-item-icon" size="20">
                             <setting></setting>
                         </n-icon>
-                        <span class="menu-text">设置</span>
+                        <span class="menu-text">{{ t('common.setting') }}</span>
                     </span>
                 </div>
                 <div class="menu-group">
@@ -44,6 +44,11 @@
                 </div>
                 <div class="menu-footer">
                     <div class="links">
+                        <span>
+                            <n-dropdown :options="languages" @select="selectLanguage">
+                                <a href="javascript:void(0);">语言-language</a>
+                            </n-dropdown>
+                        </span>
                         <span>
                             <a :href="globalConfig.mobile">移动端</a>
                         </span>
@@ -88,9 +93,11 @@
 </template>
 
 <script setup lang="ts">
+import i18n from "@/locale";
+import { useI18n } from "vue-i18n";
 import { globalConfig, statusCode } from "@leaf/utils";
 import { History, Collection, Me, Message, Setting } from "@leaf/icons";
-import { NIcon, NScrollbar } from "naive-ui";
+import { NIcon, NDropdown, NScrollbar } from "naive-ui";
 import { onBeforeMount, ref, watch } from "vue";
 import type { PartitionType } from "@leaf/apis";
 import { getPartitionAPI } from "@leaf/apis";
@@ -102,12 +109,33 @@ const props = withDefaults(defineProps<{
     fold: false
 })
 
+// i18n
+const { t } = useI18n();
+
 const router = useRouter();
 
 const menuFold = ref(props.fold);
 watch(() => props.fold, (newValue) => {
     menuFold.value = newValue;
 });
+
+// 语言
+const languages = [
+    {
+        label: '简体中文',
+        key: 'zh-CN'
+    },
+    {
+        label: 'english',
+        key: 'en-US'
+    },
+]
+
+// 修改语言
+const selectLanguage = (lang: "zh-CN" | "en-US") => {
+    i18n.global.locale = lang;
+    localStorage.setItem('locale',lang);
+}
 
 // 获取分区
 const partitionList = ref<Array<PartitionType>>([])
@@ -128,8 +156,8 @@ const goVideoList = (id: number) => {
 }
 
 // 前往个人空间
-const goSpace = (name:string) => {
-    router.push({ name: name});
+const goSpace = (name: string) => {
+    router.push({ name: name });
 }
 
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="upload">
+    <div class="upload" v-title data-title="创作中心">
         <header-bar></header-bar>
         <div class="upload-container">
             <n-menu class="upload-menu" :options="menuOptions" :default-value="defaultOption" />
@@ -11,6 +11,7 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { h, ref, onBeforeMount } from "vue";
 import { NMenu } from "naive-ui";
 import { RouterLink, useRoute } from 'vue-router';
@@ -18,10 +19,13 @@ import HeaderBar from '@/components/header-bar/Index.vue';
 import useRenderIcon from "@/hooks/render-icon-hooks";
 import { Upload, Video, Comment } from "@leaf/icons";
 
+// i18n
+const { t } = useI18n();
+
 const route = useRoute();
-const defaultOption = ref('');//默认激活菜单
 
 const { renderIcon } = useRenderIcon();
+const defaultOption = ref('');//默认激活菜单
 const menuOptions = [
     {
         label: () =>
@@ -32,7 +36,7 @@ const menuOptions = [
                         name: "UploadVideo",
                     }
                 },
-                { default: () => '发布视频' }
+                { default: () => t("upload.publishVideo") }
             ),
         key: "upload",
         icon: renderIcon(Upload),
@@ -46,7 +50,7 @@ const menuOptions = [
                         name: "VideoManage",
                     }
                 },
-                { default: () => '稿件管理' }
+                { default: () => t("upload.manuscriptManagement") }
             ),
         key: "content",
         icon: renderIcon(Video),
@@ -60,7 +64,7 @@ const menuOptions = [
                         name: "CommentManage",
                     }
                 },
-                { default: () => '评论管理' }
+                { default: () => t("upload.commentManagement") }
             ),
         key: "comment",
         icon: renderIcon(Comment),

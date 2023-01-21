@@ -23,15 +23,19 @@
                 <p>{{ authorInfo.sign }}</p>
             </div>
             <div class="follow-btn">
-                <n-button size="small" v-if="isFollow" type="primary" @click="unfollow(author!.uid)">已关注</n-button>
-                <n-button size="small" v-else :disabled="!isLogin" type="error"
-                    @click="follow(author!.uid)">关注</n-button>
+                <n-button size="small" v-if="isFollow" type="primary" @click="unfollow(author!.uid)">
+                    {{ t("follow.followed") }}
+                </n-button>
+                <n-button size="small" v-else :disabled="!isLogin" type="error" @click="follow(author!.uid)">
+                    {{ t("follow.follow") }}
+                </n-button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import useUserFollow from '@/hooks/user-follow-hooks';
 import { NButton, NSkeleton } from 'naive-ui';
@@ -40,12 +44,15 @@ import { CommonAvatar } from '@leaf/components';
 import { onBeforeMount, ref, watch } from 'vue';
 import { storageData } from '@leaf/utils';
 
-const router = useRouter();
-
 const props = defineProps<{
     author?: UserInfoType,
     loading: Boolean
 }>()
+
+// i18n
+const { t } = useI18n();
+
+const router = useRouter();
 
 const isLogin = ref(false);
 const authorInfo = ref(Object.assign({}, props.author));
