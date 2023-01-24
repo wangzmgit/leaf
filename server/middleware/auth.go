@@ -104,7 +104,7 @@ func refreshAccessToken(ctx *gin.Context, id uint) {
 	cache.SetAccessToken(id, accessToken)
 
 	// 返回给前端
-	resp.OK(ctx, "", gin.H{"token": accessToken})
+	resp.OK(ctx, "ok", gin.H{"token": accessToken})
 
 	ctx.Abort()
 }

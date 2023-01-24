@@ -8,7 +8,7 @@ import (
 type CommentVo struct {
 	ID        primitive.ObjectID `json:"id"`
 	Content   string             `json:"content"`
-	Author    UserVO             `json:"author"`
+	Author    BaseUserVO         `json:"author"`
 	Reply     []ReplyVo          `json:"reply"`
 	CreatedAt int64              `json:"created_at"`
 	At        []uint             `json:"at"`
@@ -17,7 +17,7 @@ type CommentVo struct {
 type ReplyVo struct {
 	ID        primitive.ObjectID `json:"id"`
 	Content   string             `json:"content"`
-	Author    UserVO             `json:"author"`
+	Author    BaseUserVO         `json:"author"`
 	CreatedAt int64              `json:"created_at"`
 	At        []uint             `json:"at"`
 }
@@ -29,7 +29,7 @@ func ToCommentVO(comments []model.Comment) []CommentVo {
 		newComments[i].ID = comments[i].ID
 		newComments[i].Content = comments[i].Content
 		newComments[i].CreatedAt = comments[i].CreatedAt
-		newComments[i].Author = ToUserVO(comments[i].Author)
+		newComments[i].Author = ToBaseUserVO(comments[i].Author)
 		newComments[i].Reply = ToReplyVO(comments[i].Reply)
 		newComments[i].At = comments[i].At
 	}
@@ -44,7 +44,7 @@ func ToReplyVO(replies []model.Reply) []ReplyVo {
 		newReplies[i].ID = replies[i].ID
 		newReplies[i].Content = replies[i].Content
 		newReplies[i].CreatedAt = replies[i].CreatedAt
-		newReplies[i].Author = ToUserVO(replies[i].Author)
+		newReplies[i].Author = ToBaseUserVO(replies[i].Author)
 		newReplies[i].At = replies[i].At
 	}
 	return newReplies

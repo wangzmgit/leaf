@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"kuukaa.fun/leaf/domain/model"
+	"kuukaa.fun/leaf/util/desensitization"
 )
 
 type BaseUserVO struct {
@@ -28,16 +29,21 @@ type UserVO struct {
 	CreatedAt  time.Time `json:"created_at"`
 }
 
-func ToUserVO(user model.User) UserVO {
+func ToUserVO(user model.User, desensitize bool) UserVO {
+	if desensitize {
+		user.Email = desensitization.HideEmail(user.Email)
+	}
 	return UserVO{
 		ID:         user.ID,
 		Name:       user.Username,
+		Email:      user.Email,
 		Sign:       user.Sign,
 		Avatar:     user.Avatar,
 		SpaceCover: user.SpaceCover,
 		Gender:     user.Gender,
 		Role:       user.Role,
 		Birthday:   user.Birthday,
+		CreatedAt:  user.CreatedAt,
 	}
 }
 

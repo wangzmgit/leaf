@@ -55,5 +55,5 @@ func SendRegisterEmailCode(ctx *gin.Context) {
 	// 删除人机验证状态
 	cache.DelCaptchaStatus(codeDTO.Email)
 
-	resp.OK(ctx, "验证码已发送到您的邮箱", nil)
+	resp.OK(ctx, "ok", nil)
 }
