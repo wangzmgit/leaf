@@ -162,12 +162,8 @@ onBeforeUnmount(() => {
 
 <style lang="less" scoped>
 .video {
-    height: 100%;
+    min-height: 100%;
     width: 100%;
-    top: 0;
-    bottom: 0;
-    position: fixed;
-    overflow-y: scroll;
 }
 
 .video-main {

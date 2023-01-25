@@ -1,5 +1,5 @@
 <template>
-    <div class="comment-box" @scroll="lazyLoading">
+    <div class="comment-box">
         <!--头像-->
         <common-avatar :url="userInfo.avatar"></common-avatar>
         <!--输入框-->
@@ -85,7 +85,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import { onBeforeMount, reactive, ref } from "vue";
+import { onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from "vue";
 import useComment from '@/hooks/comment-hooks';
 import useMention from '@/hooks/mention-hooks';
 import { statusCode, storageData } from '@leaf/utils';
@@ -293,23 +293,18 @@ const getMoreReply = (cid: string, index: number) => {
 }
 
 // 加载更多评论
-const lazyLoading = (() => {
-    var timer: number | null = null;
-    return (e: Event) => {
-        if (timer) return;
-        const target = e.target as HTMLElement;
-        if (target.scrollTop + target.clientHeight >= (target.scrollHeight - 10)) {
-            if (!noMore.value && !loadingComment.value) {
-                page.value++;
-                getCommentList(props.vid, page.value, 8);
-            }
+const lazyLoading = () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const clientHeight = document.documentElement.clientHeight;
+    const scrollHeight = document.documentElement.scrollHeight;
+    if (scrollTop + clientHeight >= (scrollHeight - 10)) {
+        if (!noMore.value &&!loadingComment.value) {
+            page.value++;
+            getCommentList(props.vid, page.value, 8);
         }
 
-        timer = setTimeout(() => {
-            timer = null;
-        }, 100);
     }
-})();
+}
 
 
 //删除评论回复
@@ -357,6 +352,11 @@ onBeforeMount(() => {
         userInfo.value = storageData.get("user_info");
     }
     getCommentList(props.vid, page.value, 8);
+    window.addEventListener("scroll", lazyLoading, true);
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener("scroll", lazyLoading);
 })
 </script>
 
