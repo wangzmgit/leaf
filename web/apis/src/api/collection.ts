@@ -1,5 +1,5 @@
 import request from '../request';
-import { ModifyCollectionType } from "../types/collection-type";
+import type { ModifyCollectionType } from "../types/collection-type";
 
 //获取收藏夹列表
 export const getCollectionListAPI = () => {

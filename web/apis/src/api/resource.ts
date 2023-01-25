@@ -1,5 +1,5 @@
 import request from '../request';
-import { BaseResourceType } from '../types/resource-type';
+import type { BaseResourceType } from '../types/resource-type';
 
 //修改资源标题
 export const modifyTitleAPI = (resourceTitle: BaseResourceType) => {

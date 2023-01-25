@@ -1,4 +1,4 @@
-import { danmakuType } from "./danmaku";
+import type { DanmakuType } from "@leaf/apis";
 
 export interface QualityType {
     [key: number]: {

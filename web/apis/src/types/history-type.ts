@@ -1,4 +1,4 @@
-import { BaseVideoType } from "./video-type"
+import type { BaseVideoType } from "./video-type"
 
 export interface AddHistoryType {
     vid: number,

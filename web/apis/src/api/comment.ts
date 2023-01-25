@@ -1,5 +1,5 @@
 import request from '../request';
-import { AddCommentType } from '../types/comment-type';
+import type { AddCommentType } from '../types/comment-type';
 
 // 评论
 export const addCommentAPI = (postComment: AddCommentType) => {
