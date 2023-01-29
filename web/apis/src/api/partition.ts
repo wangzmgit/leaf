@@ -1,5 +1,5 @@
 import request from '../request'
-import { AddPartitionType } from '../types/partition-type';
+import type { AddPartitionType } from '../types/partition-type';
 
 //获取分区
 export const getPartitionAPI = () => {

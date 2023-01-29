@@ -1,5 +1,5 @@
 import request from '../request';
-import { ModifyVideoType, UploadVideoType } from '../types/video-type';
+import type { ModifyVideoType, UploadVideoType } from '../types/video-type';
 
 //上传视频信息
 export const uploadVideoInfoAPI = (uploadVideo: UploadVideoType) => {

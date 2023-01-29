@@ -19,15 +19,15 @@
                     <!--关注粉丝信息-->
                     <div class="user-data">
                         <div>
-                            <p class="data-title">投稿</p>
+                            <p class="data-title">{{ t("common.manuscript") }}</p>
                             <p>{{ videoCount }}</p>
                         </div>
                         <div>
-                            <p class="data-title">关注</p>
+                            <p class="data-title">{{ t("common.following") }}</p>
                             <p class="data-content" @click="goPage('Following')">{{ userData.followingCount }}</p>
                         </div>
                         <div>
-                            <p class="data-title">粉丝</p>
+                            <p class="data-title">{{ t("common.follower") }}</p>
                             <p class="data-content" @click="goPage('Follower')">{{ userData.followerCount }}</p>
                         </div>
                     </div>
@@ -50,6 +50,7 @@
 
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import { h, ref, onBeforeMount, reactive } from "vue";
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { Video, Collection, Upload, Message, Setting, Male, Female } from "@leaf/icons";
@@ -64,6 +65,8 @@ import LeafCropper from "@/components/leaf-cropper/Index.vue";
 import SpaceCoverCropper from "@/components/leaf-cropper/component/SpaceCoverCropper.vue";
 import { storeToRefs } from "pinia";
 import { useVideoCountStore } from "@/stores/video-count-store";
+
+const { t } = useI18n();
 
 const route = useRoute();
 const router = useRouter();
@@ -81,7 +84,7 @@ const menuOptions = [
                         name: "SpaceVideo",
                     }
                 },
-                { default: () => '投稿' }
+                { default: () => t("common.manuscript") }
             ),
         key: "video",
         icon: renderIcon(Video, '#609a8b'),
@@ -95,7 +98,7 @@ const menuOptions = [
                         name: "Collection",
                     }
                 },
-                { default: () => '收藏夹' }
+                { default: () => t("common.collection") }
             ),
         key: "collection",
         icon: renderIcon(Collection, '#e3c0aa'),
@@ -109,7 +112,7 @@ const menuOptions = [
                         name: "Upload",
                     }
                 },
-                { default: () => '投稿' }
+                { default: () => t("common.submission") }
             ),
         key: "upload",
         icon: renderIcon(Upload, '#7daebd'),
@@ -123,7 +126,7 @@ const menuOptions = [
                         name: "Message",
                     }
                 },
-                { default: () => '消息' }
+                { default: () => t("common.message") }
             ),
         key: "message",
         icon: renderIcon(Message, '#c79fa7'),
@@ -137,7 +140,7 @@ const menuOptions = [
                         name: "Setting",
                     }
                 },
-                { default: () => '设置' }
+                { default: () => t("common.setting") }
             ),
         key: "setting",
         icon: renderIcon(Setting, '#808080'),
@@ -225,12 +228,6 @@ onBeforeMount(() => {
         case 'Collection':
             defaultOption.value = 'collection';
             break;
-        // case 'Announce':
-        //     defaultOption.value = 'announce';
-        //     break;
-        // case 'Message':
-        //     defaultOption.value = 'message';
-        //     break;
         case 'InfoSetting': case 'SecuritySetting':
             defaultOption.value = 'setting';
             break;
@@ -318,12 +315,12 @@ body {
         }
 
         .user-data {
-            width: 210px;
+            width: 236px;
             display: flex;
 
             div {
                 color: #fff;
-                width: 70px;
+                width: 78px;
                 text-align: center;
 
                 .data-title {

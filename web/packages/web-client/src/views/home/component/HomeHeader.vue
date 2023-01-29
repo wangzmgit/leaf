@@ -26,12 +26,14 @@
                         <span class="btn" @click="goPage('Space')">{{ userInfo.name }}</span>
                     </div>
                     <div class="menu-item">
-                        <span class="btn" @click="logout">退出登录</span>
+                        <span class="btn" @click="logout">{{ t("common.logOut") }}</span>
                     </div>
                 </div>
             </div>
             <div v-else>
-                <n-button text @click="showLogin = true">登录/注册</n-button>
+                <n-button text @click="showLogin = true">
+                    {{ t("common.login") }}/{{ t("common.register") }}
+                </n-button>
             </div>
             <!-- 投稿按钮 -->
             <n-button type="primary" class="upload-btn" @click="goPage('Upload')">
@@ -40,7 +42,7 @@
                         <upload></upload>
                     </n-icon>
                 </template>
-                投稿
+                {{ t("common.submission") }}
             </n-button>
         </div>
         <login-dialog v-if="showLogin" @close="loginClose"></login-dialog>
@@ -48,6 +50,7 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import { onBeforeMount, ref } from 'vue';
 import { globalConfig, storageData } from "@leaf/utils";
 import { useRouter } from 'vue-router';
@@ -61,6 +64,9 @@ import { storeToRefs } from 'pinia';
 
 
 const emits = defineEmits(["changeFold"]);
+
+// i18n
+const { t } = useI18n();
 
 const isLogin = ref(false);
 const router = useRouter();
@@ -161,7 +167,7 @@ onBeforeMount(() => {
     }
 
     .header-user-info {
-        width: 236px;
+        width: 280px;
         display: flex;
         align-items: center;
 

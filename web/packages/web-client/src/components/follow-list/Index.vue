@@ -148,7 +148,6 @@ onBeforeMount(() => {
 .follow-card {
     height: 70px;
     position: relative;
-    margin: 0 10px;
     border-bottom: 1px solid #d1d1d1;
 
     /**移除最后一个的底部边框 */
@@ -159,14 +158,13 @@ onBeforeMount(() => {
 
 .follow-avatar>span {
     margin-top: 5px;
-    margin-left: 20px;
 }
 
 .follow-name {
     color: #333;
     position: absolute;
     top: 10px;
-    left: 100px;
+    left: 80px;
     font-weight: 600;
     cursor: pointer;
 }
@@ -174,7 +172,7 @@ onBeforeMount(() => {
 .follow-sign {
     position: absolute;
     top: 38px;
-    left: 100px;
+    left: 80px;
     font-size: 12px;
     color: #666;
 }

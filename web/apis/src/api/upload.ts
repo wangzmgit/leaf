@@ -1,6 +1,6 @@
 import request from '../request';
-import { AxiosProgressEvent } from 'axios';
-import { UploadOptions } from "../types/upload-options-type";
+import type { AxiosProgressEvent } from 'axios';
+import type { UploadOptions } from "../types/upload-options-type";
 import { statusCode } from '@leaf/utils';
 
 // 上传图片

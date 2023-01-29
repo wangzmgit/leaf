@@ -15,23 +15,28 @@
                             <n-input ref="titleInput" v-model:value="modifyForm.title" maxlength="50" show-count
                                 @blur="modifyIndex = -1" />
                             <!-- 使用mousedown触发而不是click触发，因为input的blur要早于click -->
-                            <n-button style="width: 30%;" type="primary" @mousedown="modifyTitle(item)">修改</n-button>
+                            <n-button style="width: 30%;" type="primary" @mousedown="modifyTitle(item)">
+                                {{ t('common.modify') }}
+                            </n-button>
                         </n-input-group>
                         <n-tag class="tag" :type="toTagType(item.status)">{{ toTagText(item.status) }}</n-tag>
                     </div>
                     <div class="item-right" @click="deleteResource(item.id, index)">
-                        <span class="delete">删除</span>
+                        <span class="delete">
+                            {{ t('common.delete') }}
+                        </span>
                     </div>
                 </div>
             </n-scrollbar>
         </div>
         <div class="upload-next-btn">
-            <n-button type="primary" @click="submitReview">提交审核</n-button>
+            <n-button type="primary" @click="submitReview">{{ t('upload.submitReview') }}</n-button>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { reactive, nextTick, ref } from "vue";
 import { getTheme } from "@/theme";
 import VideoUploader from "./VideoUploader.vue";
@@ -46,8 +51,11 @@ const props = defineProps<{
     resources: Array<ResourceType>
 }>();
 
+// i18n
+const { t } = useI18n();
+
 const notification = useNotification();// 通知
-const resourceList = ref<Array<ResourceType>>(props.resources);
+
 
 // 主题
 const initTheme = () => {
@@ -58,6 +66,7 @@ const initTheme = () => {
     }
 }
 
+const resourceList = ref<Array<ResourceType>>(props.resources);
 const finishUpload = () => {
     getVideoStatusAPI(props.vid).then((res) => {
         if (res.data.code === statusCode.OK) {
@@ -88,19 +97,19 @@ const toTagType = (state: number) => {
 const toTagText = (state: number) => {
     switch (state) {
         case reviewCode.VIDEO_PROCESSING:
-            return "视频处理中";
+            return t('review.videoProcessing');
         case reviewCode.WAITING_REVIEW:
-            return "等待审核";
+            return t('review.waitingReview');
         case reviewCode.AUDIT_APPROVED:
-            return "审核通过";
+            return t('review.approved');
         case reviewCode.WRONG_VIDEO_INFO:
-            return "视频信息存在问题";
-        case reviewCode.WRONG_VIDEO_Content:
-            return "视频内容存在问题";
+            return t('review.wrongVideoInfo');
+        case reviewCode.WRONG_VIDEO_CONTENT:
+            return t('review.wrongVideoContent');
         case reviewCode.PROCESSING_FAIL:
-            return "视频处理失败";
+            return t('review.processingFail');
         default:
-            return "未知";
+            return t('common.unknown');
     }
 }
 

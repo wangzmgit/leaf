@@ -24,12 +24,14 @@
                             <span class="btn" @click="goPage('Space')">{{ userInfo.name }}</span>
                         </div>
                         <div class="menu-item">
-                            <span class="btn" @click="logout">退出登录</span>
+                            <span class="btn" @click="logout">{{ t("common.logOut") }}</span>
                         </div>
                     </div>
                 </div>
                 <div v-else>
-                    <n-button text @click="goPage('Login')">登录/注册</n-button>
+                    <n-button class="login-btn" text @click="goPage('Login')">
+                        {{ t("common.login") }}/{{ t("common.register") }}
+                    </n-button>
                 </div>
                 <!-- 图形按钮 -->
                 <div class="icon-btn" @click="goPage('Message')">
@@ -37,15 +39,15 @@
                         <message></message>
                     </n-icon>
                     <div class="icon-action">
-                        <div class="icon-action-msg">消息</div>
+                        <div class="icon-action-msg">{{ t("common.message") }}</div>
                     </div>
                 </div>
                 <div class="icon-btn" @click="goPage('Collection')">
                     <n-icon class="icon">
-                        <history></history>
+                        <collection></collection>
                     </n-icon>
                     <div class="icon-action">
-                        <div class="icon-action-msg">收藏</div>
+                        <div class="icon-action-msg">{{ t("common.collect") }}</div>
                     </div>
                 </div>
                 <!-- 投稿按钮 -->
@@ -55,7 +57,7 @@
                             <upload></upload>
                         </n-icon>
                     </template>
-                    投稿
+                    {{ t("common.submission") }}
                 </n-button>
             </div>
         </div>
@@ -63,14 +65,18 @@
 </template>
 
 <script setup lang="ts" >
-import {  onBeforeMount, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { onBeforeMount, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { CommonAvatar } from '@leaf/components';
 import { NInput, NIcon, NButton } from 'naive-ui';
 import type { UserInfoType } from '@leaf/apis';
 import { globalConfig, storageData } from "@leaf/utils"
-import { Search as SearchIcon, Upload, Message, History } from "@leaf/icons";
+import { Search as SearchIcon, Upload, Message, Collection } from "@leaf/icons";
 import { getTheme } from '@/theme';
+
+// i18n
+const { t } = useI18n();
 
 const router = useRouter();
 const route = useRoute();
@@ -159,15 +165,20 @@ onBeforeMount(() => {
         .header-right {
             display: flex;
             align-items: center;
-            width: 260px;
+            width: 310px;
 
             .avatar-box {
                 padding-top: 5px;
                 margin-right: 6px;
             }
 
+            .login-btn {
+                width: 80px;
+            }
+
             .upload-btn {
                 margin-left: 6px;
+                width: 120px;
             }
         }
     }

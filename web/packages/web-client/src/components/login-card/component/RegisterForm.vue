@@ -2,26 +2,26 @@
     <div class="login-form">
         <!-- 账号登录 -->
         <n-tabs default-value="account" size="large" justify-content="space-evenly">
-            <n-tab-pane class="form-container" name="account" tab="邮箱注册">
+            <n-tab-pane class="form-container" name="account" :tab="t('register.emailRegister')">
                 <n-form ref="emailFormRef" :rules="rules" :model="registerForm" label-placement="left" label-width="70">
-                    <n-form-item label="邮箱" path="email">
-                        <n-input placeholder="请输入邮箱" v-model:value="registerForm.email" />
+                    <n-form-item :label="t('common.email')" path="email">
+                        <n-input :placeholder="t('input.email')" v-model:value="registerForm.email" />
                     </n-form-item>
-                    <n-form-item label="密码" path="password">
-                        <n-input placeholder="请输入密码" type="password" v-model:value="registerForm.password" />
+                    <n-form-item :label="t('common.pwd')" path="password">
+                        <n-input :placeholder="t('input.pwd')" type="password" v-model:value="registerForm.password" />
                     </n-form-item>
-                    <n-form-item label="验证码" path="emailcode">
-                        <n-input placeholder="请输入验证码" v-model:value="registerForm.code" />
+                    <n-form-item :label="t('common.code')" path="emailcode">
+                        <n-input :placeholder="t('input.code')" v-model:value="registerForm.code" />
                         <n-button :disabled="disabledSend" @click="beforeSendCode">{{ sendBtnText }}</n-button>
                     </n-form-item>
                 </n-form>
             </n-tab-pane>
             <!-- 邮箱登录 -->
-            <n-tab-pane name="email" tab="手机号注册" :disabled="true"></n-tab-pane>
+            <n-tab-pane name="email" :tab="t('register.phoneRegister')" :disabled="true"></n-tab-pane>
         </n-tabs>
         <div class="login-btn">
-            <n-button @click="emits('changeForm')">返回登录</n-button>
-            <n-button type="primary" @click="sendRegisterRequest">注册</n-button>
+            <n-button @click="emits('changeForm')">{{ t('register.backLogin') }}</n-button>
+            <n-button type="primary" @click="sendRegisterRequest">{{ t('common.register') }}</n-button>
         </div>
     </div>
     <slider-captcha v-model:show="showCaptcha" :email="registerForm.email" @success="beforeSendCode"></slider-captcha>
@@ -29,18 +29,19 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import useSendCode from '@/hooks/send-code-hooks';
-
 import type { UserRegisterType } from "@leaf/apis";
 import { registerAPI } from "@leaf/apis";
 import { isEmail, statusCode } from '@leaf/utils';
-
 import type { FormRules, FormInst } from 'naive-ui';
 import { NTabs, NTabPane, NForm, NFormItem, NInput, NButton, useNotification } from 'naive-ui';
-
 import { SliderCaptcha } from "@leaf/components";
 
 const emits = defineEmits(["changeForm"]);
+
+// i18n
+const { t } = useI18n();
 
 //通知组件
 const notification = useNotification();

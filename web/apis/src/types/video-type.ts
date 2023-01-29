@@ -1,5 +1,5 @@
-import { ResourceType } from "./resource-type"
-import { UserInfoType } from "./user-type"
+import type { ResourceType } from "./resource-type"
+import type { UserInfoType } from "./user-type"
 
 export interface BaseVideoType {
     vid: number,

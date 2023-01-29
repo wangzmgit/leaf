@@ -1,5 +1,5 @@
 import request from '../request';
-import { AddDanmakuType } from '../types/danmaku-type';
+import type { AddDanmakuType } from '../types/danmaku-type';
 
 //发送弹幕
 export const sendDanmakuAPI = (danmaku: AddDanmakuType) => {

@@ -6,7 +6,7 @@
         <n-input class="comment-input" v-model:value="commentForm.content" placeholder="在这里写点什么吧~" maxlength="255"
             show-count type="textarea" :autosize="descSize" />
         <n-button v-if="!userInfo.uid" disabled>未登录</n-button>
-        <n-button v-else type="primary" @click="submitComment">发表</n-button>
+        <n-button v-else type="primary" @click="submitComment">{{ t("common.publish") }}</n-button>
     </div>
     <div class="comment-item" v-for="(item, index) in commentList" :key="index">
         <!--头像和昵称-->
@@ -17,9 +17,10 @@
             </div>
             <n-time class="comment-time" type="relative" :time="new Date(item.created_at)"></n-time>
             <div class="comment-btn">
-                <n-button v-if="userInfo" text @click="showReply(index, null, true)">回复</n-button>
-                <n-button v-if="item.author.uid === userInfo.uid" text
-                    @click="deleteClick(item.id, null, index)">删除</n-button>
+                <n-button v-if="userInfo" text @click="showReply(index, null, true)">{{ t("common.reply") }}</n-button>
+                <n-button v-if="item.author.uid === userInfo.uid" text @click="deleteClick(item.id, null, index)">{{
+                    t("common.delete")
+                }}</n-button>
             </div>
         </div>
         <!--评论内容-->
@@ -38,7 +39,7 @@
                 <!-- 输入框 -->
                 <n-input class="reply-input" v-model:value="replyForm.content" :placeholder="replyTip" maxlength="200"
                     show-count type="textarea" :autosize="descSize" />
-                <n-button type="primary" @click="submitReply(item)">回复</n-button>
+                <n-button type="primary" @click="submitReply(item)">{{ t("common.reply") }}</n-button>
             </div>
         </div>
         <!--回复-->
@@ -54,9 +55,11 @@
                         <n-time class="reply-time" type="relative" :time="new Date(reply.created_at)"></n-time>
                     </div>
                     <div class="reply-btn">
-                        <n-button v-if="userInfo" text @click="showReply(index, reply, false)">回复</n-button>
+                        <n-button v-if="userInfo" text @click="showReply(index, reply, false)">
+                            {{ t("common.reply") }}
+                        </n-button>
                         <n-button v-if="reply.author.uid === userInfo.uid" text
-                            @click="deleteClick(item.id, reply.id, index, i)">删除
+                            @click="deleteClick(item.id, reply.id, index, i)">{{ t("common.delete") }}
                         </n-button>
                     </div>
                 </div>
@@ -71,15 +74,18 @@
                 </div>
             </div>
             <div class="more">
-                <n-button :disabled="item.noMore" text @click="getMoreReply(item.id, index)">加载更多</n-button>
+                <n-button :disabled="item.noMore" text @click="getMoreReply(item.id, index)">
+                    {{ t("common.loadMore") }}
+                </n-button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import { onBeforeMount, reactive, ref } from "vue";
+import { onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from "vue";
 import useComment from '@/hooks/comment-hooks';
 import useMention from '@/hooks/mention-hooks';
 import { statusCode, storageData } from '@leaf/utils';
@@ -89,12 +95,16 @@ import { NButton, NInput, NTime, useNotification, useMessage } from "naive-ui";
 import { addCommentAPI, addReplyAPI, getUserIdAPI } from '@leaf/apis';
 import type { AddCommentType, CommentType, UserInfoType, ReplyType } from '@leaf/apis';
 
-//处理@
-const { handleMention } = useMention();
 
 const props = defineProps<{
     vid: number
 }>();
+
+// i18n
+const { t } = useI18n();
+
+//处理@
+const { handleMention } = useMention();
 
 const replyTip = ref('留下条评论吧');
 //输入框大小
@@ -288,12 +298,14 @@ const lazyLoading = () => {
     const clientHeight = document.documentElement.clientHeight;
     const scrollHeight = document.documentElement.scrollHeight;
     if (scrollTop + clientHeight >= (scrollHeight - 10)) {
-        if (!noMore.value && !loadingComment.value) {
+        if (!noMore.value &&!loadingComment.value) {
             page.value++;
             getCommentList(props.vid, page.value, 8);
         }
+
     }
 }
+
 
 //删除评论回复
 const deleteClick = (id: string, replyId: string | null, index: number, replyIndex: number | null = null) => {
@@ -340,7 +352,11 @@ onBeforeMount(() => {
         userInfo.value = storageData.get("user_info");
     }
     getCommentList(props.vid, page.value, 8);
-    window.removeEventListener('scroll', lazyLoading);
+    window.addEventListener("scroll", lazyLoading, true);
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener("scroll", lazyLoading);
 })
 </script>
 
@@ -396,7 +412,7 @@ onBeforeMount(() => {
                 margin-left: 6px;
 
                 &:hover {
-                    color: #36ad6a;
+                    color: var(--hover-color);
                 }
             }
         }
@@ -467,7 +483,7 @@ onBeforeMount(() => {
                     margin-left: 6px;
 
                     &:hover {
-                        color: #36ad6a;
+                        color: var(--hover-color);
                     }
                 }
             }
@@ -488,7 +504,7 @@ onBeforeMount(() => {
             margin: 10px 60px;
 
             &:hover {
-                color: #36ad6a;
+                color: var(--hover-color);
             }
         }
     }
@@ -498,7 +514,7 @@ onBeforeMount(() => {
     display: inline-block;
 
     .mention-user {
-        color: #36ad6a;
+        color: var(--primary-color);
         cursor: pointer;
         padding: 0 2px;
     }

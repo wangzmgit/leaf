@@ -1,4 +1,5 @@
-import axios, { AxiosInstance } from "axios";
+import axios from "axios";
+import type { AxiosInstance } from "axios";
 import { getAccessToken } from "./api/token";
 import { globalConfig as config, storageData as storage, statusCode } from "@leaf/utils";
 

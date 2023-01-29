@@ -1,5 +1,5 @@
 import request from '../request';
-import { WhisperType } from '../types/msg-whisper-type';
+import type { WhisperType } from '../types/msg-whisper-type';
 
 //获取私信列表
 export const getWhisperListAPI = () => {

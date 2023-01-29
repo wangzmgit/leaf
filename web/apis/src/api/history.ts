@@ -1,5 +1,5 @@
 import request from '../request';
-import { AddHistoryType } from '../types/history-type';
+import type { AddHistoryType } from '../types/history-type';
 
 // 上传历史记录
 export const addHistoryAPI = (addHistory: AddHistoryType) => {

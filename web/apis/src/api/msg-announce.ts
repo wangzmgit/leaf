@@ -1,5 +1,5 @@
 import request from '../request';
-import { AddAnnounceType } from '../types/msg-announce-type';
+import type { AddAnnounceType } from '../types/msg-announce-type';
 
 //获取公告
 export const getAnnounceAPI = (page: number, page_size: number) => {

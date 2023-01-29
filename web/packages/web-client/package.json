@@ -16,6 +16,7 @@
     "@leaf/utils": "workspace:^1.0.0",
     "js-base64": "^3.7.3",
     "pinia": "^2.0.23",
+    "terser": "^5.16.1",
     "vue": "^3.2.41",
     "vue-dompurify-html": "^3.1.2",
     "vue-i18n": "9.3.0-beta.16",

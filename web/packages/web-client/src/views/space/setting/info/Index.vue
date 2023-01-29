@@ -1,34 +1,34 @@
 <template>
     <div class="modify-info-from">
-        <n-form label-placement="left" label-width="auto">
+        <n-form label-placement="left" label-width="80px">
             <div class="avatar-box">
-                <p class="avatar-label">头像:</p>
+                <p class="avatar-label">{{ t("common.avatar") }}:</p>
                 <common-avatar class="avatar" :url="userInfo.avatar" :size="60" @click="avatarClick"></common-avatar>
             </div>
             <n-form-item label="UID:">
                 <p class="uid form-item">{{ userInfo.uid }}</p>
             </n-form-item>
-            <n-form-item label="昵称:">
+            <n-form-item :label="`${t('common.nickname')}:`">
                 <n-input class="form-input name" v-model:value="userInfo.name" placeholder="请输入昵称" maxlength="20"
                     show-count />
             </n-form-item>
-            <n-form-item label="性别:">
+            <n-form-item :label="`${t('common.gender')}:`">
                 <n-radio-group class="form-item" v-model:value="userInfo.gender">
-                    <n-radio-button :value="0">未知</n-radio-button>
-                    <n-radio-button :value="1">男</n-radio-button>
-                    <n-radio-button :value="2">女</n-radio-button>
+                    <n-radio-button :value="0">{{ t("common.unknown") }}</n-radio-button>
+                    <n-radio-button :value="1">{{ t("common.male") }}</n-radio-button>
+                    <n-radio-button :value="2">{{ t("common.female") }}</n-radio-button>
                 </n-radio-group>
             </n-form-item>
-            <n-form-item label="生日:">
+            <n-form-item :label="`${t('common.birthday')}:`">
                 <n-date-picker class="form-item" placeholder="选择出生日期" type="date" :value="userInfoBirthday"
                     @update-value="updateBirthday" />
             </n-form-item>
-            <n-form-item label="个性签名:">
+            <n-form-item :label="`${t('common.sign')}:`">
                 <n-input class="form-input" v-model:value="userInfo.sign" placeholder="请输入个性签名" maxlength="50"
                     show-count type="textarea" :autosize="descSize" />
             </n-form-item>
             <div class="setting-save-btn">
-                <n-button type="primary" @click="modifyUserInfo">修改</n-button>
+                <n-button type="primary" @click="modifyUserInfo">{{ t("common.modify") }}</n-button>
             </div>
         </n-form>
         <leaf-cropper ref="cropperRef">
@@ -39,7 +39,7 @@
     </div>
 </template>
 <script setup lang="ts">
-
+import { useI18n } from "vue-i18n";
 import { storageData, statusCode } from "@leaf/utils";
 import { ref, onBeforeMount } from "vue";
 import {
@@ -52,8 +52,11 @@ import type { UserInfoType, ModifyUserInfoType } from "@leaf/apis";
 import LeafCropper from "@/components/leaf-cropper/Index.vue";
 import AvatarCropper from "@/components/leaf-cropper/component/AvatarCropper.vue";
 
+// i18n
+const { t } = useI18n();
 
 const notification = useNotification();//通知
+
 
 //简介输入框大小
 const descSize = {
@@ -169,8 +172,10 @@ onBeforeMount(() => {
     position: relative;
 
     .avatar-label {
-        width: 60px;
+        box-sizing: border-box;
+        width: 80px;
         margin: 0;
+        padding: 0 12px 0 0;
         text-align: right;
         font-size: 14px;
         line-height: 60px;

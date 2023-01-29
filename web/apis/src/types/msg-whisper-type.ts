@@ -1,4 +1,4 @@
-import { UserInfoType } from "./user-type";
+import type { UserInfoType } from "./user-type";
 
 export interface WhisperType {
     fid: number,

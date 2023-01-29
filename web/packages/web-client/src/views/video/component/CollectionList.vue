@@ -2,7 +2,7 @@
     <div class="login-bg">
         <div class="login-card">
             <div class="card-head">
-                <span>添加收藏</span>
+                <span>{{ t("video.addCollection") }}</span>
                 <n-icon class="close-icon" @click="closeCard">
                     <close></close>
                 </n-icon>
@@ -11,27 +11,32 @@
                 <n-checkbox-group v-if="!loading" :default-value="defaultChecked" @update:value="handleUpdateValue">
                     <div class="collention-item" v-for="item in collections">
                         <n-checkbox :value="item.id" :label="item.name" />
-                        <span>{{ item.open ? '' : '私密' }}</span>
+                        <span>{{ item.open ? '' : t("common.private") }}</span>
                     </div>
                 </n-checkbox-group>
                 <div class="add-collection">
-                    <n-button v-if="!isAdd" type="primary" ghost @click="changeAdd">新建收藏夹</n-button>
+                    <n-button v-if="!isAdd" type="primary" ghost @click="changeAdd">
+                        {{ t("video.newCollection") }}
+                    </n-button>
                     <n-input-group v-else>
                         <n-input ref="addInput" v-model:value="name" placeholder="收藏夹名称" maxlength="20" show-count
                             @blur="changeAdd" />
                         <!-- 使用mousedown触发而不是click触发，因为input的blur要早于click -->
-                        <n-button style="width: 30%;" type="primary" @mousedown="addCollection">创建</n-button>
+                        <n-button style="width: 30%;" type="primary" @mousedown="addCollection">
+                            {{ t("common.create") }}
+                        </n-button>
                     </n-input-group>
                 </div>
             </n-scrollbar>
             <div class="save-btn">
-                <n-button type="primary" @mousedown="save">完成</n-button>
+                <n-button type="primary" @mousedown="save">{{ t("common.complete") }}</n-button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import { onBeforeMount, nextTick, ref } from 'vue';
 import { Close } from '@leaf/icons';
 import { statusCode } from '@leaf/utils';
@@ -47,6 +52,8 @@ const emits = defineEmits(['close']);
 const props = defineProps<{
     vid: number
 }>();
+
+const { t } = useI18n();
 
 const notification = useNotification();
 

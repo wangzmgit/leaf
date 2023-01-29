@@ -1,9 +1,12 @@
 <template>
     <div class="setting-title">
         <div class="content" :style="themeStyle">
-            <span ref="infoRef" :class="isInfo ? 'active-text' : ''" @click="setRouter(true)">基本信息</span>
-            <span ref="securityRef" :class="!isInfo ? 'active-text' : ''" @click="setRouter(false)">账号安全</span>
-            <div class="selected" :class="isInfo ? '' : 'active-security'"></div>
+            <span ref="infoRef" :class="isInfo ? 'active-text' : ''" @click="setRouter(true)">
+                {{ t("space.basicInformation") }}
+            </span>
+            <span ref="securityRef" :class="!isInfo ? 'active-text' : ''" @click="setRouter(false)">
+                {{ t("space.accountSecurity") }}
+            </span>
         </div>
     </div>
     <router-view class="router" />
@@ -11,14 +14,15 @@
 
 <script setup lang="ts">
 import { getTheme } from '@/theme';
+import { useI18n } from 'vue-i18n';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
-
-const isInfo = ref(true);
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
+const isInfo = ref(true);
 const infoRef = ref<HTMLSpanElement | null>(null);
 const securityRef = ref<HTMLSpanElement | null>(null);
 
@@ -51,7 +55,7 @@ onMounted(() => {
     text-align: center;
 
     .content {
-        width: 200px;
+        min-width: 200px;
         margin: 0 auto;
         position: relative;
 
@@ -59,6 +63,7 @@ onMounted(() => {
             line-height: 100px;
             font-size: 20px;
             user-select: none;
+            cursor: pointer;
 
             &:nth-child(2) {
                 margin-left: 30px;
@@ -68,27 +73,9 @@ onMounted(() => {
     }
 }
 
-.selected {
-    position: absolute;
-    top: 70px;
-    left: 10px;
-    width: 72px;
-    height: 4px;
-    border-radius: 2px;
-    background-color: var(--space-menu-active-color);
-    transition: left 0.3s;
-    -moz-transition: left 0.3s;
-    -webkit-transition: left 0.3s;
-    -o-transition: left 0.3s;
-}
-
 /**激活时 */
 .active-text {
     color: var(--space-menu-active-color);
-}
-
-.active-security {
-    left: 120px;
 }
 
 .router {

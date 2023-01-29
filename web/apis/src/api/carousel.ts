@@ -1,5 +1,5 @@
 import request from '../request';
-import { AddCarouselType } from '../types/carousel-type';
+import type { AddCarouselType } from '../types/carousel-type';
 
 // 添加轮播图
 export const addCarouselAPI = (carousel: AddCarouselType) => {

@@ -2,36 +2,36 @@
     <div class="login-form">
         <!-- 账号登录 -->
         <n-tabs default-value="account" size="large" justify-content="space-evenly" @update:value="loginTypeChange">
-            <n-tab-pane class="form-container" name="account" tab="账号登录">
+            <n-tab-pane class="form-container" name="account" :tab="t('login.accountLogin')">
                 <n-form ref="accountFormRef" :rules="rules" :model="loginForm" label-placement="left" label-width="70">
-                    <n-form-item label="账号" path="account">
-                        <n-input placeholder="请输入邮箱" v-model:value="loginForm.email" />
+                    <n-form-item :label="t('common.email')" path="email">
+                        <n-input :placeholder="t('input.email')" v-model:value="loginForm.email" />
                     </n-form-item>
-                    <n-form-item label="密码" path="password">
-                        <n-input placeholder="请输入密码" v-model:value="loginForm.password" type="password">
+                    <n-form-item :label="t('common.pwd')" path="password">
+                        <n-input :placeholder="t('input.pwd')" v-model:value="loginForm.password" type="password">
                             <template #suffix>
-                                <n-button type="primary" text @click="findPassword">找回密码</n-button>
+                                <n-button type="primary" text @click="findPassword">{{ t('login.forgotPwd') }}</n-button>
                             </template>
                         </n-input>
                     </n-form-item>
                 </n-form>
             </n-tab-pane>
             <!-- 邮箱登录 -->
-            <n-tab-pane class="form-container" name="email" tab="邮箱验证">
+            <n-tab-pane class="form-container" name="email" :tab="t('login.emailLogin')">
                 <n-form ref="emailFormRef" :rules="rules" :model="loginForm" label-placement="left" label-width="70">
-                    <n-form-item label="邮箱" path="email">
-                        <n-input placeholder="请输入邮箱" v-model:value="loginForm.email" />
+                    <n-form-item :label="t('common.email')" path="email">
+                        <n-input :placeholder="t('input.email')" v-model:value="loginForm.email" />
                     </n-form-item>
-                    <n-form-item label="验证码" path="code">
-                        <n-input placeholder="请输入验证码" v-model:value="loginForm.code" />
+                    <n-form-item :label="t('common.code')" path="code">
+                        <n-input :placeholder="t('input.code')" v-model:value="loginForm.code" />
                         <n-button :disabled="disabledSend" @click="beforeSendCode">{{ sendBtnText }}</n-button>
                     </n-form-item>
                 </n-form>
             </n-tab-pane>
         </n-tabs>
         <div class="login-btn">
-            <n-button @click="emits('changeForm')">立即注册</n-button>
-            <n-button type="primary" @click="sendLoginRequest">登录</n-button>
+            <n-button @click="emits('changeForm')">{{ t("login.registerNow") }}</n-button>
+            <n-button type="primary" @click="sendLoginRequest">{{ t("common.login") }}</n-button>
         </div>
     </div>
     <slider-captcha v-model:show="showCaptcha" :email="loginForm.email" @success="captchaSuccess"></slider-captcha>
@@ -39,21 +39,22 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import useSendCode from '@/hooks/send-code-hooks';
-
 import type { UserLoginType } from "@leaf/apis";
 import { loginAPI, emailLoginAPI, getUserInfoAPI } from "@leaf/apis";
 import { storageData, statusCode } from '@leaf/utils';
-
 import type { FormRules, FormInst } from 'naive-ui';
 import { NTabs, NTabPane, NForm, NFormItem, NInput, NButton, useNotification } from 'naive-ui';
-
 import { SliderCaptcha } from "@leaf/components";
 import { useRouter } from 'vue-router';
 
 const emits = defineEmits(["changeForm", "success"]);
 
 const router = useRouter();
+// i18n
+const { t } = useI18n();
+
 //通知组件
 const notification = useNotification();
 
@@ -129,7 +130,7 @@ const sendLoginRequest = () => {
             loginRequest(loginForm).then((res) => {
                 switch (res.data.code) {
                     case statusCode.CAPTCHA_REQUIRED:
-                    captchaUsers = "login";
+                        captchaUsers = "login";
                         showCaptcha.value = true;
                         break;
                     case statusCode.OK:

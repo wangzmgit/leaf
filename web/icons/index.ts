@@ -1,6 +1,8 @@
 import Add from "./src/Add.vue";
+import ArrowDown from "./src/ArrowDown.vue";
 import ArrowLeft from "./src/ArrowLeft.vue";
 import ArrowRight from "./src/ArrowRight.vue";
+import ArrowUp from "./src/ArrowUp.vue";
 import Avatar from "./src/Avatar.vue";
 
 import Close from "./src/Close.vue";
@@ -38,8 +40,10 @@ import Video from "./src/Video.vue";
 
 export {
     Add,
+    ArrowDown,
     ArrowLeft,
     ArrowRight,
+    ArrowUp,
     Avatar,
 
     Close,

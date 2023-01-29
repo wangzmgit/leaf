@@ -1,5 +1,5 @@
 import request from '../request';
-import { CollectType, } from '../types/collect-type';
+import type { CollectType } from '../types/collect-type';
 
 //收藏
 export const collectAPI = (collect: CollectType) => {
@@ -7,7 +7,7 @@ export const collectAPI = (collect: CollectType) => {
 }
 
 // 获取该收藏视频的收藏夹
-export const getCollectedCollection = (vid:number ) => {
+export const getCollectedCollection = (vid: number) => {
     return request.get(`v1/archive/collect/collected?vid=${vid}`);
 }
 

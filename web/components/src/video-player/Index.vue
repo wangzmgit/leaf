@@ -9,18 +9,21 @@ import { onBeforeMount, ref, watch } from 'vue';
 import dashjs from "dashjs";
 import { WPlayer } from 'vue-wplayer';
 import 'vue-wplayer/dist/style.css';
-import { ResourceType, AddHistoryType, AddDanmakuType, sendDanmakuAPI, getDanmakuAPI } from '@leaf/apis';
+import type { ResourceType, AddHistoryType, AddDanmakuType } from '@leaf/apis';
+import { sendDanmakuAPI, getDanmakuAPI } from '@leaf/apis';
 import { addHistoryAPI, getHistoryProgressAPI } from '@leaf/apis';
-import { OptionsType, QualityType } from '../types/player';
+import type { OptionsType, QualityType } from '../types/player';
 import { statusCode } from '@leaf/utils';
 
 const props = withDefaults(defineProps<{
     vid: number,
     theme: string,
+    mobile?: boolean,
     resources: Array<ResourceType>,
     part: number,
 }>(), {
     part: 1,
+    mobile: false
 })
 
 let startTime = 0;
@@ -43,6 +46,7 @@ const options: OptionsType = {
             dash.setCurrentTrack(tracks[trackIndex])
         }
     },
+    mobile: props.mobile,
     theme: props.theme,
     danmaku: {
         open: true,
