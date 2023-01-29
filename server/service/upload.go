@@ -73,13 +73,5 @@ func GenerateFileUrl(objectKey string) (string, error) {
 		return oss.GetObjectUrl(objectKey), nil
 	}
 
-	protocol := "http://"
-	if viper.GetBool("file.https") {
-		protocol = "https://"
-	}
-	if len(viper.GetString("file.domain")) == 0 {
-		return "/api/" + objectKey, nil
-	} else {
-		return protocol + viper.GetString("file.domain") + "/api/" + objectKey, nil
-	}
+	return "/api/" + objectKey, nil
 }
