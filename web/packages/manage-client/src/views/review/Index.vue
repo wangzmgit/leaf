@@ -17,7 +17,7 @@
                 <tr v-for="item in videos">
                     <td>{{ item.vid }}</td>
                     <td>
-                        <img class="cover" :src="item.cover" alt="视频封面">
+                        <img class="cover" :src="getResourceUrl(item.cover)" alt="视频封面">
                     </td>
                     <td>{{ item.title }}</td>
                     <td>{{ getPartitionName(item.partition) }}</td>
@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { onBeforeMount, reactive, ref } from 'vue';
 import VideoList from './component/VideoList.vue';
-import { statusCode, reviewCode } from '@leaf/utils';
+import { statusCode, reviewCode, getResourceUrl } from '@leaf/utils';
 import type { VideoType, PartitionType } from '@leaf/apis';
 import { getReviewListAPI, getResourceListAPI, reviewVideoAPI, getPartitionAPI } from '@leaf/apis';
 import { NTable, NButton, NCard, NTime, NDrawer, NDrawerContent, useMessage } from 'naive-ui';

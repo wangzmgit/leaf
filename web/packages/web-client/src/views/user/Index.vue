@@ -3,7 +3,7 @@
         <header-bar></header-bar>
         <div class="space-container">
             <div class="space-header">
-                <img class="cover" v-if="userInfo.spacecover" :src="userInfo.spacecover" alt="用户封面图" />
+                <img class="cover" v-if="userInfo.spacecover" :src="getResourceUrl(userInfo.spacecover)" alt="用户封面图" />
                 <div class="header-content">
                     <common-avatar :url="userInfo.avatar" :size="70" :iconsize="36"></common-avatar>
                     <div class="content-name">
@@ -47,8 +47,8 @@
 <script setup lang="ts">
 import { h, ref, onBeforeMount, reactive } from "vue";
 import { RouterLink, useRoute, useRouter } from 'vue-router';
-import {  Male, Female } from "@leaf/icons";
-import { statusCode } from "@leaf/utils";
+import { Male, Female } from "@leaf/icons";
+import { getResourceUrl, statusCode } from "@leaf/utils";
 import { CommonAvatar } from "@leaf/components";
 import { getFollowDataAPI, getOtherUserInfoAPI, type UserInfoType } from "@leaf/apis";
 import { NIcon, NMenu, useNotification, NButton } from "naive-ui";

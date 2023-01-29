@@ -3,7 +3,7 @@
         <span class="head-title">{{ t("video.userVideo") }}</span>
     </div>
     <div class="card-box" v-for="item in videoList" @click="govideo(item.vid)">
-        <img class="cover" :src="item.cover" />
+        <img class="cover" :src="getResourceUrl(item.cover)" />
         <div class="info">
             <span class="title">{{ item.title }}</span>
             <n-time class="time" :time="new Date(item.created_at)"></n-time>
@@ -19,7 +19,7 @@ import { useRouter } from "vue-router";
 import { NTime } from "naive-ui";
 import type { VideoType } from "@leaf/apis";
 import { getVideoListByUidAPI } from "@leaf/apis";
-import { statusCode } from "@leaf/utils";
+import { getResourceUrl, statusCode } from "@leaf/utils";
 
 
 const props = defineProps<{

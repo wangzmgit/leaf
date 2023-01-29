@@ -19,7 +19,7 @@
                 <tr v-for="(item, index) in carouselList" :key="index">
                     <td>{{ item.id }}</td>
                     <td>
-                        <img class="cover" :src="item.img" alt="视频封面">
+                        <img class="cover" :src="getResourceUrl(item.img)" alt="视频封面">
                     </td>
                     <td>
                         <div class="color" :style="`background-color: ${item.color}`"></div>
@@ -64,7 +64,7 @@ import {
 import CarouselUpload from '@/components/carousel-uploader/Index.vue';
 import type { CarouselType, AddCarouselType } from '@leaf/apis';
 import { getCarouselAPI, addCarouselAPI, deleteCarouselAPI } from '@leaf/apis';
-import { getMainColor, statusCode } from '@leaf/utils';
+import { getMainColor, getResourceUrl, statusCode } from '@leaf/utils';
 
 const message = useMessage();//通知
 

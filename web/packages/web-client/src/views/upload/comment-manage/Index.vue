@@ -16,7 +16,8 @@
             </div>
             <div class="item-right">
                 <div v-if="item.root_content">{{ item.root_content }}</div>
-                <img v-else :src="item.video.cover" alt="封面" :title="item.video.title" @click="goVideo(item.video.vid)">
+                <img v-else :src="getResourceUrl(item.video.cover)" alt="封面" :title="item.video.title"
+                    @click="goVideo(item.video.vid)">
             </div>
         </div>
     </div>
@@ -27,7 +28,7 @@ import { useRouter } from "vue-router";
 import { onBeforeMount, ref } from 'vue';
 import { NTime } from 'naive-ui';
 import { CommonAvatar } from "@leaf/components";
-import { statusCode } from '@leaf/utils';
+import { getResourceUrl, statusCode } from '@leaf/utils';
 import type { ReplyMessageType } from '@leaf/apis';
 import { getReplyMessageAPI } from '@leaf/apis';
 import { getTheme } from '@/theme';

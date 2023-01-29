@@ -4,7 +4,7 @@
         <div class="card-list">
             <div class="v-card" v-for="(item, index) in videoList" :key="index">
                 <div class="card-item" @click="goVideo(item.status, item.vid)">
-                    <img class="cover" :src="item.cover" />
+                    <img class="cover" :src="getResourceUrl(item.cover)" />
                     <div class="info">
                         <p class="title">{{ item.title }}</p>
                         <!--播放量-->
@@ -64,7 +64,7 @@ import { NButton, NIcon, NPagination, useNotification } from 'naive-ui';
 import { Delete, Edit } from '@leaf/icons';
 import { deleteVideoAPI, getUploadVideoAPI } from '@leaf/apis';
 import type { UserUploadVideoType } from '@leaf/apis';
-import { reviewCode, statusCode } from '@leaf/utils';
+import { getResourceUrl, reviewCode, statusCode } from '@leaf/utils';
 import { useVideoCountStore } from '@/stores/video-count-store';
 
 // i18n

@@ -12,7 +12,8 @@
                 <n-time class="msg-time" :time="new Date(item.created_at)"></n-time>
             </div>
             <div class="item-right">
-                <img :src="item.video.cover" alt="封面" :title="item.video.title" @click="goVideo(item.video.vid)">
+                <img :src="getResourceUrl(item.video.cover)" alt="封面" :title="item.video.title"
+                    @click="goVideo(item.video.vid)">
             </div>
         </div>
     </div>
@@ -23,7 +24,7 @@ import { useRouter } from "vue-router";
 import { computed, onBeforeMount, ref } from 'vue';
 import { NTime } from 'naive-ui';
 import { CommonAvatar } from "@leaf/components";
-import { statusCode } from '@leaf/utils';
+import { getResourceUrl, statusCode } from '@leaf/utils';
 import type { LikeMessageType } from '@leaf/apis';
 import { getLikeMessageAPI } from '@leaf/apis';
 import { getTheme } from '@/theme';

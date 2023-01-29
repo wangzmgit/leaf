@@ -2,7 +2,7 @@
     <div class="upload-cover">
         <n-upload multiple directory-dnd :show-file-list="false" @before-upload="beforeUploadCover"
             :custom-request="fileChange">
-            <img v-if="currentCover" class="cover" :src="currentCover" alt="封面" />
+            <img v-if="currentCover" class="cover" :src="getResourceUrl(currentCover)" alt="封面" />
             <n-upload-dragger v-else>
                 <div v-if="!uploading">
                     <div style="margin-bottom: 12px">
@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Upload } from "@leaf/icons";
-import { globalConfig } from "@leaf/utils";
+import { getResourceUrl, globalConfig } from "@leaf/utils";
 
 import type { UploadCustomRequestOptions } from 'naive-ui';
 import { NIcon, NUpload, NUploadDragger, NText, NP, NProgress, useNotification } from 'naive-ui';

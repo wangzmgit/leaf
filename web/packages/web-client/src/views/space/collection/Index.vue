@@ -4,7 +4,7 @@
         <n-scrollbar style="max-height: 550px;">
             <div class="card-item" v-for="(item, index) in collections" :key="index">
                 <div class="card-left">
-                    <img v-if="item.cover" :src="item.cover" alt="收藏夹封面">
+                    <img v-if="item.cover" :src="getResourceUrl(item.cover)" alt="收藏夹封面">
                     <div class="no-cover" v-else>
                         <img src="@/assets/collection.png" alt="默认封面">
                     </div>
@@ -69,7 +69,7 @@ import {
     NTime, NIcon, NForm, NFormItem, NButton, NInput, NSwitch,
     NScrollbar, NPopconfirm, NDrawer, NDrawerContent, useNotification
 } from 'naive-ui';
-import { statusCode } from '@leaf/utils';
+import { getResourceUrl, statusCode } from '@leaf/utils';
 
 // i18n
 const { t } = useI18n();

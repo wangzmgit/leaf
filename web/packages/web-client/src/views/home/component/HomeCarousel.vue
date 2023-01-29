@@ -4,7 +4,7 @@
             :style="`width: ${data.containerWidth}%;transition: ${data.transition};transform: ${data.transform}`"
             @mouseover="manualSwitching(null, false)" @mouseleave="manualSwitching(null, true)">
             <div class="carousel-item" :style="`width: ${data.itemWidth}% `" v-for="item in data.playList">
-                <img class="carousel-img" :src="item.img" :alt="item.title" />
+                <img class="carousel-img" :src="getResourceUrl(item.img)" :alt="item.title" />
                 <div class="carousel-mask" :style="`background-color: ${item.color}`"></div>
             </div>
         </div>
@@ -35,9 +35,9 @@
 <script lang="ts" setup>
 import type { CarouselType } from "@leaf/apis";
 import { ArrowLeft, ArrowRight } from "@leaf/icons";
-import { nextTick, onBeforeMount, onMounted, reactive, ref } from 'vue';
+import { nextTick, onBeforeMount, reactive, ref } from 'vue';
 import { getCarouselAPI } from "@leaf/apis";
-import { statusCode } from "@leaf/utils";
+import { statusCode,getResourceUrl } from "@leaf/utils";
 
 const data = reactive<{
     carouselCount: number

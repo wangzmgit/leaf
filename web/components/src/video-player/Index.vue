@@ -13,7 +13,7 @@ import type { ResourceType, AddHistoryType, AddDanmakuType } from '@leaf/apis';
 import { sendDanmakuAPI, getDanmakuAPI } from '@leaf/apis';
 import { addHistoryAPI, getHistoryProgressAPI } from '@leaf/apis';
 import type { OptionsType, QualityType } from '../types/player';
-import { statusCode } from '@leaf/utils';
+import { getResourceUrl, statusCode } from '@leaf/utils';
 
 const props = withDefaults(defineProps<{
     vid: number,
@@ -87,22 +87,22 @@ const loadResource = (part: number) => {
         case 1080:
             tmpResource[1080] = {
                 name: "1080P",
-                url: props.resources[part - 1].url,
+                url: getResourceUrl(props.resources[part - 1].url),
             }
         case 720:
             tmpResource[720] = {
                 name: "720P",
-                url: props.resources[part - 1].url,
+                url: getResourceUrl(props.resources[part - 1].url),
             }
         case 480:
             tmpResource[480] = {
                 name: "480P",
-                url: props.resources[part - 1].url,
+                url: getResourceUrl(props.resources[part - 1].url),
             }
         case 360:
             tmpResource[360] = {
                 name: "360P",
-                url: props.resources[part - 1].url,
+                url: getResourceUrl(props.resources[part - 1].url),
             }
     }
 

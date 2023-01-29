@@ -4,7 +4,7 @@
         <div class="space-container">
             <div class="space-header">
                 <button class="upload-btn" @click="uploadClick">上传封面图片</button>
-                <img class="cover" v-if="userInfo.spacecover" :src="userInfo.spacecover" alt="用户封面图" />
+                <img class="cover" v-if="userInfo.spacecover" :src="getResourceUrl(userInfo.spacecover)" alt="用户封面图" />
                 <div class="header-content">
                     <common-avatar :url="userInfo.avatar" :size="70" :iconsize="36"></common-avatar>
                     <div class="content-name">
@@ -55,7 +55,7 @@ import { h, ref, onBeforeMount, reactive } from "vue";
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { Video, Collection, Upload, Message, Setting, Male, Female } from "@leaf/icons";
 import { getFollowDataAPI, type UserInfoType } from "@leaf/apis";
-import { statusCode, storageData } from "@leaf/utils";
+import { getResourceUrl, statusCode, storageData } from "@leaf/utils";
 import { modifySpaceCoverAPI, getUserInfoAPI } from "@leaf/apis";
 import useRenderIcon from "@/hooks/render-icon-hooks";
 import { CommonAvatar } from "@leaf/components";

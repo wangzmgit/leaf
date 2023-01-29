@@ -12,7 +12,8 @@
                 <n-time class="msg-time" :time="new Date(item.created_at)"></n-time>
             </div>
             <div class="item-right">
-                <img :src="item.video.cover" alt="封面" :title="item.video.title" @click="goVideo(item.video.vid)">
+                <img :src="getResourceUrl(item.video.cover)" alt="封面" :title="item.video.title"
+                    @click="goVideo(item.video.vid)">
             </div>
         </div>
     </div>
@@ -26,6 +27,7 @@ import { CommonAvatar } from "@leaf/components";
 import { statusCode } from '@leaf/utils';
 import type { AtMessageType } from '@leaf/apis';
 import { getAtMessageAPI } from '@leaf/apis';
+import { getResourceUrl } from '@leaf/utils';
 import { getTheme } from '@/theme';
 
 
