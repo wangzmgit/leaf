@@ -1,7 +1,7 @@
 <template>
     <n-carousel autoplay show-arrow>
         <div class="carousel" v-for="(item, index) in carousels" :key="index">
-            <img class="carousel-img" :src="item.img" alt="轮播图" />
+            <img class="carousel-img" :src="getResourceUrl(item.img)" alt="轮播图" />
         </div>
     </n-carousel>
 </template>
@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { NCarousel } from 'naive-ui';
 import { ref, onBeforeMount } from 'vue';
-import { statusCode } from "@leaf/utils";
+import { getResourceUrl, statusCode } from "@leaf/utils";
 import type { CarouselType } from '@leaf/apis';
 import { getCarouselAPI } from '@leaf/apis';
 

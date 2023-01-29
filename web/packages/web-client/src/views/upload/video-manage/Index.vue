@@ -3,7 +3,7 @@
         <p class="create-title">{{ t("upload.manuscriptManagement") }}</p>
         <div class="card-item" v-for="(item, index) in videoList" :key="index">
             <div class="card-left">
-                <img v-if="item.cover" :src="item.cover" alt="视频封面">
+                <img v-if="item.cover" :src="getResourceUrl(item.cover)" alt="视频封面">
             </div>
             <div class="card-center">
                 <p class="title" @click="govideo(item.vid)">{{ item.title }}</p>
@@ -51,7 +51,7 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { ref, onBeforeMount } from 'vue';
 import { Edit, Delete } from '@leaf/icons';
-import { statusCode } from '@leaf/utils';
+import { getResourceUrl, statusCode } from '@leaf/utils';
 import { NTime, NIcon, NPagination, NButton, NPopconfirm, useNotification } from 'naive-ui';
 import { getUploadVideoAPI, deleteVideoAPI } from '@leaf/apis';
 import type { UserUploadVideoType } from '@leaf/apis';

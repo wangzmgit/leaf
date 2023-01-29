@@ -2,7 +2,7 @@
     <div class="card-list">
         <div class="card-box" v-for="(item, index) in videoList" :key="index">
             <div class="card" @click="govideo(item.vid)">
-                <img class="cover" :src="item.cover" />
+                <img class="cover" :src="getResourceUrl(item.cover)" />
                 <div class="info">
                     <p class="title">{{ item.title }}</p>
                 </div>
@@ -20,7 +20,7 @@ import { NPagination, useNotification } from "naive-ui";
 import { useRouter, useRoute } from "vue-router";
 import type { BaseVideoType } from "@leaf/apis";
 import { getVideoListByUidAPI } from "@leaf/apis";
-import { statusCode } from "@leaf/utils";
+import { getResourceUrl, statusCode } from "@leaf/utils";
 
 const uid = ref(0);
 const page = ref(1);

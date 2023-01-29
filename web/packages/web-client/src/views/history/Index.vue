@@ -10,7 +10,7 @@
                 <div class="video-list">
                     <div class="video-item" v-for="(history, index) in item.videoList" :key="index"
                         @click="goVideo(history.video.vid, history.part)">
-                        <img class="cover" :src="history.video.cover" />
+                        <img class="cover" :src="getResourceUrl(history.video.cover)" />
                         <div class="info">
                             <p class="title">{{ history.video.title }}</p>
                             <!--播放进度-->
@@ -31,7 +31,7 @@ import { NAffix } from "naive-ui";
 import HeaderBar from "@/components/header-bar/Index.vue";
 import type { HistoryVideoType } from "@leaf/apis";
 import { getHistoryVideoAPI } from "@leaf/apis";
-import { statusCode, timeStrToDateStr, relativeDate } from "@leaf/utils";
+import { statusCode, timeStrToDateStr, relativeDate, getResourceUrl } from "@leaf/utils";
 
 let page = 1;
 let noMore = false;

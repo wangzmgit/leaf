@@ -1,5 +1,4 @@
 <template>
-
     <video ref="playerRef" class="video" preload="auto" controls></video>
     <div class="video-box">
         <n-scrollbar style="max-height: 300px;">
@@ -10,7 +9,8 @@
                 </div>
                 <div v-show="item.status === reviewCode.WAITING_REVIEW" class="item-right">
                     <n-button text @click="reviewResource(item.id, index, reviewCode.AUDIT_APPROVED)">通过</n-button>
-                    <n-button text @click="reviewResource(item.id, index, reviewCode.WRONG_VIDEO_CONTENT)">不通过</n-button>
+                    <n-button text
+                        @click="reviewResource(item.id, index, reviewCode.WRONG_VIDEO_CONTENT)">不通过</n-button>
                 </div>
             </div>
         </n-scrollbar>
@@ -23,7 +23,7 @@ import dashjs from "dashjs";
 import type { ResourceType } from '@leaf/apis';
 import { reviewResourceAPI } from "@leaf/apis";
 import { NScrollbar, NTag, NButton, useNotification } from "naive-ui";
-import { reviewCode, statusCode } from "@leaf/utils";
+import { getResourceUrl, reviewCode, statusCode } from "@leaf/utils";
 
 const props = defineProps<{
     list: Array<ResourceType>
@@ -69,8 +69,9 @@ let dash: dashjs.MediaPlayerClass;
 const playerRef = ref<HTMLElement | null>(null);
 const playVideo = (resource: ResourceType) => {
     if (playerRef.value) {
+        const url = getResourceUrl(resource.url);
         dash = dashjs.MediaPlayer().create();
-        dash.initialize(playerRef.value as HTMLElement, resource.url, false);
+        dash.initialize(playerRef.value as HTMLElement, url, false);
     }
 }
 

@@ -30,3 +30,7 @@ export const thorttle = (fn: Function, delay = 1000) => {
     };
 };
 
+export const isURL = (url: string) => {
+    const reg = /http(s)?:\/\/((([\w-]+\.)+[\w-]+)|(localhost))(:\d+)?(\/[\w- ./?%&=#]*)?/;
+    return reg.test(url)
+} 

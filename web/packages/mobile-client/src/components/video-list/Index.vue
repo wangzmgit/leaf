@@ -2,7 +2,7 @@
     <div class="card-list">
         <div class="card-box" v-for="(item, index) in props.videos" :key="index">
             <div class="card" @click="govideo(item.vid)">
-                <img class="cover" :src="item.cover" />
+                <img class="cover" :src="getResourceUrl(item.cover)" />
                 <div class="info">
                     <p class="title">{{ item.title }}</p>
                 </div>
@@ -14,6 +14,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import type { VideoType } from '@leaf/apis';
+import { getResourceUrl } from "@leaf/utils";
 
 const props = defineProps<{
     videos: Array<VideoType>

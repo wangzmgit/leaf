@@ -20,7 +20,7 @@
                 <tr v-for="item in videoList">
                     <td>{{ item.vid }}</td>
                     <td>
-                        <img class="cover" :src="item.cover" alt="视频封面">
+                        <img class="cover" :src="getResourceUrl(item.cover)" alt="视频封面">
                     </td>
                     <td>{{ item.title }}</td>
                     <td>{{ item.desc }}</td>
@@ -48,7 +48,7 @@ import PartitionSelector from "./component/PartitionSelector.vue";
 import type { VideoType } from "@leaf/apis";
 import { adminGetVideoListAPI, adminSearchVideoAPI, adminDeleteVideoAPI } from "@leaf/apis";
 import { NTable, NButton, NCard, NTime, NPagination, useNotification } from 'naive-ui';
-import { statusCode } from '@leaf/utils';
+import { getResourceUrl, statusCode } from '@leaf/utils';
 
 
 const notification = useNotification();//通知

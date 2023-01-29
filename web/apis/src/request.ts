@@ -3,10 +3,10 @@ import type { AxiosInstance } from "axios";
 import { getAccessToken } from "./api/token";
 import { globalConfig as config, storageData as storage, statusCode } from "@leaf/utils";
 
-const baseURL = `${config.https ? 'https' : 'http'}://${config.domain}/api/`;
+const baseURL = config.domain ? `http${config.https ? 's' : ''}://${config.domain}` : '';
 
 const service: AxiosInstance = axios.create({
-    baseURL: baseURL,
+    baseURL: `${baseURL}/api/`,
     timeout: 5000,
     headers: {},
 });

@@ -5,7 +5,7 @@
             <div v-if="loadingContent" class="content-left">
                 <div class="card-item" v-for="(item, index) in videoList" :key="index">
                     <div class="card-left">
-                        <img v-if="item.cover" :src="item.cover" alt="收藏夹封面">
+                        <img v-if="item.cover" :src="getResourceUrl(item.cover)" alt="收藏夹封面">
                         <div class="card-no-cover" v-else>
                             <img src="@/assets/collection.png" alt="默认封面">
                         </div>
@@ -30,7 +30,7 @@
             </div>
             <div v-if="loadingInfo" class="content-right">
                 <div class="cover">
-                    <img v-if="collection?.cover" :src="collection.cover" alt="视频封面">
+                    <img v-if="collection?.cover" :src="getResourceUrl(collection.cover)" alt="视频封面">
                     <div class="no-cover" v-else>
                         <img src="@/assets/collection.png" alt="默认封面">
                     </div>
@@ -56,7 +56,7 @@ import { onBeforeMount, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import HeaderBar from '@/components/header-bar/Index.vue';
 import { Delete } from '@leaf/icons';
-import { statusCode, storageData } from '@leaf/utils';
+import { getResourceUrl, statusCode, storageData } from '@leaf/utils';
 import type { UserInfoType, CollectionInfoType, VideoType } from '@leaf/apis';
 import { getCollectionInfoAPI, getCollectVideoAPI, collectAPI } from '@leaf/apis';
 import { NTime, NIcon, NPagination, NEmpty, useNotification } from 'naive-ui';

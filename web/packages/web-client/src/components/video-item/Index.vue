@@ -1,7 +1,7 @@
 <template>
     <div class="video-item" :style="initTheme()">
         <div class="img" @click="goVideo(info.vid)">
-            <img :src="info.cover" alt="封面" />
+            <img :src="getResourceUrl(info.cover)" alt="封面" />
         </div>
         <div class="video-info">
             <span v-if="!props.keywords" class="title" @click="goVideo(info.vid)">{{ info.title }}</span>
@@ -26,6 +26,7 @@ import { NTime } from 'naive-ui';
 import { CommonAvatar } from '@leaf/components';
 import { getTheme } from '@/theme';
 import { useRouter } from 'vue-router';
+import { getResourceUrl } from '@leaf/utils';
 
 const props = defineProps<{
     info: VideoType,
