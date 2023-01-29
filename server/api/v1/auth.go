@@ -60,7 +60,7 @@ func Register(ctx *gin.Context) {
 	cache.DelEmailCode(user.Email)
 
 	// 返回
-	resp.OK(ctx, "注册成功", nil)
+	resp.OK(ctx, "ok", nil)
 }
 
 func Login(ctx *gin.Context) {
@@ -135,7 +135,7 @@ func Login(ctx *gin.Context) {
 	cache.SetRefreshToken(user.ID, refreshToken)
 
 	// 返回给前端
-	resp.OK(ctx, "", gin.H{"access_token": accessToken, "refresh_token": refreshToken})
+	resp.OK(ctx, "ok", gin.H{"access_token": accessToken, "refresh_token": refreshToken})
 }
 
 // 邮箱登录
@@ -201,11 +201,11 @@ func EmailLogin(ctx *gin.Context) {
 	cache.SetRefreshToken(user.ID, refreshToken)
 
 	// 返回给前端
-	resp.OK(ctx, "", gin.H{"access_token": accessToken, "refresh_token": refreshToken})
+	resp.OK(ctx, "ok", gin.H{"access_token": accessToken, "refresh_token": refreshToken})
 }
 
 // 检查 accessToken
 func RefreshAccessToken(ctx *gin.Context) {
 	//如果refreshToken不过期会在中间件阶段返回accessToken
-	resp.OK(ctx, "", nil)
+	resp.OK(ctx, "ok", nil)
 }

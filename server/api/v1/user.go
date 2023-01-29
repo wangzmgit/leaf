@@ -16,7 +16,7 @@ func GetUserInfo(ctx *gin.Context) {
 	userId := ctx.GetUint("userId")
 	userInfo := service.GetUserInfo(userId)
 
-	resp.OK(ctx, "", gin.H{"user_info": vo.ToUserVO(userInfo)})
+	resp.OK(ctx, "", gin.H{"user_info": vo.ToUserVO(userInfo, true)})
 }
 
 func ModifyUserInfo(ctx *gin.Context) {
@@ -129,7 +129,7 @@ func ResetPwdCheck(ctx *gin.Context) {
 	cache.SetResetPwdCheckStatus(email, 1)
 
 	// 返回给前端
-	resp.OK(ctx, "", nil)
+	resp.OK(ctx, "ok", nil)
 }
 
 // 修改密码
@@ -174,7 +174,7 @@ func ModifyPwd(ctx *gin.Context) {
 	cache.DelResetPwdCheckStatus(modifyDTO.Email)
 
 	// 返回给前端
-	resp.OK(ctx, "", nil)
+	resp.OK(ctx, "ok", nil)
 }
 
 // 管理员获取用户信息

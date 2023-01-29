@@ -24,7 +24,7 @@ func GetPartitionList(ctx *gin.Context) {
 	}
 
 	// 返回给前端
-	resp.OK(ctx, "", gin.H{"partitions": partitions})
+	resp.OK(ctx, "ok", gin.H{"partitions": partitions})
 }
 
 // 添加分区
@@ -57,7 +57,7 @@ func AddPartition(ctx *gin.Context) {
 	cache.SetPartition(vo.ToPartitionVo(service.SelectPartition()))
 
 	// 返回给前端
-	resp.OK(ctx, "", nil)
+	resp.OK(ctx, "ok", nil)
 }
 
 // 删除分区
@@ -76,5 +76,5 @@ func DeletePartition(ctx *gin.Context) {
 	cache.DelPartition()
 
 	// 返回给前端
-	resp.OK(ctx, "", nil)
+	resp.OK(ctx, "ok", nil)
 }

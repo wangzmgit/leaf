@@ -118,5 +118,5 @@ func GetCollectionInfo(ctx *gin.Context) {
 	user := service.GetUserInfo(collection.Uid)
 
 	// 返回给前端
-	resp.OK(ctx, "ok", gin.H{"collection": vo.CollectionToVo(collection), "author": vo.ToUserVO(user)})
+	resp.OK(ctx, "ok", gin.H{"collection": vo.CollectionToVo(collection), "author": vo.ToBaseUserVO(user)})
 }

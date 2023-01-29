@@ -31,7 +31,7 @@ func GetSliderCaptcha(ctx *gin.Context) {
 	}
 	// 保存x坐标到缓存
 	cache.SetSliderX(email, x)
-	resp.OK(ctx, "滑块验证通过", gin.H{"slider_captcha": vo.CaptchaVO{
+	resp.OK(ctx, "ok", gin.H{"slider_captcha": vo.CaptchaVO{
 		BgImg:     bg,
 		SliderImg: slider,
 		Y:         y,
@@ -54,10 +54,10 @@ func ValidateSlider(ctx *gin.Context) {
 	//与用户拖动位置对比
 	if validateSliderDTO.X > x-3 && validateSliderDTO.X < x+3 {
 		cache.SetCaptchaStatus(validateSliderDTO.Email, 1)
-		resp.OK(ctx, "滑块验证通过", nil)
+		resp.OK(ctx, "ok", nil)
 		return
 	}
 
-	resp.Response(ctx, resp.RequestParamError, "", nil)
 	zap.L().Error("滑块验证失败")
+	resp.Response(ctx, resp.RequestParamError, "", nil)
 }

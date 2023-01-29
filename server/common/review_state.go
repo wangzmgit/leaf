@@ -18,7 +18,7 @@ const (
 	// 视频信息存在问题
 	WRONG_VIDEO_INFO = 2100
 	// 视频内容存在问题
-	WRONG_VIDEO_Content = 2200
+	WRONG_VIDEO_CONTENT = 2200
 	// 视频处理失败
 	PROCESSING_FAIL = 2300
 )
