@@ -14,13 +14,13 @@ jobs:
         node-version: [16.x]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       # 生成静态文件
       - name: Build
-        run: npm install && npm run docs:build
+        run: cd docs && npm install && npm run docs:build
 
       - name: Deploy
         uses: crazy-max/ghaction-github-pages@v3
