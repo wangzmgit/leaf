@@ -179,6 +179,11 @@ func EmailLogin(ctx *gin.Context) {
 
 	// 读取数据库
 	user := service.SelectUserByEmail(loginDTO.Email)
+	if user.ID == 0 {
+		resp.Response(ctx, resp.UserNotExistError, "", nil)
+		zap.L().Error("用户不存在")
+		return
+	}
 
 	// 生成验证token
 	var err error

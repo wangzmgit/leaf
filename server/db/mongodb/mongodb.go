@@ -20,7 +20,7 @@ func Init() {
 		viper.GetString("mongo.password"),
 		viper.GetString("mongo.host"),
 		viper.GetString("mongo.port"),
-		viper.GetString("mongo.datasource"),
+		viper.GetString("mongo.param"),
 	)
 
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
