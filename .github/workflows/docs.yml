@@ -2,12 +2,12 @@ name: docs
 
 on:
   push:
-    branches: { master }
+    branches: [master]
   workflow_dispatch:
 
 jobs:
   docs:
-    runs-on: ubnutu-latest
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -28,5 +28,4 @@ jobs:
           target_branch: gh-pages
           build_dir: docs/.vitepress/dist
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
