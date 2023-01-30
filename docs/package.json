@@ -1,0 +1,16 @@
+{
+  "name": "leaf-docs",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:serve": "vitepress serve"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.3",
+    "vite": "^4.0.0",
+    "vitepress": "^1.0.0-alpha.40"
+  }
+}

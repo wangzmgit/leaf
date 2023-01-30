@@ -1,0 +1,32 @@
+name: docs
+
+on:
+  push:
+    branches: { master }
+  workflow_dispatch:
+
+jobs:
+  docs:
+    runs-on: ubnutu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # 生成静态文件
+      - name: Build
+        run: npm install && npm run docs:build
+
+      - name: Deploy
+        uses: crazy-max/ghaction-github-pages@v3
+        with:
+          target_branch: gh-pages
+          build_dir: docs/.vitepress/dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+
