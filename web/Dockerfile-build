@@ -1,0 +1,45 @@
+# node镜像
+FROM node:latest as build-stage
+
+WORKDIR /web
+COPY . .
+
+# 设置淘宝npm镜像
+RUN npm config set registry https://registry.npm.taobao.org 
+# 安装pnpm
+RUN npm install -g pnpm
+# 安装依赖
+RUN pnpm install
+
+# 打包PC端网页
+WORKDIR /web/packages/web-client 
+RUN pnpm run build 
+
+# 打包后台管理端网页
+WORKDIR /web/packages/manage-client
+RUN pnpm run build 
+
+# 打包移动端网页
+WORKDIR /web/packages/mobile-client
+RUN pnpm run build 
+
+# nginx镜像
+FROM nginx:1.23.3-alpine as production-stage
+
+# 移除nginx容器的default.conf文件、nginx配置文件
+RUN rm /etc/nginx/conf.d/default.conf
+RUN rm /etc/nginx/nginx.conf
+
+# 把主机的nginx.conf文件复制到nginx容器的/etc/nginx文件夹下
+COPY ./nginx.conf /etc/nginx/
+
+# 拷贝前端vue项目打包后生成的文件到nginx下运行
+COPY --from=build-stage /web/packages/web-client/web /usr/share/nginx/html/web
+COPY --from=build-stage /web/packages/manage-client/manage /usr/share/nginx/html/manage
+COPY --from=build-stage /web/packages/mobile-client/mobile /usr/share/nginx/html/mobile
+
+# 暴露9090端口
+EXPOSE 9090
+
+# 使用daemon off的方式将nginx运行在前台保证镜像不至于退出
+CMD ["nginx", "-g", "daemon off;"]
