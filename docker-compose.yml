@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+  #MySQL
+  mysql:
+    image: mysql:8.0.31
+    container_name: leaf-mysql
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: LeafRoot123 # root密码(修改要同时修改data/mysql/init/init.sql中的密码)
+      MYSQL_DATABASE: leaf
+    restart: on-failure
+    volumes:
+      - ./data/mysql/db:/var/lib/mysql
+      - ./data/mysql/init:/docker-entrypoint-initdb.d/
+    ports:
+      - '3307:3306'
+    command:
+      # 将mysql8.0默认密码策略 修改为 原先 策略 (mysql8.0对其默认策略做了更改 会导致密码无法匹配)
+      --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --explicit_defaults_for_timestamp=true --lower_case_table_names=1
+
+  #Redis
+  redis:
+    image: redis
+    container_name: leaf-redis
+    command: redis-server --requirepass LeafRedis123 # requirepass后为密码(可修改)
+    ports:
+      - "6380:6379"
+    volumes:
+      - ./data/redis:/data
+
+  #MongoDB
+  mongodb:
+    image: mongo:latest
+    container_name: leaf-mongodb
+    restart: always
+    volumes:
+      - ./data/mongo/db:/data/db
+      - ./data/mongo/logs:/var/log/mongodb
+    ports:
+      - 27018:27017
+    environment:
+      MONGO_INITDB_DATABASE: leaf
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: LeafMongo123 # MongoDB密码(可修改)
+  # 后端
+  api:
+    container_name: leaf-api
+    restart: always
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    working_dir: /server
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      # 挂载文件
+      - ./data/upload:/server/upload
+      - ./data/logs/:/server/logs
+      - ./data/config:/server/config
+    ports:
+      # 映射端口
+      - "9000:9000"
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
