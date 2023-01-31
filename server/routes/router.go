@@ -62,7 +62,7 @@ func CollectRoutes(r *gin.Engine) *gin.Engine {
 	}
 
 	//获取静态文件
-	r.StaticFS("/api/img", http.Dir("./upload/image"))
+	r.StaticFS("/api/image", http.Dir("./upload/image"))
 	r.StaticFS("/api/video", http.Dir("./upload/video"))
 
 	return r
