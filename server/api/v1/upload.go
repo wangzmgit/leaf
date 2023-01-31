@@ -46,7 +46,7 @@ func UploadImg(ctx *gin.Context) {
 		return
 	}
 
-	url, err := service.GenerateFileUrl("img/" + fileName)
+	url, err := service.GenerateFileUrl("image/" + fileName)
 	if err != nil {
 		resp.Response(ctx, resp.Error, "文件保存失败", nil)
 		zap.L().Error("生成url失败")
