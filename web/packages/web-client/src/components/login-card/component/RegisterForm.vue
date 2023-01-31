@@ -10,7 +10,7 @@
                     <n-form-item :label="t('common.pwd')" path="password">
                         <n-input :placeholder="t('input.pwd')" type="password" v-model:value="registerForm.password" />
                     </n-form-item>
-                    <n-form-item :label="t('common.code')" path="emailcode">
+                    <n-form-item :label="t('common.code')" path="code">
                         <n-input :placeholder="t('input.code')" v-model:value="registerForm.code" />
                         <n-button :disabled="disabledSend" @click="beforeSendCode">{{ sendBtnText }}</n-button>
                     </n-form-item>
@@ -63,7 +63,7 @@ const rules: FormRules = {
         { type: "email", message: "请输入正确的邮箱地址", trigger: ['blur', 'input'] },
     ],
     password: { required: true, message: '请输入密码', trigger: ['blur', 'input'] },
-    emailcode: { required: true, message: '请输入验证码', trigger: ['blur', 'input'] },
+    code: { required: true, message: '请输入验证码', trigger: ['blur', 'input'] },
 }
 
 //发送验证码相关
