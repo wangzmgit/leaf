@@ -37,7 +37,7 @@ export default defineConfig({
             copyright: 'Copyright © 2020-2022'
         },
         nav: [
-            { text: '项目指南', link: '/guide/docker', activeMatch: '/guide/docker' },
+            { text: '项目指南', link: '/guide/', activeMatch: '/guide/' },
             { text: '接口文档', link: '/api/', activeMatch: '/api/' },
             // { text: '赞助', link: '/other/donate' }
         ],
@@ -46,6 +46,10 @@ export default defineConfig({
                 {
                     text: '项目指南',
                     items: [
+                        {
+                            text: '开始',
+                            link: '/guide/'
+                        },
                         {
                             text: 'Docker部署',
                             link: '/guide/docker'
@@ -57,6 +61,10 @@ export default defineConfig({
                         {
                             text: '域名配置',
                             link: '/guide/domain'
+                        },
+                        {
+                            text: '常见问题解答',
+                            link: '/guide/qa'
                         }
                     ]
                 }

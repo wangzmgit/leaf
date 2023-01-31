@@ -2,7 +2,7 @@ name: docs
 
 on:
   push:
-    branches: [master]
+    branches: [doc]
   workflow_dispatch:
 
 jobs:
