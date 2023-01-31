@@ -10,7 +10,7 @@ hero:
   actions:
     - theme: brand
       text: 开始
-      link: /guide/docker
+      link: /guide/
     - theme: alt
       text: 在 GitHub 上查看
       link: https://github.com/wangzmgit/leaf/
