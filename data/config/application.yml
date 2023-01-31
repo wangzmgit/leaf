@@ -19,7 +19,7 @@ mail:
 mongo:
   datasource: leaf
   host: mongodb
-  param: "?authSource=admin"
+  param: authSource=admin
   # mongodb密码（修改要同时修改docker-compose.yml中对应的密码）
   password: LeafMongo123
   port: 27017
