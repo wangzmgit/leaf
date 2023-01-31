@@ -26,10 +26,11 @@ export default function useSendCode() {
                         sendBtnText.value = i18n.global.t('code.sendCode');
                         return;
                     }
-                    sendBtnText.value = `${60 - count}${i18n.global.t('code.second')}`;
+                    sendBtnText.value = `${60 - count}${i18n.global.t('common.second')}`;
                 }, 1000);
             } else {
                 disabledSend.value = false;
+                message.error(res.data.msg);
             }
             return res.data.code;
         } catch {
