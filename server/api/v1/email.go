@@ -45,7 +45,7 @@ func SendRegisterEmailCode(ctx *gin.Context) {
 	} else {
 		if err := mail.SendCaptcha(codeDTO.Email, code); err != nil {
 			resp.Response(ctx, resp.SendMailError, "邮箱验证码发送失败", nil)
-			zap.L().Error("邮箱验证码发送失败")
+			zap.L().Error("邮箱验证码发送失败" + err.Error())
 			return
 		}
 	}

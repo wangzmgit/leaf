@@ -12,7 +12,7 @@ import (
 
 // 上传图片到OSS
 func UploadImgToOss(fileName string) error {
-	objectKey := "img/" + fileName
+	objectKey := "image/" + fileName
 	filePath := "./upload/" + objectKey
 	oss, err := unioss.GetStorage()
 	if err != nil {
