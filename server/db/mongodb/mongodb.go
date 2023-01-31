@@ -15,7 +15,7 @@ var mongoClient *MongoClient
 func Init() {
 	var err error
 
-	uri := fmt.Sprintf("mongodb://%s:%s@%s:%s/%s",
+	uri := fmt.Sprintf("mongodb://%s:%s@%s:%s/?%s",
 		viper.GetString("mongo.username"),
 		viper.GetString("mongo.password"),
 		viper.GetString("mongo.host"),
