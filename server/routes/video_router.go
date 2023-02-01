@@ -50,7 +50,7 @@ func CollectVideoRoutes(r *gin.RouterGroup) {
 			// 管理员搜索视频
 			manage.GET("search", api.AdminSearchVideo)
 			// 管理员删除视频
-			manage.GET("delete", api.AdminDeleteVideo)
+			manage.POST("delete", api.AdminDeleteVideo)
 			// 获取审核列表
 			manage.GET("review/list", api.GetReviewVideoList)
 			// 获取待审核视频资源
