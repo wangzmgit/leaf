@@ -1,7 +1,7 @@
 <template>
     <div class="video-uploader">
-        <n-upload multiple directory-dnd :show-file-list="false" accept="video/mp4" @before-upload="beforeUploadVideo"
-            :custom-request="handleChange">
+        <n-upload :key="uploaderKey" multiple directory-dnd :show-file-list="false" accept="video/mp4"
+            @before-upload="beforeUploadVideo" :custom-request="handleChange">
             <n-upload-dragger>
                 <div v-if="!uploading">
                     <div style="margin-bottom: 12px">
@@ -71,21 +71,23 @@ const handleChange = ({ file }: UploadCustomRequestOptions) => {
         action: `v1/upload/video/${props.vid}`,
         file: file.file,
         onProgress: (val: any) => {
-            changeUpload("uploading", val)
+            changeUpload("uploading", val);
         },
         onError: () => {
-            changeUpload("error")
+            changeUpload("error");
             uploading.value = false;
         },
         onFinish: (data?: any) => {
-            changeUpload("success", data)
+            changeUpload("success", data);
             uploading.value = false;
         },
     })
 }
 
 //上传变化的回调
+const uploaderKey = ref(0);
 const changeUpload = (status: string, data?: any) => {
+    uploaderKey.value = Date.now();
     switch (status) {
         case "success":
             emits("finish");
