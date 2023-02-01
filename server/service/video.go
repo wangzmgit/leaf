@@ -84,7 +84,7 @@ func AdminSelectVideoListByKeywords(keywords string, page, pageSize int) (total 
 
 // 查询点击量高的视频
 func SelectVideoListByClicks(pageSize int) (videos []model.Video) {
-	mysqlClient.Debug().Where("status = ?", common.AUDIT_APPROVED).Limit(pageSize).Order("clicks").Find(&videos)
+	mysqlClient.Debug().Where("status = ?", common.AUDIT_APPROVED).Limit(pageSize).Order("clicks desc").Find(&videos)
 	return
 }
 
