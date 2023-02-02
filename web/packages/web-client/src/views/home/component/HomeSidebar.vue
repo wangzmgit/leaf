@@ -129,10 +129,14 @@ const languages = [
         label: 'english',
         key: 'en-US'
     },
+    {
+        label: '日本語',
+        key: 'ja-JP'
+    }
 ]
 
 // 修改语言
-const selectLanguage = (lang: "zh-CN" | "en-US") => {
+const selectLanguage = (lang: "zh-CN" | "en-US" | "ja-JP") => {
     i18n.global.locale = lang;
     localStorage.setItem('locale',lang);
 }
