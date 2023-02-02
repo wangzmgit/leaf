@@ -39,7 +39,7 @@ export default defineConfig({
         nav: [
             { text: '项目指南', link: '/guide/', activeMatch: '/guide/' },
             { text: '接口文档', link: '/api/', activeMatch: '/api/' },
-            // { text: '赞助', link: '/other/donate' }
+            { text: '赞助', link: '/other/donate' }
         ],
         sidebar: {
             '/guide/': [
@@ -65,6 +65,10 @@ export default defineConfig({
                         {
                             text: '常见问题解答',
                             link: '/guide/qa'
+                        },
+                        {
+                            text: '相关截图',
+                            link: '/guide/screenshot'
                         }
                     ]
                 }
