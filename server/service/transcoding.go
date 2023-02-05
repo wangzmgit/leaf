@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 	"kuukaa.fun/leaf/common"
 	"kuukaa.fun/leaf/util/number"
 	"kuukaa.fun/leaf/util/transcoding"
@@ -42,6 +43,7 @@ func VideoTransCoding(resourceId uint, quality int, dirName string) {
 	// 提取音频
 	audioFile, err := transcoding.ExtractingAudio(inputFile, localDir)
 	if err != nil {
+		zap.L().Error("音频提取失败" + err.Error())
 		completeTransCoding(resourceId, common.PROCESSING_FAIL)
 		return
 	}
@@ -49,6 +51,7 @@ func VideoTransCoding(resourceId uint, quality int, dirName string) {
 	// 生成不同分辨率的MP4
 	videoFiles, err := transcoding.PressingVideo(inputFile, localDir, quality)
 	if err != nil {
+		zap.L().Error("分辨率处理失败" + err.Error())
 		completeTransCoding(resourceId, common.PROCESSING_FAIL)
 		return
 	}
@@ -56,6 +59,7 @@ func VideoTransCoding(resourceId uint, quality int, dirName string) {
 	// 生成dash分片
 	err = transcoding.GenerateDash(videoFiles, audioFile, localDir, dirName)
 	if err != nil {
+		zap.L().Error("分片生成失败" + err.Error())
 		completeTransCoding(resourceId, common.PROCESSING_FAIL)
 		return
 	}
@@ -68,7 +72,9 @@ func VideoTransCoding(resourceId uint, quality int, dirName string) {
 
 	// 上传oss
 	if viper.GetString("oss.type") != "local" {
-		UploadVideoToOss(dirName)
+		if err := UploadVideoToOss(dirName); err != nil {
+			zap.L().Error("视频上传OSS失败" + err.Error())
+		}
 	}
 
 	// 完成转码

@@ -19,7 +19,7 @@ func UploadImg(ctx *gin.Context) {
 	img, err := ctx.FormFile("image")
 	if err != nil {
 		resp.Response(ctx, resp.FileUploadError, "", nil)
-		zap.L().Error("文件上传失败")
+		zap.L().Error("文件上传失败" + err.Error())
 		return
 	}
 
@@ -42,14 +42,14 @@ func UploadImg(ctx *gin.Context) {
 	//保存文件
 	if err := ctx.SaveUploadedFile(img, "./upload/image/"+fileName); err != nil {
 		resp.Response(ctx, resp.Error, "文件保存失败", nil)
-		zap.L().Error("文件保存失败")
+		zap.L().Error("文件保存失败" + err.Error())
 		return
 	}
 
 	url, err := service.GenerateFileUrl("image/" + fileName)
 	if err != nil {
 		resp.Response(ctx, resp.Error, "文件保存失败", nil)
-		zap.L().Error("生成url失败")
+		zap.L().Error("生成url失败" + err.Error())
 		return
 	}
 
@@ -84,7 +84,7 @@ func UploadVideo(ctx *gin.Context) {
 	img, err := ctx.FormFile("video")
 	if err != nil {
 		resp.Response(ctx, resp.FileUploadError, "", nil)
-		zap.L().Error("文件上传失败")
+		zap.L().Error("文件上传失败" + err.Error())
 		return
 	}
 
@@ -114,7 +114,7 @@ func UploadVideo(ctx *gin.Context) {
 
 	if err := os.Mkdir("./upload/video/"+filenameOnly, os.ModePerm); err != nil {
 		resp.Response(ctx, resp.Error, "文件保存失败", nil)
-		zap.L().Error("创建文件夹失败")
+		zap.L().Error("创建视频文件夹失败" + err.Error())
 		return
 	}
 
@@ -122,14 +122,14 @@ func UploadVideo(ctx *gin.Context) {
 	uploadVideoPath := "./upload/video/" + filenameOnly + "/upload.mp4"
 	if err := ctx.SaveUploadedFile(img, uploadVideoPath); err != nil {
 		resp.Response(ctx, resp.Error, "文件保存失败", nil)
-		zap.L().Error("文件保存失败")
+		zap.L().Error("文件保存失败" + err.Error())
 		return
 	}
 
 	quality, duration, err := service.PreTreatmentVideo(uploadVideoPath)
 	if err != nil {
 		resp.Response(ctx, resp.Error, "处理视频失败", nil)
-		zap.L().Error("预处理视频失败")
+		zap.L().Error("预处理视频失败" + err.Error())
 		return
 	}
 
@@ -137,7 +137,7 @@ func UploadVideo(ctx *gin.Context) {
 	url, err := service.GenerateFileUrl("video/" + filenameOnly + "/index.mpd")
 	if err != nil {
 		resp.Response(ctx, resp.Error, "文件保存失败", nil)
-		zap.L().Error("生成url失败")
+		zap.L().Error("生成url失败" + err.Error())
 		return
 	}
 
