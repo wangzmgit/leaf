@@ -44,18 +44,21 @@ service.interceptors.request.use((config) => {
 
 //响应拦截器
 service.interceptors.response.use((res) => {
-    return res;
-}, (error) => {
     // token 过期
-    if (error.response.data.code === statusCode.TOKEN_EXPRIED) {
-        return getAccessToken().then((res) => {
-            const token = res.data.data.token;
-            storage.set("access_token", token, 5);
-            error.config.headers.Authorization = `Bearer ${token}`;
-            return service(error.config)
+    if (res.data.code === statusCode.TOKEN_EXPRIED) {
+        return new Promise((_resolve, _reject) => {
+            getAccessToken().then((res) => {
+                const token = res.data.data.token;
+                storage.set("access_token", token, 5);
+                if (res.config.headers) {
+                    res.config.headers.Authorization = token;
+                }
+                service.request(res.config);
+            })
         })
     }
-
+    return Promise.resolve(res);
+}, (error) => {
     return Promise.reject(error);
 });
 
