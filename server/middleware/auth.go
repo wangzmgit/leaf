@@ -43,12 +43,12 @@ func Auth() gin.HandlerFunc {
 				// 刷新accessToken 和 refreshToken
 				zap.L().Info("token过期")
 				resp.Response(ctx, resp.TokenExpriedError, "", nil)
+				ctx.Abort()
 				return
 			}
 		} else if claims.TokenType == 1 { // refreshToken
 			// 读取缓存
-			refreshToken := cache.GetRefreshToken(claims.UserId)
-			if refreshToken == tokenString { // refreshToken 未过期
+			if cache.IsRefreshTokenExist(claims.UserId, tokenString) { // refreshToken 存在
 				// 刷新accessToken
 				refreshAccessToken(ctx, claims.UserId)
 				return
@@ -91,17 +91,15 @@ func WsAuth() gin.HandlerFunc {
 }
 
 func refreshAccessToken(ctx *gin.Context, id uint) {
-	// 生成验证token
 	var err error
 	var accessToken string
-	if accessToken, err = jwt.GenerateAccessToken(id); err != nil {
+
+	// 生成验证token
+	if accessToken, err = service.GenerateAccessToken(id); err != nil {
 		resp.Response(ctx, resp.Error, "验证token生成失败", nil)
 		zap.L().Error("验证token生成失败")
 		return
 	}
-
-	// 存入缓存
-	cache.SetAccessToken(id, accessToken)
 
 	// 返回给前端
 	resp.OK(ctx, "ok", gin.H{"token": accessToken})

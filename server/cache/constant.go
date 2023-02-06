@@ -30,6 +30,9 @@ const VIDEO_KEY = "video_key:"
 // 视频信息过期时间 n 小时
 const VIDEO_EXPIRATION_TIME = 24
 
+// 最大登录数量
+const MAX_LOGIN_LIMIT = 3
+
 // 验证token缓存标识符
 const ACCESS_TOKEN_KEY = "access_token_key:"
 
