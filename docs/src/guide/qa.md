@@ -16,3 +16,40 @@
 | 480p   | 854x480    | 30       | 800kbps      |
 | 360p   | 640x360    | 30       | 500kbps      |
 
+
+## 修改网站配色
+找到主题文件
+- web端 `web\packages\web-client\src\theme\index.ts`
+- 移动端 `web\packages\mobile-client\src\theme\index.ts`
+- 后台管理端 `web\packages\manage-client\src\theme\index.ts`
+
+修改以下颜色并重新打包
+```js
+const defaultTheme: Theme = {
+    primaryColor: "#ffc90c",
+    primaryHoverColor: "#f8df72" 
+}
+```
+
+## 修改后台管理路径
+后台管理默认`/manage/`,如需修改须按照以下步骤：
+1. 打开`web\packages\manage-client\vite.config.ts`，修改`base`为想要的路径，
+（像`/manage`前面有`/`后面没有`/`），修改`build.outDir`，需要与`base`相对应（没有`/`）
+2. 配置nginx时，找到以下部分内容，并将`manage`替换掉。
+```
+location /manage/ { 
+    root /usr/share/nginx/html;
+    index index.html index.htm;
+    try_files $uri $uri/ @manage;
+}
+
+# 解决后台管理history路由问题
+location @manage {
+    rewrite ^.*$ /manage/index.html;
+}
+```
+
+## 修改最大登录设备限制
+
+打开`server\cache\constant.go`，修改`MAX_LOGIN_LIMIT`即可。
+
