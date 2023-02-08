@@ -9,7 +9,7 @@ RUN rm /etc/nginx/nginx.conf
 COPY ./nginx.conf /etc/nginx/
 
 # 拷贝前端vue项目打包后生成的文件到nginx下运行
-COPY web/dist /usr/share/nginx/html
+COPY dist /usr/share/nginx/html
 
 
 # 暴露9090端口
