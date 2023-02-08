@@ -17,8 +17,8 @@ export const modifyVideoInfoAPI = (modifyVideo: ModifyVideoType) => {
 }
 
 //获取视频信息
-export const getVideoInfoAPI = (vid: number) => {
-    return request.get(`v1/video/get?vid=${vid}`);
+export const getVideoInfoAPI = (vid: number, ios: number = 0) => {
+    return request.get(`v1/video/get?vid=${vid}&ios=${ios}`);
 }
 
 //获取视频列表

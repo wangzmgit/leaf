@@ -3,8 +3,10 @@
         <header-bar class="header-bar"></header-bar>
         <div class="video-main">
             <div v-if="!loading" class="video-player">
-                <video-player :vid="vid" :part="part" :resources="resources" :mobile="true"
+                <video-player v-if="ios === 0" :vid="vid" :part="part" :resources="resources" :mobile="true"
                     :theme="theme.primaryColor"></video-player>
+                <ios-video-player class="ios" v-else :vid="vid" :resources="resources" :theme="theme.primaryColor"
+                    :part="part"></ios-video-player>
                 <!-- 视频信息 -->
                 <div class="video-info">
                     <div class="title-wrapper">
@@ -57,7 +59,7 @@ import { onBeforeMount, ref } from 'vue';
 import CommentList from './component/CommentList.vue';
 import PartList from './component/PartList.vue';
 import HeaderBar from '@/components/header-bar/Index.vue';
-import { CommonAvatar, VideoPlayer } from '@leaf/components';
+import { CommonAvatar, VideoPlayer, IosVideoPlayer } from '@leaf/components';
 import { Forbid, ArrowDown, ArrowUp } from "@leaf/icons";
 import { globalConfig, statusCode } from '@leaf/utils';
 import type { VideoType } from '@leaf/apis';
@@ -68,6 +70,7 @@ const router = useRouter();
 const theme = getTheme();
 const vid = parseInt(route.params.vid.toString());
 
+const ios = ref(navigator.userAgent.includes("iPhone") ? 1 : 0);
 const part = ref(1);//当前分集
 const fold = ref(true);//折叠
 
@@ -83,8 +86,8 @@ const initTheme = () => {
 const loading = ref(true);
 const resources = ref([]);
 const videoInfo = ref<VideoType | null>(null);
-const getVideoInfo = (vid: number) => {
-    getVideoInfoAPI(vid).then((res) => {
+const getVideoInfo = (vid: number, ios: number) => {
+    getVideoInfoAPI(vid, ios).then((res) => {
         if (res.data.code === statusCode.OK) {
             videoInfo.value = res.data.data.video;
             resources.value = res.data.data.video.resources;
@@ -108,7 +111,7 @@ const changePart = (target: number) => {
 }
 
 onBeforeMount(() => {
-    getVideoInfo(vid);
+    getVideoInfo(vid, ios.value);
     if (route.query.p) {
         part.value = Number(route.query.p);
     }
