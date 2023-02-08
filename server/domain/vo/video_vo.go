@@ -3,6 +3,7 @@ package vo
 import (
 	"time"
 
+	"github.com/spf13/viper"
 	"kuukaa.fun/leaf/domain/model"
 )
 
@@ -83,7 +84,14 @@ func ToVideoStatusVO(video model.Video, resources []model.Resource) VideoStatusV
 	}
 }
 
-func ToVideoVO(video model.Video, resource []model.Resource) VideoVO {
+func ToVideoVO(video model.Video, resource []model.Resource, ios uint) VideoVO {
+
+	// 处理视频资源地址
+	if ios == 1 && viper.GetBool("file.video_adaptation_ios") {
+		for i := 0; i < len(resource); i++ {
+			resource[i].Url = resource[i].OriginalUrl
+		}
+	}
 
 	return VideoVO{
 		ID:        video.ID,

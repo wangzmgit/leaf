@@ -118,7 +118,7 @@ func Login(ctx *gin.Context) {
 	var err error
 	var accessToken string
 	var refreshToken string
-	if accessToken, err = jwt.GenerateAccessToken(user.ID); err != nil {
+	if accessToken, err = service.GenerateAccessToken(user.ID); err != nil {
 		resp.Response(ctx, resp.Error, "验证token生成失败", nil)
 		zap.L().Error("验证token生成失败")
 		return
@@ -189,7 +189,7 @@ func EmailLogin(ctx *gin.Context) {
 	var err error
 	var accessToken string
 	var refreshToken string
-	if accessToken, err = jwt.GenerateAccessToken(user.ID); err != nil {
+	if accessToken, err = service.GenerateAccessToken(user.ID); err != nil {
 		resp.Response(ctx, resp.Error, "验证token生成失败", nil)
 		zap.L().Error("验证token生成失败")
 		return

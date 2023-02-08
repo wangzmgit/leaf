@@ -141,8 +141,14 @@ func UploadVideo(ctx *gin.Context) {
 		return
 	}
 
+	// 生成原始文件的url
+	originalUrl := "video/" + filenameOnly + "/upload.mp4"
+	if viper.GetBool("file.video_adaptation_ios") {
+		originalUrl, _ = service.GenerateFileUrl(originalUrl)
+	}
+
 	// 存入数据库
-	resource := dto.ResourceDtoToResource(vid, userId, quality, duration, url)
+	resource := dto.ResourceDtoToResource(vid, userId, quality, duration, url, originalUrl)
 	rid := service.InsertResource(resource)
 
 	// 启动转码服务
