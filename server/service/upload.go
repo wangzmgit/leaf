@@ -34,11 +34,13 @@ func UploadVideoToOss(dirName string) error {
 	}
 
 	for _, f := range files {
-		if f.Name() != "upload.mp4" {
-			objectKey := "video/" + dirName + "/" + f.Name()
-			filePath := "./upload/" + objectKey
-			oss.PutObjectFromFile(objectKey, filePath)
+		if f.Name() == "upload.mp4" && !viper.GetBool("file.video_adaptation_ios") {
+			continue
 		}
+
+		objectKey := "video/" + dirName + "/" + f.Name()
+		filePath := "./upload/" + objectKey
+		oss.PutObjectFromFile(objectKey, filePath)
 	}
 
 	return nil

@@ -109,6 +109,7 @@ func GetVideoStatus(ctx *gin.Context) {
 
 // 获取视频信息
 func GetVideoByID(ctx *gin.Context) {
+	ios := convert.StringToUint(ctx.DefaultQuery("ios", "0"))
 	vid := convert.StringToUint(ctx.DefaultQuery("vid", "0"))
 
 	video := service.GetVideoInfo(vid)
@@ -131,7 +132,7 @@ func GetVideoByID(ctx *gin.Context) {
 	video.Clicks = service.GetVideoClicks(video.ID)
 
 	// 返回给前端
-	resp.OK(ctx, "ok", gin.H{"video": vo.ToVideoVO(video, resources)})
+	resp.OK(ctx, "ok", gin.H{"video": vo.ToVideoVO(video, resources, ios)})
 }
 
 // 提交审核
