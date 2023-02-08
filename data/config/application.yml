@@ -6,7 +6,7 @@ log:
   max-age: 30
   max-backups: 60
   max-size: 200
-  mode: dev
+  mode: prod
 mail:
   addresser: 网站管理员
   debug: false
