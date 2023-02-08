@@ -1,6 +1,8 @@
 file:
   max_img_size: 5
   max_video_size: 500
+  # 是否兼容IOS下视频播放（如果true，在IPhone中会使用mp4视频）
+  video_adaptation_ios: false
 log:
   filename: ./logs/app.log
   max-age: 30
