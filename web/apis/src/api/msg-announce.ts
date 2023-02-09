@@ -6,6 +6,11 @@ export const getAnnounceAPI = (page: number, page_size: number) => {
     return request.get(`v1/message/announce/get?page=${page}&page_size=${page_size}`);
 }
 
+//获取最新重要公告
+export const getImportantAnnounceAPI = () => {
+    return request.get('v1/message/announce/important/get');
+}
+
 //添加公告
 export const addAnnounceAPI = (addAnnounce: AddAnnounceType) => {
     return request.post('v1/message/announce/add', addAnnounce);
