@@ -15,6 +15,18 @@ type AnnounceVO struct {
 	Important bool      `json:"important"`
 }
 
+func ToAnnounceVO(announce model.Announce) AnnounceVO {
+
+	return AnnounceVO{
+		ID:        announce.ID,
+		Title:     announce.Title,
+		Content:   announce.Content,
+		Url:       announce.Url,
+		CreatedAt: announce.CreatedAt,
+		Important: announce.Important,
+	}
+}
+
 func ToAnnounceVoList(announces []model.Announce) []AnnounceVO {
 	length := len(announces)
 	newAnnounces := make([]AnnounceVO, length)

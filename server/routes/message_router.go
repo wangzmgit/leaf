@@ -12,8 +12,10 @@ func CollectMessageRoutes(r *gin.RouterGroup) {
 		// 公告
 		announce := message.Group("announce")
 		{
-			// 获取点赞收藏数据
+			// 获取公告
 			announce.GET("get", api.GetAnnounce)
+			// 获取最新重要公告
+			announce.GET("important/get", api.GetImportantAnnounce)
 
 			//需要用户登录
 			announceAuth := announce.Group("")
