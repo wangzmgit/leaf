@@ -19,3 +19,9 @@ func SelectAnnounce(page, pageSize int) (total int64, announces []model.Announce
 	mysqlClient.Limit(pageSize).Offset((page - 1) * pageSize).Find(&announces)
 	return
 }
+
+// 查询一条重要公告
+func SelectImportantAnnounce() (announce model.Announce) {
+	mysqlClient.Model(&model.Announce{}).Last(&announce)
+	return
+}

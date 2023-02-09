@@ -28,6 +28,14 @@ func GetAnnounce(ctx *gin.Context) {
 	resp.OK(ctx, "ok", gin.H{"total": total, "announces": vo.ToAnnounceVoList(announces)})
 }
 
+// 获取重要公告
+func GetImportantAnnounce(ctx *gin.Context) {
+	announce := service.SelectImportantAnnounce()
+
+	// 返回给前端
+	resp.OK(ctx, "ok", gin.H{"announce": vo.ToAnnounceVO(announce)})
+}
+
 // 添加公告
 func AddAnnounce(ctx *gin.Context) {
 	//获取参数
