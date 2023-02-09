@@ -1,10 +1,12 @@
 <template>
     <n-config-provider :theme-overrides="themeOverrides" :locale="zhCN" :date-locale="dateZhCN">
-        <n-notification-provider>
-            <n-message-provider>
-                <router-view></router-view>
-            </n-message-provider>
-        </n-notification-provider>
+        <n-dialog-provider>
+            <n-notification-provider>
+                <n-message-provider>
+                    <router-view></router-view>
+                </n-message-provider>
+            </n-notification-provider>
+        </n-dialog-provider>
     </n-config-provider>
 </template>
 
@@ -12,7 +14,7 @@
 import { getTheme } from "./theme";
 import { zhCN, dateZhCN } from "naive-ui";
 import type { GlobalThemeOverrides } from 'naive-ui';
-import { NNotificationProvider, NConfigProvider, NMessageProvider } from 'naive-ui';
+import { NNotificationProvider, NConfigProvider, NMessageProvider, NDialogProvider } from 'naive-ui';
 
 const theme = getTheme();
 

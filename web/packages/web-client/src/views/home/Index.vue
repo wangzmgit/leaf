@@ -23,11 +23,13 @@ import { getTheme } from '@/theme';
 import HomeSidebar from './component/HomeSidebar.vue';
 import HomeHeader from "./component/HomeHeader.vue";
 import HomeCarousel from './component/HomeCarousel.vue';
-import { getRecommendedVideoAPI, type VideoType } from "@leaf/apis";
+import type { AnnounceType, VideoType } from "@leaf/apis";
+import { getImportantAnnounceAPI, getRecommendedVideoAPI } from "@leaf/apis";
 import VideoItem from '@/components/video-item/Index.vue';
 import { globalConfig, statusCode } from '@leaf/utils';
+import { useDialog } from 'naive-ui';
 
-
+const dialog = useDialog();
 const menuFold = ref(false);
 const changeMenuFold = (val: boolean) => {
     menuFold.value = val;
@@ -52,6 +54,21 @@ const getRecommendedVideo = () => {
 
 onBeforeMount(() => {
     getRecommendedVideo();
+    getImportantAnnounceAPI().then((res) => {
+        if (res.data.code === statusCode.OK) {
+            const announce: AnnounceType = res.data.data.announce;
+            const readAnnounceList: Array<number> = JSON.parse(localStorage.getItem("read_announce_id") || "[]")
+            if (announce.id !== 0 && !readAnnounceList.includes(announce.id)) {
+                readAnnounceList.push(announce.id);
+                localStorage.setItem("read_announce_id", JSON.stringify(readAnnounceList));
+                dialog.info({
+                    title: announce.title,
+                    content: announce.content,
+                    positiveText: '已读',
+                })
+            }
+        }
+    })
 })
 </script>
 
