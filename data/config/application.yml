@@ -1,4 +1,5 @@
 cors:
+  # 建议修改为前端地址(格式：http://example.com)
   allow_origin: '*'
 file:
   max_img_size: 5
