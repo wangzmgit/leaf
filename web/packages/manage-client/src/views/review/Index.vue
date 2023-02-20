@@ -36,6 +36,10 @@
                 </tr>
             </tbody>
         </n-table>
+        <div class="pagination">
+            <n-pagination v-model:page="pagination.current" :item-count="pagination.count"
+                :page-size="pagination.pageSize" @update-page="pageChange" />
+        </div>
     </n-card>
     <n-drawer v-model:show="activeDrawer" :width="502">
         <n-drawer-content title="视频列表">
@@ -50,9 +54,10 @@ import VideoList from './component/VideoList.vue';
 import { statusCode, reviewCode, getResourceUrl } from '@leaf/utils';
 import type { VideoType, PartitionType } from '@leaf/apis';
 import { getReviewListAPI, getResourceListAPI, reviewVideoAPI, getPartitionAPI } from '@leaf/apis';
-import { NTable, NButton, NCard, NTime, NDrawer, NDrawerContent, useMessage } from 'naive-ui';
+import { NTable, NButton, NCard, NTime, NDrawer, NPagination, NDrawerContent, useMessage } from 'naive-ui';
 
 const pagination = reactive({
+    count: 0,
     current: 1,
     pageSize: 8,
 })
@@ -63,11 +68,18 @@ const message = useMessage();//通知
 const getVideoList = () => {
     getReviewListAPI(pagination.current, pagination.pageSize).then((res) => {
         if (res.data.code === statusCode.OK) {
+            pagination.count = res.data.data.total;
             videos.value = res.data.data.videos;
         }
     }).catch(() => {
         message.error('获取视频列表失败');
     });
+}
+
+//页码改变
+const pageChange = (target: number) => {
+    pagination.current = target;
+    getVideoList();
 }
 
 // 获取分区列表
@@ -152,5 +164,9 @@ onBeforeMount(() => {
             margin: 0 6px;
         }
     }
+}
+
+.pagination {
+    margin-top: 20px;
 }
 </style>
