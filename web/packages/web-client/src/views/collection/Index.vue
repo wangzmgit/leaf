@@ -2,7 +2,7 @@
     <div class="collection" :style="initTheme()" v-title data-title="收藏夹详情">
         <header-bar></header-bar>
         <div class="collection-main">
-            <div v-if="loadingContent" class="content-left">
+            <div class="content-left">
                 <div class="card-item" v-for="(item, index) in videoList" :key="index">
                     <div class="card-left">
                         <img v-if="item.cover" :src="getResourceUrl(item.cover)" alt="收藏夹封面">
@@ -21,12 +21,9 @@
                         </n-icon>
                     </div>
                 </div>
-                <div class="page-box">
+                <div v-if="loadingContent" class="page-box">
                     <n-pagination v-model:page="page" :item-count="count" :page-size="8" @update-page="pageChange" />
                 </div>
-            </div>
-            <div v-else class="content-left">
-                <n-empty description="什么都没有"> </n-empty>
             </div>
             <div v-if="loadingInfo" class="content-right">
                 <div class="cover">
@@ -59,7 +56,7 @@ import { Delete } from '@leaf/icons';
 import { getResourceUrl, statusCode, storageData } from '@leaf/utils';
 import type { UserInfoType, CollectionInfoType, VideoType } from '@leaf/apis';
 import { getCollectionInfoAPI, getCollectVideoAPI, collectAPI } from '@leaf/apis';
-import { NTime, NIcon, NPagination, NEmpty, useNotification } from 'naive-ui';
+import { NTime, NIcon, NPagination, useNotification } from 'naive-ui';
 import { getTheme } from '@/theme';
 
 // i18n
@@ -160,11 +157,13 @@ onBeforeMount(() => {
     bottom: 0;
     position: fixed;
     overflow-y: scroll;
+    background-color: #f5f6f7;
 }
 
 .collection-main {
+    // padding: 20px 20px 16px;
     width: calc(100% - 200px);
-    background: #fff;
+    box-sizing: border-box;
     margin: 20px auto 0 auto;
     display: flex;
     flex-wrap: nowrap;
@@ -172,8 +171,10 @@ onBeforeMount(() => {
 }
 
 .content-left {
+    padding-top: 20px;
     width: calc(100% - 380px);
     min-width: 680px;
+    background: #fff;
 }
 
 .card-item {
@@ -271,6 +272,8 @@ onBeforeMount(() => {
     width: 350px;
     height: 600px;
     min-width: 350px;
+    padding: 10px;
+    background: #fff;
 
     .cover {
         width: 100%;
