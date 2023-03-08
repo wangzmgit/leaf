@@ -12,7 +12,7 @@ import (
 type Claims struct {
 	UserId    uint
 	TokenType uint // 0:accessToken,1:refreshtToken
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 }
 
 /**
@@ -27,10 +27,10 @@ func GenerateAccessToken(id uint) (string, error) {
 	accessClaims := &Claims{
 		UserId:    id,
 		TokenType: 0,
-		StandardClaims: jwt.StandardClaims{
+		RegisteredClaims: jwt.RegisteredClaims{
 			//发放时间等
-			ExpiresAt: expirationTime.Unix(),
-			IssuedAt:  time.Now().Unix(),
+			ExpiresAt: jwt.NewNumericDate(expirationTime),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			Issuer:    "leaf",
 		},
 	}
@@ -50,10 +50,10 @@ func GenerateRefreshToken(id uint) (string, error) {
 	refreshClaims := &Claims{
 		UserId:    id,
 		TokenType: 1,
-		StandardClaims: jwt.StandardClaims{
+		RegisteredClaims: jwt.RegisteredClaims{
 			//发放时间等
-			ExpiresAt: expirationTime.Unix(),
-			IssuedAt:  time.Now().Unix(),
+			ExpiresAt: jwt.NewNumericDate(expirationTime),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			Issuer:    "leaf",
 		},
 	}
@@ -91,9 +91,8 @@ func ParseToken(tokenString string) (*jwt.Token, *Claims, error) {
 		secret = []byte(viper.GetString("security.access_jwt_secret"))
 	} else if claims.TokenType == 1 { // refreshToken
 		secret = []byte(viper.GetString("security.refresh_jwt_secret"))
-	} else {
-
 	}
+
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (i interface{}, e error) {
 		return secret, nil
 	})

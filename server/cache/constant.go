@@ -37,7 +37,7 @@ const MAX_LOGIN_LIMIT = 3
 const ACCESS_TOKEN_KEY = "access_token_key:"
 
 // 验证token过期时间 n 分钟
-const ACCESS_TOKEN_EXPRIRATION_TIME = 5
+const ACCESS_TOKEN_EXPRIRATION_TIME = 60
 
 // 刷新token缓存标识符
 const REFRESH_TOKEN_KEY = "refresh_token_key:"
