@@ -15,14 +15,14 @@ import (
 func main() {
 	// 初始化配置文件
 	initialize.ConfigFiles()
+	// 初始化日志
+	logger.InitLogger()
 	// 初始化滑块验证码生成
 	initialize.Jigsaw()
 	// 初始化OSS
 	initialize.Oss()
 	// 初始化casbin
 	authentication.InitCasbin()
-	// 初始化日志
-	logger.InitLogger()
 	// 初始化mysql
 	mysql.Init()
 	// 初始化数据库表
