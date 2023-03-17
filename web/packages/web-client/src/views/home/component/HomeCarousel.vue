@@ -37,7 +37,7 @@ import type { CarouselType } from "@leaf/apis";
 import { ArrowLeft, ArrowRight } from "@leaf/icons";
 import { nextTick, onBeforeMount, reactive, ref } from 'vue';
 import { getCarouselAPI } from "@leaf/apis";
-import { statusCode,getResourceUrl } from "@leaf/utils";
+import { statusCode, getResourceUrl } from "@leaf/utils";
 
 const data = reactive<{
     carouselCount: number

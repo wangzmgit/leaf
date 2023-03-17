@@ -5,7 +5,7 @@
             <tr>
                 <td>头像</td>
                 <td>
-                    <common-avatar :size="50" :src="userInfo.avatar"></common-avatar>
+                    <common-avatar :size="50" :src="getResourceUrl(userInfo.avatar)"></common-avatar>
                 </td>
             </tr>
             <tr>
@@ -42,7 +42,7 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { NTime } from "naive-ui";
-import { storageData } from "@leaf/utils";
+import { getResourceUrl, storageData } from "@leaf/utils";
 import type { UserInfoType } from "@leaf/apis";
 import { CommonAvatar } from "@leaf/components";
 import HeaderBar from "@/components/header-bar/Index.vue";

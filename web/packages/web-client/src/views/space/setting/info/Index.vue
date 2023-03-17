@@ -3,7 +3,8 @@
         <n-form label-placement="left" label-width="80px">
             <div class="avatar-box">
                 <p class="avatar-label">{{ t("common.avatar") }}:</p>
-                <common-avatar class="avatar" :url="userInfo.avatar" :size="60" @click="avatarClick"></common-avatar>
+                <common-avatar class="avatar" :url="getResourceUrl(userInfo.avatar)" :size="60"
+                    @click="avatarClick"></common-avatar>
             </div>
             <n-form-item label="UID:">
                 <p class="uid form-item">{{ userInfo.uid }}</p>
@@ -40,7 +41,7 @@
 </template>
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { storageData, statusCode } from "@leaf/utils";
+import { storageData, statusCode, getResourceUrl } from "@leaf/utils";
 import { ref, onBeforeMount } from "vue";
 import {
     NForm, NFormItem, NButton, NRadioGroup, NInput,
