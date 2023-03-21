@@ -110,6 +110,19 @@ const menuOptions = [
                 { default: () => '分区管理' }
             ),
         key: "partition",
+    },
+    {
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
+                        name: "Config",
+                    }
+                },
+                { default: () => '网站配置' }
+            ),
+        key: "config",
     }
 ];
 
@@ -127,6 +140,8 @@ const routeNameToKey = () => {
             return "carousel";
         case "Partition":
             return "partition";
+        case "Config":
+            return "config";
         default:
             return "";
     }

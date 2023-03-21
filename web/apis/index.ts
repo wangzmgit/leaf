@@ -55,3 +55,6 @@ export * from "./src/types/danmaku-type";
 
 export * from "./src/api/carousel";
 export * from "./src/types/carousel-type";
+
+export * from "./src/api/config";
+export * from "./src/types/config-type";
