@@ -72,6 +72,13 @@ p, admin, /api/v1/carousel/delete, POST
 p, root, /api/v1/partition/add, POST
 p, root, /api/v1/partition/delete, POST
 
+p, root, /api/v1/config/email/get, GET
+p, root, /api/v1/config/email/set, POST
+p, root, /api/v1/config/storage/get, GET
+p, root, /api/v1/config/storage/set, POST
+p, root, /api/v1/config/other/get, GET
+p, root, /api/v1/config/other/set, POST
+
 g, auditor, user
 g, admin, auditor
 g, root, admin

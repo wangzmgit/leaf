@@ -59,6 +59,8 @@ func CollectRoutes(r *gin.Engine) *gin.Engine {
 		CollectDanmakuRoutes(v1)
 		// 轮播图相关路由
 		CollectCarouselRoutes(v1)
+		// 网站配置相关路由
+		CollectConfigRoutes(v1)
 	}
 
 	//获取静态文件
