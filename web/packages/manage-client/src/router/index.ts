@@ -46,6 +46,12 @@ const router = createRouter({
                     name: 'Carousel',
                     meta: { auth: true },
                     component: () => import("../views/carousel/Index.vue"),
+                },
+                {
+                    path: '/config',
+                    name: 'Config',
+                    meta: { auth: true },
+                    component: () => import("../views/config/Index.vue"),
                 }
             ]
         },
