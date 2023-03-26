@@ -121,10 +121,10 @@ const setStorageConfig = () => {
         case "aliyun":
             msg.push(...checkConfig({ 'endpoint': storageForm.endpoint }));
             break;
-        case "qiniu":
+        case "tencent":
             msg.push(...checkConfig({ 'appId': storageForm.appId, 'region': storageForm.region }));
             break;
-        case "aliyun":
+        case "qiniu":
             msg.push(...checkConfig({ 'domain': storageForm.domain }));
             break;
     }

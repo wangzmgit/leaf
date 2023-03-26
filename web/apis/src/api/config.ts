@@ -1,5 +1,5 @@
 import request from '../request';
-import { EmailConfigType, OtherConfigType, StorageConfigType } from '../types/config-type';
+import type { EmailConfigType, OtherConfigType, StorageConfigType } from '../types/config-type';
 
 //获取其他配置
 export const getOtherConfigAPI = () => {
