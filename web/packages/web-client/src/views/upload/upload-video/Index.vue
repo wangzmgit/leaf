@@ -110,6 +110,7 @@ onBeforeMount(() => {
     const vid = Number(route.params.vid);
     const modify = (route.query.modify || "").toString();
     if (vid) {
+        current.value = 0;
         getVideoStatusAPI(vid).then((res) => {
             if (res.data.code === statusCode.OK) {
                 videoInfo.value = res.data.data.video;
@@ -118,6 +119,7 @@ onBeforeMount(() => {
                         current.value = 2;
                         break;
                     case reviewCode.AUDIT_APPROVED:
+                        videoInfo.value = res.data.data.video;
                         if (modify === "info") {
                             current.value = 1;
                         } else if (modify === "video") {
