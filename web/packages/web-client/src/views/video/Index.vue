@@ -77,7 +77,7 @@ import ArchiveInfo from './component/ArchiveInfo.vue';
 import { Forbid } from "@leaf/icons";
 import type { ResourceType, VideoType } from '@leaf/apis';
 import { getVideoInfoAPI } from '@leaf/apis';
-import { globalConfig, statusCode } from '@leaf/utils';
+import { createUuid, globalConfig, statusCode } from '@leaf/utils';
 
 // i18n
 const { t } = useI18n();
@@ -124,9 +124,14 @@ let SocketURL = "";
 let websocket: WebSocket | null = null;
 //初始化weosocket
 const initWebSocket = (vid: number) => {
+    let clientId = localStorage.getItem("ws_client_id");
+    if (!clientId) {
+        clientId = createUuid();
+        localStorage.setItem("ws_client_id", clientId);
+    }
     const wsProtocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
     const domain = globalConfig.domain || window.location.host;
-    SocketURL = wsProtocol + domain + `/api/v1/video/online/ws?vid=${vid}`;
+    SocketURL = wsProtocol + domain + `/api/v1/video/online/ws?vid=${vid}&client_id=${clientId}`;
 
     websocket = new WebSocket(SocketURL);
     websocket.onmessage = websocketOnmessage;
