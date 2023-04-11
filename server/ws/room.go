@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 	"kuukaa.fun/leaf/domain/vo"
@@ -17,8 +16,7 @@ var (
 )
 
 // 处理ws请求
-func RoomWsHandler(w http.ResponseWriter, r *http.Request, roomId uint) {
-	clientId := uuid.New()
+func RoomWsHandler(w http.ResponseWriter, r *http.Request, roomId uint, clientId string) {
 	conn, err := CreateWsConn(w, r)
 	if err != nil {
 		zap.L().Error("升级websocket失败，原因 " + err.Error())

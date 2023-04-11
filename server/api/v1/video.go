@@ -498,10 +498,11 @@ func AdminDeleteVideo(ctx *gin.Context) {
 // 视频Websocket连接(统计在线人数)
 func GetRoomConnect(ctx *gin.Context) {
 	vid := convert.StringToUint(ctx.Query("vid"))
+	clientId := ctx.Query("client_id")
 	if vid == 0 {
 		return
 	}
 
 	// 升级为websocket长链接
-	ws.RoomWsHandler(ctx.Writer, ctx.Request, vid)
+	ws.RoomWsHandler(ctx.Writer, ctx.Request, vid, clientId)
 }
