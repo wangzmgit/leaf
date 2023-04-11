@@ -3,7 +3,7 @@
 ## 在线人数连接
 
 #### 请求URL
-- ` ws://域名/api/v1/video/online/ws?vid=视频ID `
+- ` ws://域名/api/v1/video/online/ws?vid=视频ID&client_id=随机生成的客户端ID `
 
 #### 返回示例 
 ```json
