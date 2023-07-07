@@ -115,7 +115,6 @@ onBeforeMount(() => {
     width: calc(100% - 50px);
     gap: 0 16px;
     grid-template-columns: repeat(4, 1fr);
-    height: 1040px;
     overflow: hidden;
 
     .recommended-carousel {
@@ -126,7 +125,7 @@ onBeforeMount(() => {
 }
 
 .recommended-fold {
-    height: 780px;
+    max-height: 780px;
     grid-template-columns: repeat(5, 1fr);
 }
 </style>

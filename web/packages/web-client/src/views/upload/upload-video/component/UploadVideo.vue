@@ -117,7 +117,7 @@ const toTagText = (state: number) => {
 const submitReview = () => {
     if (resourceList.value.length === 0) {
         notification.error({
-            title: '请先删除视频',
+            title: '请先上传视频',
             duration: 5000,
         })
         return;
