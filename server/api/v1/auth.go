@@ -114,28 +114,20 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	// 生成验证token
+	// 生成token
 	var err error
-	var accessToken string
-	var refreshToken string
-	if accessToken, err = service.GenerateAccessToken(user.ID); err != nil {
-		resp.Response(ctx, resp.Error, "验证token生成失败", nil)
-		zap.L().Error("验证token生成失败")
-		return
-	}
-	// 生成刷新token
-	if refreshToken, err = jwt.GenerateRefreshToken(user.ID); err != nil {
-		resp.Response(ctx, resp.Error, "刷新token生成失败", nil)
-		zap.L().Error("刷新token生成失败")
+	var token string
+	if token, err = jwt.GenerateToken(user.ID); err != nil {
+		resp.Response(ctx, resp.Error, "token生成失败", nil)
+		zap.L().Error("token生成失败")
 		return
 	}
 
 	// 存入缓存
-	cache.SetAccessToken(user.ID, accessToken)
-	cache.SetRefreshToken(user.ID, refreshToken)
+	cache.SetToken(user.ID, token)
 
 	// 返回给前端
-	resp.OK(ctx, "ok", gin.H{"access_token": accessToken, "refresh_token": refreshToken})
+	resp.OK(ctx, "ok", gin.H{"token": token})
 }
 
 // 邮箱登录
@@ -185,32 +177,18 @@ func EmailLogin(ctx *gin.Context) {
 		return
 	}
 
-	// 生成验证token
+	// 生成token
 	var err error
-	var accessToken string
-	var refreshToken string
-	if accessToken, err = service.GenerateAccessToken(user.ID); err != nil {
-		resp.Response(ctx, resp.Error, "验证token生成失败", nil)
-		zap.L().Error("验证token生成失败")
-		return
-	}
-	// 生成刷新token
-	if refreshToken, err = jwt.GenerateRefreshToken(user.ID); err != nil {
-		resp.Response(ctx, resp.Error, "刷新token生成失败", nil)
-		zap.L().Error("刷新token生成失败")
+	var token string
+	if token, err = jwt.GenerateToken(user.ID); err != nil {
+		resp.Response(ctx, resp.Error, "token生成失败", nil)
+		zap.L().Error("token生成失败")
 		return
 	}
 
 	// 存入缓存
-	cache.SetAccessToken(user.ID, accessToken)
-	cache.SetRefreshToken(user.ID, refreshToken)
+	cache.SetToken(user.ID, token)
 
 	// 返回给前端
-	resp.OK(ctx, "ok", gin.H{"access_token": accessToken, "refresh_token": refreshToken})
-}
-
-// 检查 accessToken
-func RefreshAccessToken(ctx *gin.Context) {
-	//如果refreshToken不过期会在中间件阶段返回accessToken
-	resp.OK(ctx, "ok", nil)
+	resp.OK(ctx, "ok", gin.H{"token": token})
 }
