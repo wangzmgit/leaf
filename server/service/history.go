@@ -9,7 +9,8 @@ func InsertHistory(history model.History) error {
 }
 
 func InsertOrUpdateHistory(history model.History) error {
-	if SelectHistory(history.Vid, history.Uid).ID == 0 {
+	id := SelectHistory(history.Vid, history.Uid).ID
+	if id == 0 {
 		return InsertHistory(history)
 	}
 
