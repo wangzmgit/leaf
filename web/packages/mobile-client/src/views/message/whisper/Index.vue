@@ -43,7 +43,7 @@ import { ArrowLeft } from '@leaf/icons';
 import { CommonAvatar } from '@leaf/components';
 import { globalConfig, statusCode, storageData } from '@leaf/utils';
 import type { UserInfoType, WhisperDetailsType } from '@leaf/apis';
-import { getWhisperDetailsAPI, sendWhisperAPI, getAccessToken } from '@leaf/apis';
+import { getWhisperDetailsAPI, sendWhisperAPI } from '@leaf/apis';
 
 const msgDetails = ref<Array<WhisperDetailsType>>([]);
 const msgForm = reactive({
@@ -148,16 +148,9 @@ let websocket: WebSocket | null = null;
 const initWebSocket = async () => {
     const wsProtocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
     const domain = globalConfig.domain || window.location.host;
-    SocketURL = wsProtocol + domain + "/api/v1/message/whisper/ws";
-
-    // 获取token
-    const res = await getAccessToken();
-    if (res.data.code === statusCode.OK) {
-        storageData.set("access_token", res.data.data.token, 5);
-        SocketURL += "?token=" + storageData.get("access_token");
-        websocket = new WebSocket(SocketURL);
-        websocket.onmessage = websocketOnmessage;
-    }
+    SocketURL = `${wsProtocol}${domain}/api/v1/message/whisper/ws?token=${storageData.get("token")}`;
+    websocket = new WebSocket(SocketURL);
+    websocket.onmessage = websocketOnmessage;
 }
 
 //数据接收

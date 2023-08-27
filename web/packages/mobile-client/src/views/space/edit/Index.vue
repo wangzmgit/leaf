@@ -60,8 +60,7 @@ const goMine = () => {
 
 const logout = () => {
     //清除token和用户信息并刷新页面
-    storageData.remove("refresh_token");
-    storageData.remove("access_token");
+    storageData.remove("token");
     storageData.remove("user_info");
     router.push({ name: "Home" });
 }

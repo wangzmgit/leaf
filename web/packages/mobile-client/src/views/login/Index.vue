@@ -64,8 +64,7 @@ const loginClick = () => {
 		if (!errors) {
 			loginAPI(loginForm).then((res) => {
 				if (res.data.code === statusCode.OK) {
-					storageData.set("access_token", res.data.data.access_token, 5);
-					storageData.set("refresh_token", res.data.data.refresh_token, 14 * 24 * 60);
+					storageData.set("token", res.data.data.token, 14 * 24 * 60);
 					getUserInfoAPI().then((infoRes) => {
 						if (infoRes.data.code === statusCode.OK) {
 							storageData.set("user_info", infoRes.data.data.user_info, 14 * 24 * 60);

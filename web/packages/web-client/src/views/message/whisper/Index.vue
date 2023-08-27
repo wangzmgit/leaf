@@ -54,7 +54,7 @@ import { NInput, NButton, NTime, NScrollbar, useNotification } from 'naive-ui';
 import { onBeforeMount, onBeforeUnmount, reactive, ref, nextTick } from 'vue';
 import { CommonAvatar } from '@leaf/components';
 import {
-    getAccessToken, getOtherUserInfoAPI, getWhisperDetailsAPI,
+    getOtherUserInfoAPI, getWhisperDetailsAPI,
     getWhisperListAPI, readWhisperAPI, sendWhisperAPI
 } from "@leaf/apis";
 import { statusCode, globalConfig, storageData } from '@leaf/utils';
@@ -232,16 +232,9 @@ let websocket: WebSocket | null = null;
 const initWebSocket = async () => {
     const wsProtocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
     const domain = globalConfig.domain || window.location.host;
-    SocketURL = wsProtocol + domain + "/api/v1/message/whisper/ws";
-
-    // 获取token
-    const res = await getAccessToken();
-    if (res.data.code === statusCode.OK) {
-        storageData.set("access_token", res.data.data.token, 5);
-        SocketURL += "?token=" + storageData.get("access_token");
-        websocket = new WebSocket(SocketURL);
-        websocket.onmessage = websocketOnmessage;
-    }
+    SocketURL = `${wsProtocol}${domain}/api/v1/message/whisper/ws?token=${storageData.get("token")}`;
+    websocket = new WebSocket(SocketURL);
+    websocket.onmessage = websocketOnmessage;
 }
 
 //数据接收
