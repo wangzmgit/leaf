@@ -128,8 +128,7 @@ const sendLoginRequest = () => {
                         showCaptcha.value = true;
                         break;
                     case statusCode.OK:
-                        storageData.set("access_token", res.data.data.access_token, 5);
-                        storageData.set("refresh_token", res.data.data.refresh_token, 14 * 24 * 60);
+                        storageData.set("token", res.data.data.token, 14 * 24 * 60);
                         getUserInfoAPI().then((infoRes) => {
                             if (infoRes.data.code === statusCode.OK) {
                                 const userInfo = infoRes.data.data.user_info;

@@ -82,8 +82,7 @@ const router = useRouter();
 const route = useRoute();
 
 const logout = () => {
-    storageData.remove("refresh_token");
-    storageData.remove("access_token");
+    storageData.remove("token");
     storageData.remove('user_info');
     isLogin.value = false;
 }

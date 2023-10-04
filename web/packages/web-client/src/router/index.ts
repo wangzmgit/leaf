@@ -75,7 +75,7 @@ const router = createRouter({
 
 router.beforeEach((to, from,next) => {
     //是否需要登录
-    if (to.meta.auth && !storageData.get('access_token') && !storageData.get('refresh_token')) {
+    if (to.meta.auth && !storageData.get('token')) {
         if (from.name !== "Home") {
             router.push({ name: 'Login' });
             next();

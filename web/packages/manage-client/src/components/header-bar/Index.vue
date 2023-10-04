@@ -30,8 +30,7 @@ import { CommonAvatar } from '@leaf/components';
 const router = useRouter();
 
 const logout = () => {
-    storageData.remove("refresh_token");
-    storageData.remove("access_token");
+    storageData.remove("token");
     storageData.remove('user_info');
     router.push({ name: 'Login' });
 }
