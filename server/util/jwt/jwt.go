@@ -5,51 +5,28 @@ import (
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/spf13/viper"
-	"go.uber.org/zap"
 	"kuukaa.fun/leaf/cache"
 )
 
 type Claims struct {
-	UserId    uint
-	TokenType uint // 0:accessToken,1:refreshtToken
+	UserId uint
+	// TokenType uint // 0:accessToken,1:refreshtToken
 	jwt.RegisteredClaims
 }
 
 /**
- * 生成验证用的token
+ * 生成token
  * param: id 用户id
  * return: token字符串、错误信息
  */
-func GenerateAccessToken(id uint) (string, error) {
-	accessJwtKey := []byte(viper.GetString("security.access_jwt_secret"))
+func GenerateToken(id uint) (string, error) {
+	refreshJwtKey := []byte(viper.GetString("security.jwt_secret"))
 	// token过期时间
-	expirationTime := time.Now().Add(cache.ACCESS_TOKEN_EXPRIRATION_TIME * time.Minute) // 5分钟有效
-	accessClaims := &Claims{
-		UserId:    id,
-		TokenType: 0,
-		RegisteredClaims: jwt.RegisteredClaims{
-			//发放时间等
-			ExpiresAt: jwt.NewNumericDate(expirationTime),
-			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			Issuer:    "leaf",
-		},
-	}
-	return generateToken(accessJwtKey, accessClaims)
-}
-
-/**
- * 生成刷新用的token
- * param: id 用户id
- * return: token字符串、错误信息
- */
-func GenerateRefreshToken(id uint) (string, error) {
-	refreshJwtKey := []byte(viper.GetString("security.refresh_jwt_secret"))
-	// token过期时间
-	expirationTime := time.Now().Add(cache.REFRESH_TOKEN_EXPRIRATION_TIME * time.Hour) // 14天有效
+	expirationTime := time.Now().Add(cache.TOKEN_EXPRIRATION_TIME * time.Hour) // 14天有效
 
 	refreshClaims := &Claims{
-		UserId:    id,
-		TokenType: 1,
+		UserId: id,
+		// TokenType: 1,
 		RegisteredClaims: jwt.RegisteredClaims{
 			//发放时间等
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
@@ -80,20 +57,9 @@ func GetTokenClaims(tokenString string) (*Claims, error) {
  * return: error 解析token的错误信息
  */
 func ParseToken(tokenString string) (*jwt.Token, *Claims, error) {
-	// 获取jwt的荷载数据
-	claims, err := GetTokenClaims(tokenString)
-	if err != nil {
-		zap.L().Error("token荷载解析失败: " + err.Error())
-	}
-	// 判断类型 选择不同的密钥
-	var secret []byte
-	if claims.TokenType == 0 { // accessToken
-		secret = []byte(viper.GetString("security.access_jwt_secret"))
-	} else if claims.TokenType == 1 { // refreshToken
-		secret = []byte(viper.GetString("security.refresh_jwt_secret"))
-	}
-
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (i interface{}, e error) {
+	claims := &Claims{}
+	secret := []byte(viper.GetString("security.jwt_secret"))
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (i interface{}, e error) {
 		return secret, nil
 	})
 

@@ -30,8 +30,6 @@ func CollectUserRoutes(r *gin.RouterGroup) {
 		auth := user.Group("")
 		auth.Use(middleware.Auth())
 		{
-			//刷新token
-			auth.GET("token/refresh", api.RefreshAccessToken)
 			//用户获取个人信息
 			auth.GET("/info/get", api.GetUserInfo)
 			//用户修改个人信息
