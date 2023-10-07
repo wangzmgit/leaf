@@ -1,6 +1,7 @@
 # 开始
 
-## 双token登录方案
+## ~~双token登录方案~~
+在v1.1.0及之后的版本中，双token方案已经被移除，文档中携带的access_token全部改为token
 ![双token登录方案](/token.png)
 
 ## 稿件状态码
