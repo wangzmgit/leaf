@@ -61,7 +61,7 @@ redis:
   # redis密码（修改要同时修改docker-compose.yml中对应的密码）
   password: LeafRedis123
   port: 6379
-server:
+security:
   jwt_secret:
 user:
   prefix: user_
