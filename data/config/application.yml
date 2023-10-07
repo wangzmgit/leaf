@@ -62,7 +62,6 @@ redis:
   password: LeafRedis123
   port: 6379
 server:
-  access_jwt_secret: 
-  refresh_jwt_secret: 
+  jwt_secret:
 user:
   prefix: user_
