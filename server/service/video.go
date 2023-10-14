@@ -1,10 +1,13 @@
 package service
 
 import (
+	"time"
+
 	"kuukaa.fun/leaf/cache"
 	"kuukaa.fun/leaf/common"
 	"kuukaa.fun/leaf/domain/dto"
 	"kuukaa.fun/leaf/domain/model"
+	"kuukaa.fun/leaf/domain/vo"
 )
 
 func InsertVideo(video model.Video) (uint, error) {
@@ -170,4 +173,40 @@ func IsVideoBelongUser(id, userId uint) bool {
 	mysqlClient.Where("id = ? and uid = ?", id, userId).First(&video)
 
 	return video.ID != 0
+}
+
+// 视频总数量
+func SelectVideoCount() (count int64) {
+	mysqlClient.Model(&model.Video{}).Count(&count)
+	return
+}
+
+// 待审核视频数量
+func SelectReviewVideoCount() (count int64) {
+	mysqlClient.Model(&model.Video{}).Where("status = ?", common.WAITING_REVIEW).Count(&count)
+	return
+}
+
+// 获取当日新增视频数量
+// 参数：x往前偏移天数，例：0表示当天，1表示昨天
+func SelectNewVideoCount(x int) (count int64, date string) {
+	t := time.Now()
+	startTime := t.AddDate(0, 0, -(x + 1))
+	endTime := t.AddDate(0, 0, -x)
+	date = startTime.Format("2006/1/02")
+
+	mysqlClient.Model(&model.Video{}).Where("created_at > ? and created_at < ?", startTime, endTime).Count(&count)
+	return
+}
+
+// 获取分区视频数量
+func SelectPartitionVideoCount(partitionId uint) (partitionVideoCount []vo.PartitionVideoCount) {
+	mysqlClient.Table("partition").
+		Select("`partition`.content, COUNT(video.id) as video_count").
+		Joins("LEFT JOIN video ON video.partition_id = `partition`.id").
+		Where("video.deleted_at IS NULL AND `partition`.deleted_at IS NULL AND `partition`.parent_id = ?", partitionId).
+		Group("`partition`.content").
+		Scan(&partitionVideoCount)
+
+	return
 }

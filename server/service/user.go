@@ -152,3 +152,21 @@ func DeleteUser(id uint) {
 	cache.DelUser(id)
 	mysqlClient.Where("id = ?", id).Delete(&model.User{})
 }
+
+// 用户总数量
+func SelectUserCount() (count int64) {
+	mysqlClient.Model(&model.User{}).Count(&count)
+	return
+}
+
+// 获取当日新增用户数量
+// 参数：x往前偏移天数，例：0表示当天，1表示昨天
+func SelectNewUserCount(x int) (count int64, date string) {
+	t := time.Now()
+	startTime := t.AddDate(0, 0, -(x + 1))
+	endTime := t.AddDate(0, 0, -x)
+	date = startTime.Format("2006/1/02")
+
+	mysqlClient.Model(&model.User{}).Where("created_at > ? and created_at < ?", startTime, endTime).Count(&count)
+	return
+}

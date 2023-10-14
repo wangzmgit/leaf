@@ -61,6 +61,8 @@ func CollectRoutes(r *gin.Engine) *gin.Engine {
 		CollectCarouselRoutes(v1)
 		// 网站配置相关路由
 		CollectConfigRoutes(v1)
+		// 仪表盘相关路由
+		CollectDashboardRoutes(v1)
 	}
 
 	//获取静态文件
