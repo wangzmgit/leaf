@@ -30,7 +30,7 @@ const initTheme = () => {
 }
 
 const loginSuccess = () => {
-    router.push({ name: "Home" });
+    router.push({ name: "Dashboard" });
 }
 </script>
 

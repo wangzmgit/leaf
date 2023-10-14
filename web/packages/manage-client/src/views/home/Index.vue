@@ -39,6 +39,19 @@ const menuOptions = [
                 RouterLink,
                 {
                     to: {
+                        name: "Dashboard",
+                    }
+                },
+                { default: () => '仪表盘' }
+            ),
+        key: "dashboard",
+    },
+    {
+        label: () =>
+            h(
+                RouterLink,
+                {
+                    to: {
                         name: "Review",
                     }
                 },
@@ -128,6 +141,8 @@ const menuOptions = [
 
 const routeNameToKey = () => {
     switch (route.name) {
+        case "Dashboard":
+            return "dashboard";
         case "Review":
             return "review";
         case "User":
