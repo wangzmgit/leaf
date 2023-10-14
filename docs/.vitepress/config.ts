@@ -134,6 +134,10 @@ export default defineConfig({
                             link: '/api/danmaku'
                         },
                         {
+                            text: '后台仪表盘相关接口',
+                            link: '/api/dashboard'
+                        },
+                        {
                             text: '轮播图相关接口',
                             link: '/api/carousel'
                         },
