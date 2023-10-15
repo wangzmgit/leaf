@@ -1,0 +1,1 @@
+import{_ as t,c as e,o as a,a as r}from"./app.6fababfc.js";const n="/wechat.png",o="/alipay.png",x=JSON.parse('{"title":"赞助","description":"","frontmatter":{},"headers":[],"relativePath":"other/donate.md"}'),s={name:"other/donate.md"},_=r("",3),c=[_];function d(i,l,h,p,m,g){return a(),e("div",null,c)}const y=t(s,[["render",d]]);export{x as __pageData,y as default};
