@@ -12,7 +12,7 @@ Leaf弹幕视频网站是一个基于Go+Vue的前后端分离项目。Web 端使
 
 `开发交流群: 909847398`
 
-`文档：` https://leaf.interastral-peace.com/
+`文档：` https://leaf.interastral-peace.com.com/
 
 ## 相关项目
 
@@ -76,17 +76,17 @@ Leaf弹幕视频网站是一个基于Go+Vue的前后端分离项目。Web 端使
 
 ## 截图
 
-|                              Web端                               |                                                             |
-| :--------------------------------------------------------------: | :---------------------------------------------------------: |
-|       ![Web端登录](https://leaf.kuukaa.fun/web_login.png)        |     ![Web端首页](https://leaf.kuukaa.fun/web_home.png)      |
-|       ![Web端上传](https://leaf.kuukaa.fun/web_upload.png)       |     ![Web端视频](https://leaf.kuukaa.fun/web_video.png)     |
-|     ![Web端个人中心](https://leaf.kuukaa.fun/web_space.png)      |    ![Web端消息](https://leaf.kuukaa.fun/web_message.png)    |
-|                            后台管理端                            |                                                             |
-|     ![管理端登录](https://leaf.kuukaa.fun/manage_login.png)      | ![管理端视频管理](https://leaf.kuukaa.fun/manage_video.png) |
-| ![管理端轮播图管理](https://leaf.kuukaa.fun/manage_carousel.png) |                                                             |
-|                              移动端                              |                                                             |
-|     ![移动端登录](https://leaf.kuukaa.fun/mobile_login.jpg)      |   ![移动端视频](https://leaf.kuukaa.fun/mobile_video.jpg)   |
-|    ![移动端评论](https://leaf.kuukaa.fun/mobile_comment.jpg)     |                                                             |
+|                                  Web端                                  |                                                                    |
+| :---------------------------------------------------------------------: | :----------------------------------------------------------------: |
+|       ![Web端登录](https://leaf.interastral-peace.com/web_login.png)        |     ![Web端首页](https://leaf.interastral-peace.com/web_home.png)      |
+|       ![Web端上传](https://leaf.interastral-peace.com/web_upload.png)       |     ![Web端视频](https://leaf.interastral-peace.com/web_video.png)     |
+|     ![Web端个人中心](https://leaf.interastral-peace.com/web_space.png)      |    ![Web端消息](https://leaf.interastral-peace.com/web_message.png)    |
+|                               后台管理端                                |                                                                    |
+|     ![管理端登录](https://leaf.interastral-peace.com/manage_login.png)      | ![管理端视频管理](https://leaf.interastral-peace.com/manage_video.png) |
+| ![管理端轮播图管理](https://leaf.interastral-peace.com/manage_carousel.png) |                                                                    |
+|                                 移动端                                  |                                                                    |
+|     ![移动端登录](https://leaf.interastral-peace.com/mobile_login.jpg)      |   ![移动端视频](https://leaf.interastral-peace.com/mobile_video.jpg)   |
+|    ![移动端评论](https://leaf.interastral-peace.com/mobile_comment.jpg)     |                                                                    |
 
 
 
