@@ -13,7 +13,7 @@
                         点击或拖拽视频到此处上传视频
                     </n-text>
                     <n-p depth="3" style="margin: 8px 0 0 0">
-                        上传文件大小需小于{{ globalConfig.maxVideoSize }}M,仅支持.mp4格式文件
+                        上传文件大小需小于{{ maxVideoSize }}M,仅支持.mp4格式文件
                     </n-p>
                 </div>
                 <n-progress v-else type="circle" :percentage="percent" />
@@ -29,6 +29,8 @@ import { globalConfig } from "@leaf/utils";
 import type { UploadCustomRequestOptions } from "naive-ui";
 import { NIcon, NUpload, NUploadDragger, NText, NP, NProgress, useNotification } from 'naive-ui';
 import { uploadFileAPI } from "@leaf/apis";
+
+const maxVideoSize = window.$maxVideoSize || globalConfig.maxVideoSize;
 
 const emits = defineEmits(["finish"]);
 const props = defineProps<{
@@ -51,11 +53,11 @@ const beforeUploadVideo = async (options: any) => {
             duration: 5000,
         });
     }
-    const isLtMaxSize = file.file.size / 1024 / 1024 < globalConfig.maxVideoSize;
+    const isLtMaxSize = file.file.size / 1024 / 1024 < maxVideoSize;
     if (!isLtMaxSize) {
         notification.error({
             title: '上传失败',
-            content: `视频大小不能超过${globalConfig.maxVideoSize}M`,
+            content: `视频大小不能超过${maxVideoSize}M`,
             duration: 5000,
         });
     }
