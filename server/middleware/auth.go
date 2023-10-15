@@ -1,6 +1,8 @@
 package middleware
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"kuukaa.fun/leaf/cache"
@@ -30,7 +32,7 @@ func Auth() gin.HandlerFunc {
 			user := service.SelectUserByID(claims.UserId)
 			role := dto.GetRoleString(user.Role)
 			if !authentication.Check(role, ctx.FullPath(), ctx.Request.Method) {
-				zap.L().Info("权限不足")
+				zap.L().Error(fmt.Sprintf("权限不足,用户ID：%d，角色：%s，路径：%s，请求方法：%s", claims.UserId, role, ctx.FullPath(), ctx.Request.Method))
 				resp.Response(ctx, resp.UnauthorizedError, "", nil)
 				ctx.Abort()
 				return
@@ -40,7 +42,7 @@ func Auth() gin.HandlerFunc {
 
 			return
 		} else {
-			zap.L().Info("token验证失败")
+			zap.L().Error("token验证失败-token不存在")
 			resp.Response(ctx, resp.UnauthorizedError, "", nil)
 			ctx.Abort()
 			return
