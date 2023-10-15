@@ -14,7 +14,7 @@
                         点击或拖拽图片到此处上传封面
                     </n-text>
                     <n-p depth="3" style="margin: 8px 0 0 0">
-                        上传文件大小需小于{{ globalConfig.maxImgSize }}M,仅支持.jpg .jpeg .png格式文件
+                        上传文件大小需小于{{ maxImgSize }}M,仅支持.jpg .jpeg .png格式文件
                     </n-p>
                 </div>
                 <n-progress v-else type="circle" :percentage="percent" />
@@ -36,6 +36,8 @@ import LeafCropper from "@/components/leaf-cropper/Index.vue";
 import CoverCropper from "@/components/leaf-cropper/component/CoverCropper.vue";
 import type { UploadCustomRequestOptions } from 'naive-ui';
 import { NIcon, NUpload, NUploadDragger, NText, NP, NProgress, useNotification } from 'naive-ui';
+
+const maxImgSize = window.$maxImgSize || globalConfig.maxImgSize;
 
 const emits = defineEmits(["finish"]);
 const props = defineProps<{
@@ -60,11 +62,11 @@ const beforeUploadCover = async (options: any) => {
             duration: 5000,
         });
     }
-    const isLtMaxSize = file.file.size / 1024 / 1024 < globalConfig.maxImgSize;
+    const isLtMaxSize = file.file.size / 1024 / 1024 < maxImgSize;
     if (!isLtMaxSize) {
         notification.error({
             title: '上传失败',
-            content: `图片大小不能超过${globalConfig.maxImgSize}M`,
+            content: `图片大小不能超过${maxImgSize}M`,
             duration: 5000,
         });
     }

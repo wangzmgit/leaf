@@ -13,6 +13,8 @@ if (res.status === 200) {
     window.$title = config.title;
     window.$icp = config.icp;
     window.$security = config.security;
+    window.$maxImgSize = config.maxImgSize;
+    window.$maxVideoSize = config.maxVideoSize;
 }
 
 const app = createApp(App);

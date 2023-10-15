@@ -9,4 +9,6 @@ interface Window {
     $title: string
     $icp: string
     $security: string
+    $maxImgSize: null | number
+    $maxVideoSize: null | number
 }
