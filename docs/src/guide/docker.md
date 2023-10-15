@@ -28,8 +28,10 @@ docker-compose stop
 ```
 
 ## 前端部署
+:::warning 提示
+目前的部署方式不建议使用docker部署前端，建议直接跳转到[域名配置](/guide/domain#未部署前端)完成前端的部署
+:::
 
-前端提供了docker部署，但不是必要的，如果需要配置域名建议直接跳转到[域名配置](/guide/domain#未部署前端)
 
 ### 1.配置后端文件
 打开 `web\utils\src\global-config.ts`文件，修改`domain`为后端域名
