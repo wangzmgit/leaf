@@ -4,3 +4,9 @@ declare module '*.vue' {
     const component: DefineComponent<{}, {}, any>
     export default component
 }
+
+interface Window {
+    $title: string
+    $icp: string
+    $security: string
+}

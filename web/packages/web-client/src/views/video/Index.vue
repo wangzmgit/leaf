@@ -112,7 +112,7 @@ const getVideoInfo = (vid: number) => {
             }
 
             //修改网站标题
-            document.title = `${res.data.data.video.title}-${globalConfig.title}`
+            document.title = `${res.data.data.video.title}-${window.$title || globalConfig.title}`
             loading.value = false;
         }
     })

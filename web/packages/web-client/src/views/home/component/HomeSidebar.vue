@@ -54,19 +54,19 @@
                         </span>
                         <span>
                             <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">
-                                {{ globalConfig.icp }}
+                                {{ icp }}
                             </a>
                         </span>
-                        <span>
+                        <span v-show="security">
                             <img class="security" src="@/assets/filing.png" alt="公网安备图标" />
                             <a href="https://www.beian.gov.cn/portal/registerSystemInfo" target="_blank">
-                                {{ globalConfig.security }}
+                                {{ security }}
                             </a>
                         </span>
                     </div>
                     <div class="copyright">
                         <span>
-                            Powered by <a href="https://github.com/wangzmgit/leaf" target="_blank">wzmgit/leaf</a>
+                            Powered by <a href="https://github.com/wangzmgit/leaf" target="_blank">leaf</a>
                         </span>
                     </div>
                 </div>
@@ -102,6 +102,9 @@ import { onBeforeMount, ref, watch } from "vue";
 import type { PartitionType } from "@leaf/apis";
 import { getPartitionAPI } from "@leaf/apis";
 import { useRouter } from "vue-router";
+
+const icp = window.$icp || globalConfig.icp;
+const security = window.$security || globalConfig.security;
 
 const props = withDefaults(defineProps<{
     fold: boolean

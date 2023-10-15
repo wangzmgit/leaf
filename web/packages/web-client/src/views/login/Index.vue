@@ -1,5 +1,5 @@
 <template>
-    <div class="login-bg" v-title :data-title="`登录-${globalConfig.title}`">
+    <div class="login-bg" v-title :data-title="`登录-${title}`">
         <img src="@/assets/login-bg.svg" />
     </div>
     <login-card @success="loginSuccess"></login-card>
@@ -9,6 +9,9 @@
 import { useRouter } from 'vue-router';
 import LoginCard from '@/components/login-card/Index.vue';
 import { globalConfig } from '@leaf/utils';
+import { ref } from 'vue';
+
+const title = ref(window.$title || globalConfig.title);
 
 const router = useRouter();
 

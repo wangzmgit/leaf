@@ -1,6 +1,6 @@
 const title = "弹幕网站标题";
 const https = false;
-const domain = "localhost:9000";
+const domain = "";
 const mobile = "/mobile/";
 const icp = "icp备案信息";
 const security = "公网安备信息"

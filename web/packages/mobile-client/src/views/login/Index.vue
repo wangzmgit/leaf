@@ -4,7 +4,7 @@
 			<div class="head-text">
 				<span>您好，</span>
 				<br>
-				<span>欢迎回到 {{ globalConfig.title }}</span>
+				<span>欢迎回到 {{ title }}</span>
 			</div>
 		</div>
 		<div class="login-div">
@@ -35,14 +35,16 @@ import { NForm, NFormItem, NButton, NInput, useMessage } from 'naive-ui';
 import { globalConfig, storageData, statusCode } from "@leaf/utils";
 import { getTheme } from "@/theme";
 
+const title = ref(window.$title || globalConfig.title);
+
 const message = useMessage();//通知
 
 const initTheme = () => {
-    const theme = getTheme();
+	const theme = getTheme();
 
-    return {
-        "--primary-color": theme.primaryColor
-    }
+	return {
+		"--primary-color": theme.primaryColor
+	}
 }
 
 const loginForm = reactive<UserLoginType>({

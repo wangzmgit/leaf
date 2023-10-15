@@ -1,7 +1,7 @@
 <template>
     <div class="home" :style="initTheme()" v-title data-title="后台管理系统">
         <div class="home-menu">
-            <span class="title">{{ globalConfig.title }}</span>
+            <span class="title">{{ title }}</span>
             <n-menu :default-value="defaultKey" :options="menuOptions" />
         </div>
         <div class="home-box">
@@ -20,6 +20,8 @@ import { RouterLink, useRoute } from 'vue-router';
 import { globalConfig } from '@leaf/utils';
 import { NMenu } from "naive-ui";
 import HeaderBar from '@/components/header-bar/Index.vue';
+
+const title = ref(window.$title || globalConfig.title);
 
 const route = useRoute();
 

@@ -5,6 +5,17 @@ import App from './App.vue';
 import store from './stores';
 import router from './router';
 import i18n from './locale'; //引入国际化
+import { globalConfig } from '@leaf/utils';
+
+// 加载网站配置
+const baseURL = globalConfig.domain ? `http${globalConfig.https ? 's' : ''}://${globalConfig.domain}` : '';
+const res = await fetch(`${baseURL}/api/config/web.json`)
+if (res.status === 200) {
+    const config = await res.json();
+    window.$title = config.title;
+    window.$icp = config.icp;
+    window.$security = config.security;
+}
 
 const app = createApp(App);
 

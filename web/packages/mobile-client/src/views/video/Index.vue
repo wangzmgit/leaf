@@ -1,5 +1,5 @@
 <template>
-    <div class="video" :style="initTheme()" v-title :data-title="`视频播放-${globalConfig.title}`">
+    <div class="video" :style="initTheme()" v-title :data-title="`视频播放-${title}`">
         <header-bar class="header-bar"></header-bar>
         <div class="video-main">
             <div v-if="!loading" class="video-player">
@@ -65,6 +65,8 @@ import { globalConfig, statusCode } from '@leaf/utils';
 import type { VideoType } from '@leaf/apis';
 import { getVideoInfoAPI } from '@leaf/apis';
 
+const title = ref(window.$title || globalConfig.title);
+
 const route = useRoute();
 const router = useRouter();
 const theme = getTheme();
@@ -97,7 +99,7 @@ const getVideoInfo = (vid: number, ios: number) => {
             }
 
             //修改网站标题
-            document.title = `${res.data.data.video.title}-${globalConfig.title}`
+            document.title = `${res.data.data.video.title}-${window.$title || globalConfig.title}`
             loading.value = false;
         }
     })

@@ -25,7 +25,7 @@ import { NSpin, useMessage } from 'naive-ui';
 import { statusCode, globalConfig } from '@leaf/utils';
 
 
-const title = globalConfig.title;
+const title = window.$title || globalConfig.title;
 const message = useMessage();
 
 //视频列表

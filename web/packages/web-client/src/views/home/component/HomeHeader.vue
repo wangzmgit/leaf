@@ -4,7 +4,7 @@
             <n-icon class="menu-icon-btn" size="22" @click="foldClick">
                 <menu-outline></menu-outline>
             </n-icon>
-            <span>{{ globalConfig.title }}</span>
+            <span>{{ title }}</span>
         </div>
         <div class="header-search">
             <n-input class="search-input" v-model:value="keywords" round placeholder="搜索" @keydown.enter="search">
@@ -64,6 +64,7 @@ import { storeToRefs } from 'pinia';
 
 
 const emits = defineEmits(["changeFold"]);
+const title = ref(window.$title || globalConfig.title);
 
 // i18n
 const { t } = useI18n();
