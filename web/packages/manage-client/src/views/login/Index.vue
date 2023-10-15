@@ -5,7 +5,7 @@
         </div>
         <div class="login-right">
             <div class="login-form">
-                <span class="title">{{ globalConfig.title }}后台管理系统</span>
+                <span class="title">{{ title }}后台管理系统</span>
                 <login-form @success="loginSuccess"></login-form>
             </div>
         </div>
@@ -17,6 +17,9 @@ import { useRouter } from 'vue-router';
 import LoginForm from './component/LoginForm.vue';
 import { globalConfig } from '@leaf/utils';
 import { getTheme } from '@/theme';
+import { ref } from 'vue';
+
+const title = ref(window.$title || globalConfig.title);
 
 const router = useRouter();
 
@@ -30,7 +33,7 @@ const initTheme = () => {
 }
 
 const loginSuccess = () => {
-    router.push({ name: "Home" });
+    router.push({ name: "Dashboard" });
 }
 </script>
 

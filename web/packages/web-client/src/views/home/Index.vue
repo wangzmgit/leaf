@@ -1,5 +1,5 @@
 <template>
-    <div class="home" :style="initTheme()" v-title :data-title="`${globalConfig.title}`">
+    <div class="home" :style="initTheme()" v-title :data-title="`${title}`">
         <home-header class="home-header" @change-fold="changeMenuFold"></home-header>
         <div class="home-content">
             <div class="home-left" :class="menuFold ? 'home-left-fold' : ''">
@@ -30,6 +30,8 @@ import { globalConfig, statusCode } from '@leaf/utils';
 import { useDialog } from 'naive-ui';
 
 const dialog = useDialog();
+const title = ref(window.$title || globalConfig.title);
+
 const menuFold = ref(false);
 const changeMenuFold = (val: boolean) => {
     menuFold.value = val;

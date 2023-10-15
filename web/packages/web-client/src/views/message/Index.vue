@@ -1,5 +1,5 @@
 <template>
-    <div class="message" :style="themeStyle" v-title :data-title="`消息中心-${globalConfig.title}`">
+    <div class="message" :style="themeStyle" v-title :data-title="`消息中心-${title}`">
         <header-bar></header-bar>
         <div class="message-container">
             <div class="message-side-bar">
@@ -25,6 +25,8 @@ import { useRoute, useRouter } from 'vue-router';
 import HeaderBar from '@/components/header-bar/Index.vue';
 import { globalConfig } from "@leaf/utils";
 import { getTheme } from "@/theme";
+
+const title = ref(window.$title || globalConfig.title);
 
 // i18n
 const { t } = useI18n();

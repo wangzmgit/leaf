@@ -12,6 +12,12 @@ const router = createRouter({
             component: homeView,
             children: [
                 {
+                    path: '/dashboard',
+                    name: 'Dashboard',
+                    meta: { auth: true },
+                    component: () => import("../views/dashboard/Index.vue"),
+                },
+                {
                     path: '/user',
                     name: 'User',
                     meta: { auth: true },

@@ -2,7 +2,7 @@
     <div class="header-bar" :style="themeStyle()">
         <div class="header-content">
             <div class="header-left" @click="goPage('Home')">
-                <h1 class="title">{{ globalConfig.title }}</h1>
+                <h1 class="title">{{ title }}</h1>
             </div>
             <div v-show="route.name !== 'Search'" class="header-center">
                 <n-input v-model:value="keywords" round placeholder="搜索" @keydown.enter="search">
@@ -74,6 +74,8 @@ import type { UserInfoType } from '@leaf/apis';
 import { globalConfig, storageData } from "@leaf/utils"
 import { Search as SearchIcon, Upload, Message, Collection } from "@leaf/icons";
 import { getTheme } from '@/theme';
+
+const title = ref(window.$title || globalConfig.title);
 
 // i18n
 const { t } = useI18n();

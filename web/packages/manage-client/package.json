@@ -16,6 +16,8 @@
     "@leaf/icons": "workspace:^1.0.0",
     "@leaf/utils": "workspace:^1.0.0",
     "dashjs": "^4.5.1",
+    "echarts": "^5.4.3",
+    "less": "^4.1.3",
     "naive-ui": "^2.33.5",
     "pinia": "^2.0.28",
     "terser": "^5.16.1",

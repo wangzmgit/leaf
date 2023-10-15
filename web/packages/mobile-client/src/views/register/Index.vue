@@ -4,7 +4,7 @@
             <div class="head-text">
                 <span>您好，</span>
                 <br>
-                <span>欢迎注册 {{ globalConfig.title }}</span>
+                <span>欢迎注册 {{ title }}</span>
             </div>
         </div>
         <div class="login-div">
@@ -39,6 +39,8 @@ import type { FormInst, FormRules } from 'naive-ui';
 import { NForm, NFormItem, NButton, NInput, useMessage } from 'naive-ui';
 import { globalConfig, statusCode } from "@leaf/utils";
 import { getTheme } from "@/theme";
+
+const title = ref(window.$title || globalConfig.title);
 
 const message = useMessage();//通知
 

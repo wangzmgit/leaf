@@ -56,3 +56,6 @@ export * from "./src/types/carousel-type";
 
 export * from "./src/api/config";
 export * from "./src/types/config-type";
+
+export * from "./src/api/dashboard";
+export * from "./src/types/dashboard-type";

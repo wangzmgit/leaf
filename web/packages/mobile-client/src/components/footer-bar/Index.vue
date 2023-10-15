@@ -6,18 +6,18 @@
             </span>
             <span>|</span>
             <span>
-                Powered by <a href="https://github.com/wangzmgit/danmu-v5" target="_blank">wzmgit/danmu-v5</a>
+                Powered by <a href="https://github.com/wangzmgit/leaf" target="_blank">leaf</a>
             </span>
         </div>
         <div class="copyright link-list">
-            <span v-show="globalConfig.icp">
-                <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">{{ globalConfig.icp }}</a>
+            <span v-show="icp">
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">{{ icp }}</a>
             </span>
-            <span v-show="globalConfig.icp">|</span>
-            <span v-show="globalConfig.security" class="security">
+            <span v-show="icp">|</span>
+            <span v-show="security" class="security">
                 <img class="security" src="@/assets/filing.png" alt="公网安备" />
                 <a href="https://www.beian.gov.cn/portal/registerSystemInfo" target="_blank">
-                    {{ globalConfig.security }}
+                    {{ security }}
                 </a>
             </span>
         </div>
@@ -27,6 +27,8 @@
 <script setup lang="ts">
 import { globalConfig } from '@leaf/utils';
 
+const icp = window.$icp || globalConfig.icp;
+const security = window.$security || globalConfig.security;
 const webUrl = `http${globalConfig.https ? 's' : ''}://${globalConfig.domain}/`;
 </script>
 

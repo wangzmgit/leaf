@@ -1,5 +1,5 @@
 <template>
-    <div v-title :data-title="`找回密码-${globalConfig.title}`">
+    <div v-title :data-title="`找回密码-${title}`">
         <header-bar></header-bar>
         <div class="find-password">
             <steps class="steps" :current="current" :title-list="['填写账号', '重置密码', '操作成功']"></steps>
@@ -51,8 +51,9 @@ import { resetpwdCheckAPI, mpdifyPwdAPI } from "@leaf/apis";
 import { SliderCaptcha } from "@leaf/components"
 import useSendCode from "@/hooks/send-code-hooks";
 import { useRouter } from "vue-router";
-
 import Steps from "@/components/steps/Index.vue"
+
+const title = ref(window.$title || globalConfig.title);
 
 const message = useMessage();
 
