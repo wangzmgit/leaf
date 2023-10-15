@@ -69,6 +69,10 @@ p, user, /api/v1/danmaku/send, POST
 p, admin, /api/v1/carousel/add, POST
 p, admin, /api/v1/carousel/delete, POST
 
+p, auditor, /api/v1/dashboard/card/data, GET
+p, auditor, /api/v1/dashboard/trend, GET
+p, auditor, /api/v1/dashboard/partition, GET
+
 p, root, /api/v1/partition/add, POST
 p, root, /api/v1/partition/delete, POST
 

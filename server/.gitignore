@@ -1,4 +1,5 @@
 /config/*.yml
 /upload/video/v_test
+/upload/config/
 /upload/image/
 *.log
