@@ -12,7 +12,7 @@ Leaf弹幕视频网站是一个基于Go+Vue的前后端分离项目。Web 端使
 
 `开发交流群: 909847398`
 
-`文档：` http://leaf.kuukaa.fun/
+`文档：` https://leaf.interastral-peace.com/
 
 ## 相关项目
 
