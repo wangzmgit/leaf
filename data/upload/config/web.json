@@ -1,5 +1,7 @@
 {
     "title": "",
     "icp": "",
-    "security": ""
+    "security": "",
+    "maxImgSize": null,
+    "maxVideoSize": null
 }
