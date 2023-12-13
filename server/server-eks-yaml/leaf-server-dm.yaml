@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leaf-server
+  namespace: leaf-prd
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  selector:
+    matchLabels:
+      app: leaf-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: leaf-server
+    spec:
+      terminationGracePeriodSeconds: 20
+      containers:
+        - name: leaf-server
+          image: handsome20230606/leaf:v1
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "2"
+            limits:
+              memory: "2Gi"
+              cpu: "2"
+          ports:
+            - containerPort: 9000
+          volumeMounts:
+            - name: leaf-pv
+              mountPath: /server/upload/
+            - name: leaf-server-conf
+              mountPath: /server/config/application.yaml
+              subPath: application.yaml
+      volumes:
+        - name: leaf-server-conf
+          configMap:
+            name: "leaf-server-cm"
+            items:
+              - key: "application.yaml"
+        - name: leaf-pv
+          persistentVolumeClaim:
+            claimName: leaf-server-pvc
