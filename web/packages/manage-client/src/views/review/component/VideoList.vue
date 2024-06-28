@@ -2,15 +2,14 @@
     <video ref="playerRef" class="video" preload="auto" controls></video>
     <div class="video-box">
         <n-scrollbar style="max-height: 300px;">
-            <div class="video-item" v-for="(item, index) in resources">
+            <div class="video-item" v-for="(item, index) in resources" :key="index">
                 <div class="item-left" @click="playVideo(item)">
                     <span>P{{ index + 1 }} {{ item.title }}</span>
                     <n-tag class="tag" :type="toTagType(item.status)">{{ toTagText(item.status) }}</n-tag>
                 </div>
                 <div v-show="item.status === reviewCode.WAITING_REVIEW" class="item-right">
                     <n-button text @click="reviewResource(item.id, index, reviewCode.AUDIT_APPROVED)">通过</n-button>
-                    <n-button text
-                        @click="reviewResource(item.id, index, reviewCode.WRONG_VIDEO_CONTENT)">不通过</n-button>
+                    <n-button text @click="reviewResource(item.id, index, reviewCode.WRONG_VIDEO_CONTENT)">不通过</n-button>
                 </div>
             </div>
         </n-scrollbar>
@@ -30,7 +29,7 @@ const props = defineProps<{
 }>();
 
 const resources = ref(props.list);
-const notification = useNotification();//通知
+const notification = useNotification(); // 通知
 
 const toTagType = (state: number) => {
     switch (state) {
@@ -64,18 +63,18 @@ const toTagText = (state: number) => {
     }
 }
 
-//播放视频
+// 播放视频
 let dash: dashjs.MediaPlayerClass;
-const playerRef = ref<HTMLElement | null>(null);
+const playerRef = ref<HTMLVideoElement | null>(null);
 const playVideo = (resource: ResourceType) => {
     if (playerRef.value) {
         const url = getResourceUrl(resource.url);
         dash = dashjs.MediaPlayer().create();
-        dash.initialize(playerRef.value as HTMLElement, url, false);
+        dash.initialize(playerRef.value as HTMLVideoElement, url, false);
     }
 }
 
-//审核资源
+// 审核资源
 const reviewResource = (id: number, index: number, status: number) => {
     reviewResourceAPI(id, status).then((res) => {
         if (res.data.code === statusCode.OK) {
@@ -86,7 +85,7 @@ const reviewResource = (id: number, index: number, status: number) => {
             title: '审核调用失败',
             content: "原因:" + err.response.data.msg,
             duration: 5000,
-        })
+        });
     });
 }
 </script>
