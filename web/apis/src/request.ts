@@ -11,18 +11,21 @@ const service: AxiosInstance = axios.create({
 });
 
 
-//请求拦截器
+import type { AxiosRequestHeaders } from 'axios';
+
+// 请求拦截器
 service.interceptors.request.use((config) => {
-    config.headers = config.headers ? config.headers : {};
+    // 确保 config.headers 类型为 AxiosRequestHeaders
+    config.headers = config.headers ? config.headers : {} as AxiosRequestHeaders;
     if (storage.get('token')) {
         if (!config.headers["Authorization"]) {
             config.headers.Authorization = `${storage.get('token')}`;
         }
     }
     return config;
-}), (error: any) => {
+}, (error: any) => {
     return Promise.reject(error);
-}
+});
 
 
 
