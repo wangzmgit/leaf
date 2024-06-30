@@ -3,10 +3,11 @@
 ## 项目介绍
 Leaf弹幕视频网站是一个基于Go+Vue的前后端分离项目。Web 端使用 Vue + NaiveUI , 后端使用 Golang + Gin + Gorm进行开发。
 
+***新版本已发布，此版本停止更新，新版本地址 => [Alnitak](https://github.com/wangzmgit/alnitak)***
+
 ### 特点
 - 实现了文件存储在服务器本地或阿里云、腾讯云、七牛云对象存储功能
 - 实现了视频自动处理分辨率并将视频切片(MPEG-DASH)功能
-
 
 ## 项目文档
 
